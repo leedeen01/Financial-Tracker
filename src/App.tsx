@@ -5,9 +5,9 @@ import { useState } from "react";
 
 function App() {
   const [expenses, setExpenses] = useState([
-    { id: 1, description: "abc", amount: 10, category: "Utilities" },
-    { id: 2, description: "absc", amount: 120, category: "Utilities" },
-    { id: 3, description: "abssc", amount: 10, category: "Utilities" },
+    { id: 1, description: "Mcdonald", amount: 10, category: "Utilities" },
+    { id: 2, description: "Bread", amount: 4.6, category: "Groceries" },
+    { id: 3, description: "Movie", amount: 8.8, category: "Entertainment" },
   ]);
 
   return (
