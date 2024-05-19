@@ -3,6 +3,13 @@ import { FieldValues, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod/dist/zod.js";
 
+interface Expense {
+  id: number;
+  description: string;
+  amount: number;
+  category: string;
+}
+
 const schema = z.object({
   description: z.string().min(1, { message: "Please fill in the description" }),
   amount: z
@@ -13,7 +20,12 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-const Form = () => {
+interface Props {
+  expenses: Expense[];
+  onInclude: (item: Expense) => void;
+}
+
+const Form = ({ expenses, onInclude }: Props) => {
   const {
     register,
     handleSubmit,
@@ -22,11 +34,14 @@ const Form = () => {
 
   const onSubmit = (data: FieldValues) => {
     const formDataObject = {
+      id: expenses.length + 1,
       description: data.description,
       amount: data.amount,
       category: data.category,
     };
-    console.log(data);
+    console.log(expenses);
+
+    onInclude(formDataObject);
   };
 
   return (
