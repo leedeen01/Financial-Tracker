@@ -97,15 +97,6 @@ const Form = ({ expenses, onInclude }: Props) => {
           Submit
         </button>
       </form>
-
-      <div className="mb-3 mt-5">
-        <select className="form-control" id="dropdown">
-          <option value="N/A">All categories</option>
-          <option value="">Groceries</option>
-          <option value="">Utilities</option>
-          <option value="">Entertainment</option>
-        </select>
-      </div>
     </>
   );
 };
