@@ -35,6 +35,7 @@ const ExpenseList = ({ expenses, onDelete }: Props) => {
           <option value="Groceries">Groceries</option>
           <option value="Utilities">Utilities</option>
           <option value="Entertainment">Entertainment</option>
+          <option value="Food">Food</option>
         </select>
       </div>
 
