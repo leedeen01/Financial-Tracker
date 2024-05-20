@@ -2,6 +2,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import { FieldValues, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod/dist/zod.js";
+import { categories } from "../App";
 
 interface Expense {
   id: number;
@@ -85,10 +86,11 @@ const Form = ({ expenses, onInclude }: Props) => {
             className="form-control"
           >
             <option value=""></option>
-            <option value="Groceries">Groceries</option>
-            <option value="Utilities">Utilities</option>
-            <option value="Entertainment">Entertainment</option>
-            <option value="Food">Food</option>
+            {categories.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
           </select>
           {errors.category && (
             <p className="text-danger"> {errors.category.message} </p>

@@ -4,6 +4,8 @@ import ExpenseList from "./Components/ExpenseList";
 import { useState } from "react";
 import ExpenseFilter from "./Components/ExpenseFilter";
 
+export const categories = ["Food", "Groceries", "Entertainment", "Utilities"];
+
 function App() {
   const [expenses, setExpenses] = useState([
     { id: 1, description: "Mcdonald", amount: 10, category: "Food" },
