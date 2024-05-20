@@ -2,6 +2,7 @@ import "./App.css";
 import Form from "./Components/Form";
 import ExpenseList from "./Components/ExpenseList";
 import { useState } from "react";
+import ExpenseFilter from "./Components/ExpenseFilter";
 
 function App() {
   const [expenses, setExpenses] = useState([
@@ -11,14 +12,24 @@ function App() {
     { id: 4, description: "Phone Bill", amount: 8.8, category: "Utilities" },
   ]);
 
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const selectedExpenses = selectedCategory
+    ? expenses.filter((e) => e.category === selectedCategory)
+    : expenses;
+
   return (
     <>
       <Form
         expenses={expenses}
         onInclude={(item) => setExpenses([...expenses, item])}
       />
+      <div className="mt-5 mb-3">
+        <ExpenseFilter
+          onSelectCategory={(category) => setSelectedCategory(category)}
+        />
+      </div>
       <ExpenseList
-        expenses={expenses}
+        expenses={selectedExpenses}
         onDelete={(id) => setExpenses(expenses.filter((e) => e.id != id))}
       />
     </>
