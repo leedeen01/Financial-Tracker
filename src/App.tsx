@@ -3,6 +3,7 @@ import Form from "./Components/Form";
 import ExpenseList from "./Components/ExpenseList";
 import { useState } from "react";
 import ExpenseFilter from "./Components/ExpenseFilter";
+import { FaAlignJustify } from "react-icons/fa";
 
 export const categories = ["Food", "Groceries", "Entertainment", "Utilities"];
 
@@ -18,22 +19,50 @@ function App() {
   const selectedExpenses = selectedCategory
     ? expenses.filter((e) => e.category === selectedCategory)
     : expenses;
+  const [NavBar, toggleNavBar] = useState(false);
+
+  const toggle = () => {
+    toggleNavBar(!NavBar);
+  };
 
   return (
     <>
-      <Form
-        expenses={expenses}
-        onInclude={(item) => setExpenses([...expenses, item])}
-      />
-      <div className="mt-5 mb-3">
-        <ExpenseFilter
-          onSelectCategory={(category) => setSelectedCategory(category)}
-        />
+      <div className="top">
+        <FaAlignJustify className="hamburger" onClick={toggle} />
+        <div className="appName">Trackspence</div>
       </div>
-      <ExpenseList
-        expenses={selectedExpenses}
-        onDelete={(id) => setExpenses(expenses.filter((e) => e.id != id))}
-      />
+
+      <div className="row">
+        {NavBar && (
+          <div className="col-2 bg-secondary">
+            <div className="NavBar">NavBar</div>
+          </div>
+        )}
+        <div className="col">
+          <div className="container">
+            <div className="piechart d-flex justify-content-center bg-success">
+              piechart
+            </div>
+            <Form
+              expenses={expenses}
+              onInclude={(item) => setExpenses([...expenses, item])}
+            />
+            <div className="row content">
+              <div className="mt-5 mb-3">
+                <ExpenseFilter
+                  onSelectCategory={(category) => setSelectedCategory(category)}
+                />
+              </div>
+              <ExpenseList
+                expenses={selectedExpenses}
+                onDelete={(id) =>
+                  setExpenses(expenses.filter((e) => e.id != id))
+                }
+              />
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 }

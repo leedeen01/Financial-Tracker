@@ -1,0 +1,13 @@
+.top {
+  display: flex;
+  height: 50px;
+  background-color: grey;
+  align-items: center;
+  padding: 20px;
+}
+
+.appName {
+  margin:10px;
+  font-size:larger;
+}
+
