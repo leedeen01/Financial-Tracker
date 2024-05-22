@@ -6,8 +6,19 @@
   padding: 20px;
 }
 
+
+
 .appName {
   margin:10px;
   font-size:larger;
 }
 
+.container-fluid {
+  padding: 0px;
+  margin: 0px;
+}
+
+.content {
+  padding: 0px;
+  margin: 20px;
+}

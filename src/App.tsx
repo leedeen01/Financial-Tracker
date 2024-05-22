@@ -27,19 +27,19 @@ function App() {
 
   return (
     <>
-      <div className="top">
-        <FaAlignJustify className="hamburger" onClick={toggle} />
-        <div className="appName">Trackspence</div>
-      </div>
+      <div className="container-fluid gx-0">
+        <div className="top">
+          <FaAlignJustify className="hamburger" onClick={toggle} />
+          <div className="appName">Trackspence</div>
+        </div>
 
-      <div className="row">
-        {NavBar && (
-          <div className="col-2 bg-secondary">
-            <div className="NavBar">NavBar</div>
-          </div>
-        )}
-        <div className="col">
-          <div className="container">
+        <div className="row ">
+          {NavBar && (
+            <div className="col-2 bg-secondary">
+              <div className="NavBar">NavBar</div>
+            </div>
+          )}
+          <div className="col content gx-0">
             <div className="piechart d-flex justify-content-center bg-success">
               piechart
             </div>
@@ -47,7 +47,7 @@ function App() {
               expenses={expenses}
               onInclude={(item) => setExpenses([...expenses, item])}
             />
-            <div className="row content">
+            <div className="row z">
               <div className="mt-5 mb-3">
                 <ExpenseFilter
                   onSelectCategory={(category) => setSelectedCategory(category)}
