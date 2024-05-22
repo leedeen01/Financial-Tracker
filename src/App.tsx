@@ -1,9 +1,13 @@
 import "./App.css";
+import "bootstrap/dist/css/bootstrap.css";
 import Form from "./Components/Form";
 import ExpenseList from "./Components/ExpenseList";
-import { useState } from "react";
 import ExpenseFilter from "./Components/ExpenseFilter";
-import { FaAlignJustify } from "react-icons/fa";
+import PieChart from "./Components/PieChart";
+import NavList from "./Components/Nav/NavList";
+import NavBar from "./Components/Nav/NavBar";
+
+import { useState } from "react";
 
 export const categories = ["Food", "Groceries", "Entertainment", "Utilities"];
 
@@ -19,40 +23,47 @@ function App() {
   const selectedExpenses = selectedCategory
     ? expenses.filter((e) => e.category === selectedCategory)
     : expenses;
-  const [NavBar, toggleNavBar] = useState(false);
+  const [NavListToggle, onToggleNavList] = useState(false);
 
-  const toggle = () => {
-    toggleNavBar(!NavBar);
+  const onToggle = () => {
+    onToggleNavList(!NavListToggle);
   };
 
   return (
     <>
       <div className="container-fluid gx-0">
+        {/* NavBar Section */}
         <div className="top">
-          <FaAlignJustify className="hamburger" onClick={toggle} />
-          <div className="appName">Trackspence</div>
+          <NavBar
+            onToggle={onToggle}
+          />
         </div>
 
-        <div className="row ">
-          {NavBar && (
-            <div className="col-2 bg-secondary">
-              <div className="NavBar">NavBar</div>
-            </div>
+        {/* NavList Section */}
+        <div className="row">
+          {NavListToggle && (
+            <NavList />
           )}
+
           <div className="col content gx-0">
-            <div className="piechart d-flex justify-content-center bg-success">
-              piechart
-            </div>
+            {/* PieChart Section */}
+            <PieChart />
+
+            {/* ExpenseForm Section */}
             <Form
               expenses={expenses}
               onInclude={(item) => setExpenses([...expenses, item])}
             />
+
             <div className="row z">
               <div className="mt-5 mb-3">
+                {/* ExpenseFilter Section */}
                 <ExpenseFilter
                   onSelectCategory={(category) => setSelectedCategory(category)}
                 />
               </div>
+
+              {/* ExpenseList Section */}
               <ExpenseList
                 expenses={selectedExpenses}
                 onDelete={(id) =>
