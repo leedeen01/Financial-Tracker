@@ -6,6 +6,7 @@ import ExpenseFilter from "./Components/ExpenseFilter";
 import PieChart from "./Components/PieChart";
 import NavList from "./Components/Nav/NavList";
 import NavBar from "./Components/Nav/NavBar";
+import GoogleOAuth from "./Components/GoogleOAuth";
 
 import { useState } from "react";
 
@@ -33,17 +34,14 @@ function App() {
     <>
       <div className="container-fluid gx-0">
         {/* NavBar Section */}
-        <div className="top">
-          <NavBar
-            onToggle={onToggle}
-          />
+        <div className="top d-flex justify-content-between">
+          <NavBar onToggle={onToggle} />
+          <GoogleOAuth />
         </div>
 
         {/* NavList Section */}
         <div className="row">
-          {NavListToggle && (
-            <NavList />
-          )}
+          {NavListToggle && <NavList />}
 
           <div className="col content gx-0">
             {/* PieChart Section */}

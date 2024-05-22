@@ -1,14 +1,18 @@
 import { FaAlignJustify } from "react-icons/fa";
 
 interface Props {
-    onToggle: () => void;
+  onToggle: () => void;
 }
 
-const NavBar = ({onToggle}: Props) => {
-    return (<>
+const NavBar = ({ onToggle }: Props) => {
+  return (
+    <>
+      <div>
         <FaAlignJustify className="hamburger" onClick={onToggle} />
-        <div className="appName">Trackspence</div>
-        </>);
-}
+        <span className="appName">Trackspence</span>
+      </div>
+    </>
+  );
+};
 
 export default NavBar;
