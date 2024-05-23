@@ -26,7 +26,7 @@ const ExpenseList = ({ expenses, onDelete }: Props) => {
           {expenses.map((expense) => (
             <tr key={expense.id}>
               <td>{expense.description}</td>
-              <td>{expense.amount}</td>
+              <td>{expense.amount.toFixed(2)}</td>
               <td>{expense.category}</td>
               <td>
                 <button

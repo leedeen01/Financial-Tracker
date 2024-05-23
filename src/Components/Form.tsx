@@ -1,13 +1,18 @@
 import { FieldValues, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod/dist/zod.js";
-import { categories } from "../App";
 
 interface Expense {
   id: number;
   description: string;
   amount: number;
   category: string;
+}
+
+interface Category {
+  name: string;
+  background: string;
+  border: string;
 }
 
 const schema = z.object({
@@ -23,9 +28,10 @@ type FormData = z.infer<typeof schema>;
 interface Props {
   expenses: Expense[];
   onInclude: (item: Expense) => void;
+  categories: Category[];
 }
 
-const Form = ({ expenses, onInclude }: Props) => {
+const Form = ({ expenses, onInclude, categories }: Props) => {
   const {
     register,
     handleSubmit,
@@ -86,8 +92,8 @@ const Form = ({ expenses, onInclude }: Props) => {
           >
             <option value=""></option>
             {categories.map((category) => (
-              <option key={category} value={category}>
-                {category}
+              <option key={category.name} value={category.name}>
+                {category.name}
               </option>
             ))}
           </select>
