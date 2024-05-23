@@ -24,7 +24,7 @@ function App() {
     { id: 2, description: "Fish", amount: 4.6, category: "Groceries" },
     { id: 3, description: "Movie", amount: 7, category: "Entertainment" },
     { id: 4, description: "Phone Bill", amount: 8.8, category: "Utilities" },
-    { id: 5, description: "Broccoli", amount: 5.2, category: "Groceries" },
+    { id: 5, description: "Truffle", amount: 12.2, category: "Groceries" },
     { id: 6, description: "Ramen", amount: 14.9, category: "Food" },
     { id: 7, description: "Club", amount: 25, category: "Entertainment" },
     { id: 8, description: "Bread", amount: 1.5, category: "Food" },
