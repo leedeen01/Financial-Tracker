@@ -7,16 +7,32 @@ import ExpenseFilter from "./Components/ExpenseFilter";
 import OverviewChart from "./Components/OverviewChart";
 import NavList from "./Components/Nav/NavList";
 import NavBar from "./Components/Nav/NavBar";
-import GoogleOAuth from "./Components/GoogleOAuth";
+/*import GoogleOAuth from "./Components/GoogleOAuth";*/
 
 import { useState } from "react";
 
 function App() {
   const categories = [
-    {name: "Food", background: "rgba(75, 192, 192, 0.2)", border: "rgba(75, 192, 192, 1)"},
-    {name: "Groceries", background: "rgba(54, 162, 235, 0.2)", border: "rgba(54, 162, 235, 1)"},
-    {name: "Entertainment", background: "rgba(255, 206, 86, 0.2)", border: "rgba(255, 206, 86, 1)"},
-    {name: "Utilities", background: "rgba(255, 99, 132, 0.2)", border: "rgba(255, 99, 132, 1)"}
+    {
+      name: "Food",
+      background: "rgba(75, 192, 192, 0.2)",
+      border: "rgba(75, 192, 192, 1)",
+    },
+    {
+      name: "Groceries",
+      background: "rgba(54, 162, 235, 0.2)",
+      border: "rgba(54, 162, 235, 1)",
+    },
+    {
+      name: "Entertainment",
+      background: "rgba(255, 206, 86, 0.2)",
+      border: "rgba(255, 206, 86, 1)",
+    },
+    {
+      name: "Utilities",
+      background: "rgba(255, 99, 132, 0.2)",
+      border: "rgba(255, 99, 132, 1)",
+    },
   ];
 
   const [expenses, setExpenses] = useState([
@@ -46,7 +62,7 @@ function App() {
         {/* NavBar Section */}
         <div className="top d-flex justify-content-between">
           <NavBar onToggle={onToggle} />
-          <GoogleOAuth />
+          {/*<GoogleOAuth />*/}
         </div>
 
         {/* NavList Section */}
@@ -55,10 +71,7 @@ function App() {
 
           <div className="col content gx-0">
             {/* Overview Chart Section */}
-            <OverviewChart
-              expenses={expenses}
-              categories={categories}
-            />
+            <OverviewChart expenses={expenses} categories={categories} />
 
             {/* ExpenseForm Section */}
             <Form
