@@ -1,7 +1,6 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
 
-import Form from "./Components/Form";
 import ExpenseList from "./Components/ExpenseList";
 import ExpenseFilter from "./Components/ExpenseFilter";
 import OverviewChart from "./Components/OverviewChart";
@@ -10,31 +9,12 @@ import NavBar from "./Components/Nav/NavBar";
 /*import GoogleOAuth from "./Components/GoogleOAuth";*/
 
 import { useEffect, useState } from "react";
-import { Expense, mapExpenseJSONToExpense } from "./models/expense";
+import { categories, Expense } from "./models/expense";
+import * as expensesApi from "./network/expenses_api";
+import AddExpenseDialog from "./Components/AddEditExpenseDialog";
 
 function App() {
-  const categories = [
-    {
-      name: "Food",
-      background: "rgba(75, 192, 192, 0.2)",
-      border: "rgba(75, 192, 192, 1)",
-    },
-    {
-      name: "Groceries",
-      background: "rgba(54, 162, 235, 0.2)",
-      border: "rgba(54, 162, 235, 1)",
-    },
-    {
-      name: "Entertainment",
-      background: "rgba(255, 206, 86, 0.2)",
-      border: "rgba(255, 206, 86, 1)",
-    },
-    {
-      name: "Utilities",
-      background: "rgba(255, 99, 132, 0.2)",
-      border: "rgba(255, 99, 132, 1)",
-    },
-  ];
+  const [showAddDialog, setShowAddDialog] = useState(false);
 
   const [expenses, setExpenses] = useState<Expense[]>([]);
 
@@ -51,11 +31,7 @@ function App() {
   useEffect(() => {
     async function loadExpenses() {
       try {
-        const response = await fetch("http://localhost:5000/api/expenses", {
-          method: "GET",
-        });
-        const expensesJSON = await response.json();
-        const expenses: Expense[] = mapExpenseJSONToExpense(expensesJSON);
+        const expenses = await expensesApi.fetchExpense();
         setExpenses(expenses);
       } catch (error) {
         console.error(error);
@@ -65,6 +41,15 @@ function App() {
     loadExpenses();
   }, []);
 
+  async function deleteExpense(expense: Expense) {
+    try {
+      await expensesApi.deleteExpense(expense._id);
+      setExpenses(expenses.filter((e) => e._id !== expense._id));
+    } catch (error) {
+      console.error(error);
+      alert(error);
+    }
+  }
   return (
     <>
       <div className="container-fluid gx-0">
@@ -83,11 +68,13 @@ function App() {
             <OverviewChart expenses={expenses} categories={categories} />
 
             {/* ExpenseForm Section */}
-            <Form
-              expenses={expenses}
-              onInclude={(item) => setExpenses([...expenses, item])}
-              categories={categories}
-            />
+            {showAddDialog && (
+              <AddExpenseDialog
+                expenses={expenses}
+                onDismiss={() => setShowAddDialog(false)}
+                updateExpenses={setExpenses} // Pass the updateExpenses function
+              />
+            )}
 
             <div className="row z">
               <div className="mt-5 mb-3">
@@ -101,9 +88,8 @@ function App() {
               {/* ExpenseList Section */}
               <ExpenseList
                 expenses={selectedExpenses}
-                onDelete={(id) =>
-                  setExpenses(expenses.filter((e) => e.id != id))
-                }
+                onDelete={(id) => deleteExpense(id)}
+                onAdd={() => setShowAddDialog(true)}
               />
             </div>
           </div>

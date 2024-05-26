@@ -1,11 +1,13 @@
 import { Expense } from "../models/expense";
+import { MdDelete, MdAdd, MdEdit } from "react-icons/md";
 
 interface Props {
   expenses: Expense[];
-  onDelete: (id: number) => void;
+  onDelete: (expense: Expense) => void;
+  onAdd: () => void;
 }
 
-const ExpenseList = ({ expenses, onDelete }: Props) => {
+const ExpenseList = ({ expenses, onDelete, onAdd }: Props) => {
   return (
     <>
       <table className="table table-bordered">
@@ -14,22 +16,26 @@ const ExpenseList = ({ expenses, onDelete }: Props) => {
             <th>Description</th>
             <th>Amount</th>
             <th>Category</th>
-            <th></th>
+            <th>
+              <MdAdd onClick={() => onAdd()} className="w-25 text-muted" />
+            </th>
           </tr>
         </thead>
         <tbody>
           {expenses.map((expense) => (
-            <tr key={expense.id}>
+            <tr key={expense._id}>
               <td>{expense.description}</td>
               <td>{expense.amount.toFixed(2)}</td>
               <td>{expense.category}</td>
               <td>
-                <button
-                  onClick={() => onDelete(Number(expense.id))}
-                  className="btn btn-outline-danger"
-                >
-                  Delete
-                </button>
+                <MdDelete
+                  className="text-muted w-25"
+                  onClick={(e) => {
+                    onDelete(expense);
+                    e.stopPropagation();
+                  }}
+                />
+                <MdEdit className="text-muted w-25" />
               </td>
             </tr>
           ))}

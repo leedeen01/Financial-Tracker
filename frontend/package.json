@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "homepage": "https://leedeen01.github.io/ExpenseTracker/",
   "type": "module",
+  "proxy": "http://localhost:5000",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -19,6 +20,7 @@
     "chart.js": "^4.4.3",
     "jwt-decode": "^4.0.0",
     "react": "^18.2.0",
+    "react-bootstrap": "^2.10.2",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "7.43",

@@ -33,17 +33,14 @@ const Form = ({ expenses, onInclude, categories }: Props) => {
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const onSubmit = (data: FieldValues) => {
-    const formDataObject = {
-      id: expenses.length + 1,
+    const newExpense = {
+      _id: String(expenses.length + 1),
       description: data.description,
       amount: data.amount,
       category: data.category,
-      createdAt: data.createdAt,
-      updatedAt: data.updatedAt,
     };
-    console.log(expenses);
 
-    onInclude(formDataObject);
+    onInclude(newExpense);
   };
 
   return (
@@ -73,6 +70,7 @@ const Form = ({ expenses, onInclude, categories }: Props) => {
             type="text"
             className="form-control"
           />
+
           {errors.amount && (
             <p className="text-danger"> {errors.amount.message} </p>
           )}
