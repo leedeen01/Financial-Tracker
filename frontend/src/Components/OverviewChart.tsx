@@ -1,14 +1,8 @@
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
+import { Expense } from "../models/expense";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
-
-interface Expense {
-  id: number;
-  description: string;
-  amount: number;
-  category: string;
-}
 
 interface Category {
   name: string;
@@ -29,19 +23,22 @@ const OverviewChart = ({ expenses, categories }: Props) => {
   });
 
   const data = {
-    labels: categories.map(category => category.name),
+    labels: categories.map((category) => category.name),
     datasets: [
       {
         label: "Total Spent",
         data: dataByCategory,
-        backgroundColor: categories.map(category => category.background),
-        borderColor: categories.map(category => category.border),
+        backgroundColor: categories.map((category) => category.background),
+        borderColor: categories.map((category) => category.border),
         borderWidth: 1,
-      }
+      },
     ],
   };
 
-  const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
+  const totalExpenses = expenses.reduce(
+    (sum, expense) => sum + expense.amount,
+    0
+  );
 
   return (
     <div className="container mt-5">

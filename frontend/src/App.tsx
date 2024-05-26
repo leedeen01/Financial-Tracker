@@ -9,7 +9,8 @@ import NavList from "./Components/Nav/NavList";
 import NavBar from "./Components/Nav/NavBar";
 /*import GoogleOAuth from "./Components/GoogleOAuth";*/
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Expense, mapExpenseJSONToExpense } from "./models/expense";
 
 function App() {
   const categories = [
@@ -35,16 +36,7 @@ function App() {
     },
   ];
 
-  const [expenses, setExpenses] = useState([
-    { id: 1, description: "Mcdonald", amount: 10, category: "Food" },
-    { id: 2, description: "Fish", amount: 4.6, category: "Groceries" },
-    { id: 3, description: "Movie", amount: 7, category: "Entertainment" },
-    { id: 4, description: "Phone Bill", amount: 8.8, category: "Utilities" },
-    { id: 5, description: "Truffle", amount: 12.2, category: "Groceries" },
-    { id: 6, description: "Ramen", amount: 14.9, category: "Food" },
-    { id: 7, description: "Club", amount: 25, category: "Entertainment" },
-    { id: 8, description: "Bread", amount: 1.5, category: "Food" },
-  ]);
+  const [expenses, setExpenses] = useState<Expense[]>([]);
 
   const [selectedCategory, setSelectedCategory] = useState("");
   const selectedExpenses = selectedCategory
@@ -55,6 +47,23 @@ function App() {
   const onToggle = () => {
     onToggleNavList(!NavListToggle);
   };
+
+  useEffect(() => {
+    async function loadExpenses() {
+      try {
+        const response = await fetch("http://localhost:5000/api/expenses", {
+          method: "GET",
+        });
+        const expensesJSON = await response.json();
+        const expenses: Expense[] = mapExpenseJSONToExpense(expensesJSON);
+        setExpenses(expenses);
+      } catch (error) {
+        console.error(error);
+        alert(error);
+      }
+    }
+    loadExpenses();
+  }, []);
 
   return (
     <>

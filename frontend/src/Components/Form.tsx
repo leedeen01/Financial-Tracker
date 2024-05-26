@@ -1,13 +1,7 @@
 import { FieldValues, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod/dist/zod.js";
-
-interface Expense {
-  id: number;
-  description: string;
-  amount: number;
-  category: string;
-}
+import { Expense } from "../models/expense";
 
 interface Category {
   name: string;
@@ -44,6 +38,8 @@ const Form = ({ expenses, onInclude, categories }: Props) => {
       description: data.description,
       amount: data.amount,
       category: data.category,
+      createdAt: data.createdAt,
+      updatedAt: data.updatedAt,
     };
     console.log(expenses);
 

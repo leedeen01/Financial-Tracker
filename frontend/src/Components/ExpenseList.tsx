@@ -1,9 +1,4 @@
-interface Expense {
-  id: number;
-  description: string;
-  amount: number;
-  category: string;
-}
+import { Expense } from "../models/expense";
 
 interface Props {
   expenses: Expense[];
@@ -30,7 +25,7 @@ const ExpenseList = ({ expenses, onDelete }: Props) => {
               <td>{expense.category}</td>
               <td>
                 <button
-                  onClick={() => onDelete(expense.id)}
+                  onClick={() => onDelete(Number(expense.id))}
                   className="btn btn-outline-danger"
                 >
                   Delete
