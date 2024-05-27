@@ -11,7 +11,7 @@ async function fetchData(input: RequestInfo, init?: RequestInit) {
 }
 
 export async function fetchExpense(): Promise<Expense[]> {
-  const response = await fetchData("http://localhost:5000/api/expenses", {
+  const response = await fetchData("http://localhost:6969/api/expenses", {
     method: "GET",
   });
   const expensesJSON = await response.json();
@@ -25,14 +25,14 @@ export interface expenseInput {
   category: string;
 }
 export async function createExpense(expense: expenseInput): Promise<Expense[]> {
-  await fetchData("http://localhost:5000/api/expenses", {
+  await fetchData("http://localhost:6969/api/expenses", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(expense),
   });
-  const expenses = await fetchData("http://localhost:5000/api/expenses", {
+  const expenses = await fetchData("http://localhost:6969/api/expenses", {
     method: "GET",
   });
   const expensesJSON = await expenses.json();
@@ -44,7 +44,7 @@ export async function updateExpense(
   expense: expenseInput
 ): Promise<Expense> {
   const response = await fetchData(
-    "http://localhost:5000/api/expenses/" + expenseId,
+    "http://localhost:6969/api/expenses/" + expenseId,
     {
       method: "PATCH",
       headers: {
@@ -58,7 +58,7 @@ export async function updateExpense(
 
 export async function deleteExpense(expenseId: string) {
   console.log(expenseId);
-  return await fetchData("http://localhost:5000/api/expenses/" + expenseId, {
+  return await fetchData("http://localhost:6969/api/expenses/" + expenseId, {
     method: "DELETE",
   });
 }
