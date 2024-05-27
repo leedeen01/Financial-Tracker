@@ -11,18 +11,20 @@ interface Props {
 
 const ExpenseFilter = ({ onSelectCategory, categories }: Props) => {
   return (
-    <select
-      onChange={(event) => onSelectCategory(event.target.value)}
-      className="form-control"
-      id="category"
-    >
-      <option value="All">All categories</option>
-      {categories.map((category) => (
-        <option key={category.name} value={category.name}>
-          {category.name}
-        </option>
-      ))}
-    </select>
+    <div className="d-flex justify-content-center">
+      <select
+        onChange={(event) => onSelectCategory(event.target.value)}
+        className="form-control w-25 text-center"
+        id="category"
+      >
+        <option value="">All categories</option>
+        {categories.map((category) => (
+          <option key={category.name} value={category.name}>
+            {category.name}
+          </option>
+        ))}
+      </select>
+    </div>
   );
 };
 

@@ -1,8 +1,5 @@
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { Doughnut } from "react-chartjs-2";
 import { Expense } from "../models/expense";
-
-ChartJS.register(ArcElement, Tooltip, Legend);
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, Customized } from 'recharts';
 
 interface Category {
   name: string;
@@ -17,38 +14,65 @@ interface Props {
 
 const OverviewChart = ({ expenses, categories }: Props) => {
   const dataByCategory = categories.map((category) => {
-    return expenses
-      .filter((expense) => expense.category === category.name)
-      .reduce((sum, expense) => sum + expense.amount, 0);
+    const total = expenses
+    .filter((expense) => expense.category === category.name)
+    .reduce((sum, expense) => sum + expense.amount, 0);
+
+    return {
+      name: category.name,
+      value: parseFloat(total.toFixed(2)),
+      backgroundColor: category.background,
+      borderColor: category.border
+    };
   });
 
-  const data = {
-    labels: categories.map((category) => category.name),
-    datasets: [
-      {
-        label: "Total Spent",
-        data: dataByCategory,
-        backgroundColor: categories.map((category) => category.background),
-        borderColor: categories.map((category) => category.border),
-        borderWidth: 1,
-      },
-    ],
+  const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
+
+  const expensesCenterText = () => {
+    return (
+      <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" fontSize={20}>
+        Total: ${totalExpenses.toFixed(2)}
+      </text>
+    );
   };
 
-  const totalExpenses = expenses.reduce(
-    (sum, expense) => sum + expense.amount,
-    0
-  );
+  const legendFormatter = (value: string, entry: any) => {
+    const { payload } = entry;
+    return <span style={{ color: payload.borderColor }}>{value}</span>;
+  };
 
   return (
-    <div className="container mt-5">
+    <div className="container w-75 mt-5">
       <div className="row justify-content-center">
         <div className="col-md-6">
           <div className="card text-center">
             <div className="card-body">
-              <Doughnut data={data} />
+              <ResponsiveContainer width="100%" height={450}>
+                <PieChart>
+                  <Pie
+                    data={dataByCategory}
+                    dataKey="value"
+                    nameKey="name"
+                    cornerRadius={10}
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={180}
+                    innerRadius={100}
+                    isAnimationActive={true}>
+                      {dataByCategory.map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={entry.backgroundColor}
+                          stroke={entry.borderColor}
+                        />
+                      ))}
+                  </Pie>
+                  <Tooltip />
+                  <Legend formatter={legendFormatter}/>
+                  <Customized component={expensesCenterText} />
+                </PieChart>
+              </ResponsiveContainer>
             </div>
-            <h1>Expenses: ${totalExpenses.toFixed(2)}</h1>
           </div>
         </div>
       </div>

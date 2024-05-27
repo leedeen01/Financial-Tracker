@@ -19,9 +19,11 @@ function App() {
   const [expenses, setExpenses] = useState<Expense[]>([]);
 
   const [selectedCategory, setSelectedCategory] = useState("");
+  
   const selectedExpenses = selectedCategory
     ? expenses.filter((e) => e.category === selectedCategory)
     : expenses;
+
   const [NavListToggle, onToggleNavList] = useState(false);
 
   const onToggle = () => {
