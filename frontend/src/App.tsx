@@ -11,15 +11,16 @@ import NavBar from "./Components/Nav/NavBar";
 import { useEffect, useState } from "react";
 import { categories, Expense } from "./models/expense";
 import * as expensesApi from "./network/expenses_api";
-import AddExpenseDialog from "./Components/AddEditExpenseDialog";
+import AddEditExpenseDialog from "./Components/AddEditExpenseDialog";
 
 function App() {
+  const [selectedExpense, setSelectedExpense] = useState("");
   const [showAddDialog, setShowAddDialog] = useState(false);
 
   const [expenses, setExpenses] = useState<Expense[]>([]);
 
   const [selectedCategory, setSelectedCategory] = useState("");
-  
+
   const selectedExpenses = selectedCategory
     ? expenses.filter((e) => e.category === selectedCategory)
     : expenses;
@@ -71,9 +72,12 @@ function App() {
 
             {/* ExpenseForm Section */}
             {showAddDialog && (
-              <AddExpenseDialog
+              <AddEditExpenseDialog
                 expenses={expenses}
-                onDismiss={() => setShowAddDialog(false)}
+                onDismiss={() => {
+                  setShowAddDialog(false);
+                  setSelectedExpense("");
+                }}
                 updateExpenses={setExpenses} // Pass the updateExpenses function
               />
             )}
@@ -92,7 +96,19 @@ function App() {
                 expenses={selectedExpenses}
                 onDelete={(id) => deleteExpense(id)}
                 onAdd={() => setShowAddDialog(true)}
+                onEdit={(id) => setSelectedExpense(id)}
               />
+              {showAddDialog && (
+                <AddEditExpenseDialog
+                  expenseToEdit={selectedExpense}
+                  expenses={expenses}
+                  onDismiss={() => {
+                    setShowAddDialog(false);
+                    setSelectedExpense("");
+                  }}
+                  updateExpenses={setExpenses} // Pass the updateExpenses function
+                />
+              )}
             </div>
           </div>
         </div>

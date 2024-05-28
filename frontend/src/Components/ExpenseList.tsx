@@ -5,9 +5,10 @@ interface Props {
   expenses: Expense[];
   onDelete: (expense: Expense) => void;
   onAdd: () => void;
+  onEdit: (id: string) => void;
 }
 
-const ExpenseList = ({ expenses, onDelete, onAdd }: Props) => {
+const ExpenseList = ({ expenses, onDelete, onAdd, onEdit }: Props) => {
   return (
     <>
       <div className="d-flex justify-content-center table-responsive">
@@ -36,7 +37,13 @@ const ExpenseList = ({ expenses, onDelete, onAdd }: Props) => {
                       e.stopPropagation();
                     }}
                   />
-                  <MdEdit className="text-muted w-25" />
+                  <MdEdit
+                    className="text-muted w-25"
+                    onClick={() => {
+                      onAdd();
+                      onEdit(expense._id);
+                    }}
+                  />
                 </td>
               </tr>
             ))}

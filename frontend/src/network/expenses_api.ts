@@ -46,7 +46,7 @@ export async function updateExpense(
   const response = await fetchData(
     "http://localhost:6969/api/expenses/" + expenseId,
     {
-      method: "PATCH",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },

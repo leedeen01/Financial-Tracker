@@ -1,5 +1,13 @@
 import { Expense } from "../models/expense";
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, Customized } from 'recharts';
+import {
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  Tooltip,
+  Legend,
+  Customized,
+} from "recharts";
 
 interface Category {
   name: string;
@@ -15,27 +23,37 @@ interface Props {
 const OverviewChart = ({ expenses, categories }: Props) => {
   const dataByCategory = categories.map((category) => {
     const total = expenses
-    .filter((expense) => expense.category === category.name)
-    .reduce((sum, expense) => sum + expense.amount, 0);
+      .filter((expense) => expense.category === category.name)
+      .reduce((sum, expense) => sum + expense.amount, 0);
 
     return {
       name: category.name,
       value: parseFloat(total.toFixed(2)),
       backgroundColor: category.background,
-      borderColor: category.border
+      borderColor: category.border,
     };
   });
 
-  const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
+  const totalExpenses = expenses.reduce(
+    (sum, expense) => sum + expense.amount,
+    0
+  );
 
   const expensesCenterText = () => {
     return (
-      <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" fontSize={20}>
+      <text
+        x="50%"
+        y="50%"
+        textAnchor="middle"
+        dominantBaseline="middle"
+        fontSize={20}
+      >
         Total: ${totalExpenses.toFixed(2)}
       </text>
     );
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const legendFormatter = (value: string, entry: any) => {
     const { payload } = entry;
     return <span style={{ color: payload.borderColor }}>{value}</span>;
@@ -58,17 +76,18 @@ const OverviewChart = ({ expenses, categories }: Props) => {
                     cy="50%"
                     outerRadius={180}
                     innerRadius={100}
-                    isAnimationActive={true}>
-                      {dataByCategory.map((entry, index) => (
-                        <Cell
-                          key={`cell-${index}`}
-                          fill={entry.backgroundColor}
-                          stroke={entry.borderColor}
-                        />
-                      ))}
+                    isAnimationActive={true}
+                  >
+                    {dataByCategory.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={entry.backgroundColor}
+                        stroke={entry.borderColor}
+                      />
+                    ))}
                   </Pie>
                   <Tooltip />
-                  <Legend formatter={legendFormatter}/>
+                  <Legend formatter={legendFormatter} />
                   <Customized component={expensesCenterText} />
                 </PieChart>
               </ResponsiveContainer>

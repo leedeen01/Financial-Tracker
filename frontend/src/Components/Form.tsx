@@ -20,27 +20,38 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 interface Props {
-  expenses: Expense[];
+  expenseToEdit?: Expense;
   onInclude: (item: Expense) => void;
+  onUpdate: (item: Expense) => void;
   categories: Category[];
 }
 
-const Form = ({ expenses, onInclude, categories }: Props) => {
+const Form = ({ onInclude, onUpdate, categories, expenseToEdit }: Props) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>({ resolver: zodResolver(schema) });
+  } = useForm<FormData>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      description: expenseToEdit?.description || "",
+      amount: expenseToEdit?.amount || 0,
+      category: expenseToEdit?.category || "",
+    },
+  });
 
   const onSubmit = (data: FieldValues) => {
     const newExpense = {
-      _id: String(expenses.length + 1),
+      _id: "",
       description: data.description,
       amount: data.amount,
       category: data.category,
     };
-
-    onInclude(newExpense);
+    if (expenseToEdit) {
+      onUpdate(newExpense);
+    } else {
+      onInclude(newExpense);
+    }
   };
 
   return (
