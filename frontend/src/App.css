@@ -1,7 +1,6 @@
-.top {
+/* .top {
   display: flex;
-  height: 50px;
-  background-color: grey;
+  height: fit-content;
   align-items: center;
   padding: 20px;
 }
@@ -19,4 +18,8 @@
 .content {
   padding: 0px;
   margin: 20px;
+} */
+
+.width100 {
+  width: 100%;
 }

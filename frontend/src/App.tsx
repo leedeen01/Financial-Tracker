@@ -1,119 +1,71 @@
 import "./App.css";
-import "bootstrap/dist/css/bootstrap.css";
-
-import ExpenseList from "./Components/ExpenseList";
-import ExpenseFilter from "./Components/ExpenseFilter";
-import OverviewChart from "./Components/OverviewChart";
-import NavList from "./Components/Nav/NavList";
-import NavBar from "./Components/Nav/NavBar";
-/*import GoogleOAuth from "./Components/GoogleOAuth";*/
-
+import Login from "./Components/Login.tsx";
+import SignUp from "./Components/SignUp.tsx";
+import NavBar from "./Components/nav/NavBar.tsx";
 import { useEffect, useState } from "react";
-import { categories, Expense } from "./models/expense";
-import * as expensesApi from "./network/expenses_api";
-import AddEditExpenseDialog from "./Components/AddEditExpenseDialog";
+import { User } from "./models/user.ts";
+import * as ExpensesApi from "./network/expenses_api";
+import { Container } from "react-bootstrap";
+import Home from "./pages/Home.tsx";
+import HomeLoggedOut from "./pages/HomeLoggedOut.tsx";
 
 function App() {
-  const [selectedExpense, setSelectedExpense] = useState("");
-  const [showAddDialog, setShowAddDialog] = useState(false);
 
-  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 
-  const [selectedCategory, setSelectedCategory] = useState("");
-
-  const selectedExpenses = selectedCategory
-    ? expenses.filter((e) => e.category === selectedCategory)
-    : expenses;
-
-  const [NavListToggle, onToggleNavList] = useState(false);
-
-  const onToggle = () => {
-    onToggleNavList(!NavListToggle);
-  };
+  const [showSignUp, setShowSignUp] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
 
   useEffect(() => {
-    async function loadExpenses() {
+    async function fetchLoggedInUser() {
       try {
-        const expenses = await expensesApi.fetchExpense();
-        setExpenses(expenses);
+        const user = await ExpensesApi.getLoggedInUser();
+        setLoggedInUser(user);
       } catch (error) {
         console.error(error);
-        alert(error);
       }
     }
-    loadExpenses();
+    fetchLoggedInUser();
   }, []);
 
-  async function deleteExpense(expense: Expense) {
-    try {
-      await expensesApi.deleteExpense(expense._id);
-      setExpenses(expenses.filter((e) => e._id !== expense._id));
-    } catch (error) {
-      console.error(error);
-      alert(error);
-    }
-  }
   return (
-    <>
-      <div className="container-fluid gx-0">
-        {/* NavBar Section */}
-        <div className="top d-flex justify-content-between">
-          <NavBar onToggle={onToggle} />
-          {/*<GoogleOAuth />*/}
-        </div>
+    <div>
+      {/* NavBar Section */}
+      <NavBar
+        loggedInUser={loggedInUser}
+        onLoginClicked={() => setShowLogin(true)}
+        onSignUpClicked={() => setShowSignUp(true)}
+        onLogoutSuccessful={() => setLoggedInUser(null)}
+      />
 
-        {/* NavList Section */}
-        <div className="row">
-          {NavListToggle && <NavList />}
+      <Container>
+        <>
+          { loggedInUser
+            ? <Home />
+            : <HomeLoggedOut />
+          }
+        </>
+      </Container>
 
-          <div className="col content gx-0">
-            {/* Overview Chart Section */}
-            <OverviewChart expenses={expenses} categories={categories} />
-
-            {/* ExpenseForm Section */}
-            {showAddDialog && (
-              <AddEditExpenseDialog
-                expenses={expenses}
-                onDismiss={() => {
-                  setShowAddDialog(false);
-                  setSelectedExpense("");
-                }}
-                updateExpenses={setExpenses} // Pass the updateExpenses function
-              />
-            )}
-
-            <div className="row z">
-              <div className="mt-5 mb-3">
-                {/* ExpenseFilter Section */}
-                <ExpenseFilter
-                  onSelectCategory={(category) => setSelectedCategory(category)}
-                  categories={categories}
-                />
-              </div>
-
-              {/* ExpenseList Section */}
-              <ExpenseList
-                expenses={selectedExpenses}
-                onDelete={(id) => deleteExpense(id)}
-                onAdd={() => setShowAddDialog(true)}
-                onEdit={(id) => setSelectedExpense(id)}
-              />
-              {showAddDialog && (
-                <AddEditExpenseDialog
-                  expenseToEdit={selectedExpense}
-                  expenses={expenses}
-                  onDismiss={() => {
-                    setShowAddDialog(false);
-                    setSelectedExpense("");
-                  }}
-                  updateExpenses={setExpenses} // Pass the updateExpenses function
-                />
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
+      { showSignUp &&
+        <SignUp
+          onDismiss={() => setShowSignUp(false)}
+          onSignUpSuccessful={(user) => {
+            setLoggedInUser(user);
+            setShowSignUp(false);
+          }}
+        />
+      }
+      { showLogin &&
+        <Login
+          onDismiss={() => setShowLogin(false)}
+          onLoginSuccessful={(user) => {
+            setLoggedInUser(user);
+            setShowLogin(false);
+          }}
+        />
+      }
+    </div>
   );
 }
 

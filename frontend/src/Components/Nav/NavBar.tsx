@@ -1,17 +1,33 @@
-import { FaAlignJustify } from "react-icons/fa";
+import { Container, Navbar, Nav } from "react-bootstrap";
+import { User } from "../../models/user";
+import NavBarLoggedInView from "./NavBarLoggedInView";
+import NavBarLoggedOutView from "./NavBarLoggedOutView";
 
-interface Props {
-  onToggle: () => void;
+interface NavBarProps {
+  loggedInUser: User | null,
+  onSignUpClicked: () => void,
+  onLoginClicked: () => void,
+  onLogoutSuccessful: () => void,
 }
 
-const NavBar = ({ onToggle }: Props) => {
+const NavBar = ({ loggedInUser, onSignUpClicked, onLoginClicked, onLogoutSuccessful }: NavBarProps) => {
   return (
-    <>
-      <div>
-        <FaAlignJustify className="hamburger" onClick={onToggle} />
-        <span className="appName">Trackspence</span>
-      </div>
-    </>
+    <Navbar bg="primary" variant="dark" expand="lg" sticky="top">
+      <Container>
+        <Navbar.Brand>
+          Trackspence
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="main-navbar" />
+        <Navbar.Collapse id="main-navbar">
+          <Nav className="ms-auto">
+            { loggedInUser
+            ? <NavBarLoggedInView user={loggedInUser} onLogoutSuccessful={onLogoutSuccessful} />
+            : <NavBarLoggedOutView onLoginClicked={onLoginClicked} onSignUpClicked={onSignUpClicked} />
+            }
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   );
 };
 
