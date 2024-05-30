@@ -1,7 +1,6 @@
 import "bootstrap/dist/css/bootstrap.css";
 import { Button, Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import "../App.css";
 import { User } from "../models/user";
 import * as ExpensesApi from "../network/expenses_api";
 import { SignUpCredentials } from "../network/expenses_api";
