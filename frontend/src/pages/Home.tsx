@@ -3,7 +3,6 @@ import "bootstrap/dist/css/bootstrap.css";
 import ExpenseFilter from "../Components/ExpenseFilter";
 import ExpenseList from "../Components/ExpenseList";
 import OverviewChart from "../Components/OverviewChart";
-import NavList from "../Components/Nav/NavList";
 
 import { useEffect, useState } from "react";
 import AddEditExpenseDialog from "../Components/AddEditExpenseDialog";
@@ -49,8 +48,6 @@ function Home() {
       <div className="container-fluid gx-0">
         {/* NavList Section */}
         <div className="row">
-          <NavList />
-
           <div className="col content gx-0">
             {/* Overview Chart Section */}
             <OverviewChart expenses={expenses} categories={categories} />
