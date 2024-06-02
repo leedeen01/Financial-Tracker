@@ -1,7 +1,7 @@
 import "./App.css";
 import Login from "./Components/Login.tsx";
 import SignUp from "./Components/SignUp.tsx";
-import NavBar from "./Components/nav/NavBar.tsx";
+import NavBar from "./Components/Nav/NavBar.tsx";
 import { useEffect, useState } from "react";
 import { User } from "./models/user.ts";
 import * as ExpensesApi from "./network/expenses_api";
@@ -10,7 +10,6 @@ import Home from "./pages/Home.tsx";
 import HomeLoggedOut from "./pages/HomeLoggedOut.tsx";
 
 function App() {
-
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 
   const [showSignUp, setShowSignUp] = useState(false);
@@ -39,15 +38,10 @@ function App() {
       />
 
       <Container>
-        <>
-          { loggedInUser
-            ? <Home />
-            : <HomeLoggedOut />
-          }
-        </>
+        <>{loggedInUser ? <Home /> : <HomeLoggedOut />}</>
       </Container>
 
-      { showSignUp &&
+      {showSignUp && (
         <SignUp
           onDismiss={() => setShowSignUp(false)}
           onSignUpSuccessful={(user) => {
@@ -55,8 +49,8 @@ function App() {
             setShowSignUp(false);
           }}
         />
-      }
-      { showLogin &&
+      )}
+      {showLogin && (
         <Login
           onDismiss={() => setShowLogin(false)}
           onLoginSuccessful={(user) => {
@@ -64,7 +58,7 @@ function App() {
             setShowLogin(false);
           }}
         />
-      }
+      )}
     </div>
   );
 }

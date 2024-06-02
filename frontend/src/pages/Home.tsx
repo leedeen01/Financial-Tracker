@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import ExpenseFilter from "../Components/ExpenseFilter";
 import ExpenseList from "../Components/ExpenseList";
 import OverviewChart from "../Components/OverviewChart";
-import NavList from "../Components/nav/NavList";
+import NavList from "../Components/Nav/NavList";
 
 import { useEffect, useState } from "react";
 import AddEditExpenseDialog from "../Components/AddEditExpenseDialog";
