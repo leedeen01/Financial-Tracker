@@ -1,17 +1,14 @@
 {
   "name": "expensetracker",
-  "private": true,
+  "private": false,
   "version": "0.0.0",
-  "homepage": "https://leedeen01.github.io/ExpenseTracker/",
   "type": "module",
-  "proxy": "http://localhost:5000",
+  "homepage": "",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@hookform/resolvers": "^2.9.11",
