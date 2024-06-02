@@ -46,7 +46,6 @@ function Home() {
   return (
     <>
       <div className="container-fluid gx-0">
-        {/* NavList Section */}
         <div className="row">
           <div className="col content gx-0">
             {/* Overview Chart Section */}
