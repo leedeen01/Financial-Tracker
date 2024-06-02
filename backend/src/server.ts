@@ -3,7 +3,7 @@ import "dotenv/config";
 import env from "./util/validateEnv";
 import mongoose from "mongoose";
 
-const port = process.env.PORT || env.PORT;
+const port = process.env.PORT || 6969;
 
 mongoose
   .connect(env.MONGO_CONNECTION_STRING!)
