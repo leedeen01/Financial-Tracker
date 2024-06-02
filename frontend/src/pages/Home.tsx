@@ -22,12 +22,6 @@ function Home() {
     ? expenses.filter((e) => e.category === selectedCategory)
     : expenses;
 
-  const [NavListToggle, onToggleNavList] = useState(false);
-
-  const onToggle = () => {
-    onToggleNavList(!NavListToggle);
-  };
-
   useEffect(() => {
     async function loadExpenses() {
       try {
@@ -55,12 +49,11 @@ function Home() {
       <div className="container-fluid gx-0">
         {/* NavList Section */}
         <div className="row">
-          {NavListToggle && <NavList />}
+          <NavList />
 
           <div className="col content gx-0">
             {/* Overview Chart Section */}
             <OverviewChart expenses={expenses} categories={categories} />
-
             {/* ExpenseForm Section */}
             {showAddDialog && (
               <AddEditExpenseDialog
