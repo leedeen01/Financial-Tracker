@@ -12,7 +12,7 @@ import MongoStore from "connect-mongo";
 const app = express();
 app.use(
   cors({
-    origin: "https://slug-panel.onrender.com",
+    origin: "https://main--trackspence1.netlify.app/",
   })
 );
 app.options("*", cors());
