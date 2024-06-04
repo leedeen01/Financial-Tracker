@@ -10,12 +10,11 @@ import env from "./util/validateEnv";
 import MongoStore from "connect-mongo";
 
 const app = express();
-app.use(
-  cors({
-    origin: "https://main--trackspence1.netlify.app/",
-  })
-);
-app.options("*", cors());
+const corsOptions = {
+  credentials: true,
+  origin: ["http://localhost:5173", ""], // Whitelist the domains you want to allow
+};
+app.use(cors(corsOptions));
 
 //to get a console log message for any request
 app.use(morgan("dev"));

@@ -61,6 +61,7 @@ export async function login(credentials: LoginCredentials): Promise<User> {
 export async function logout() {
   await fetchData(`${website}/api/users/logout`, {
     method: "POST",
+    credentials: "include",
   });
 }
 
