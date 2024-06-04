@@ -12,7 +12,7 @@ import MongoStore from "connect-mongo";
 const app = express();
 const corsOptions = {
   credentials: true,
-  origin: ["https://main--trackspence1.netlify.app"], // Whitelist the domains you want to allow
+  origin: ["7f947cef-e496-4272-a361-fce8733fc0a3"], // Whitelist the domains you want to allow
 };
 app.use(cors(corsOptions));
 
