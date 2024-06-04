@@ -10,11 +10,12 @@ import env from "./util/validateEnv";
 import MongoStore from "connect-mongo";
 
 const app = express();
-const corsOptions = {
-  credentials: true,
-  origin: ["7f947cef-e496-4272-a361-fce8733fc0a3"], // Whitelist the domains you want to allow
-};
-app.use(cors(corsOptions));
+app.use(
+  cors({
+    origin: "https://slug-panel.onrender.com",
+  })
+);
+app.options("*", cors());
 
 //to get a console log message for any request
 app.use(morgan("dev"));
