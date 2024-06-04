@@ -17,6 +17,7 @@ async function fetchData(input: RequestInfo, init?: RequestInit) {
 export async function getLoggedInUser(): Promise<User> {
   const response = await fetchData(`${website}/api/users`, {
     method: "GET",
+    credentials: "include",
   });
   return response.json();
 }
@@ -33,6 +34,8 @@ export async function signUp(credentials: SignUpCredentials): Promise<User> {
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: "include",
+
     body: JSON.stringify(credentials),
   });
   return response.json();
@@ -49,6 +52,7 @@ export async function login(credentials: LoginCredentials): Promise<User> {
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: "include",
     body: JSON.stringify(credentials),
   });
   return response.json();
@@ -104,7 +108,6 @@ export async function updateExpense(
 }
 
 export async function deleteExpense(expenseId: string) {
-  console.log(expenseId);
   return await fetchData(`${website}/api/expenses/` + expenseId, {
     method: "DELETE",
   });

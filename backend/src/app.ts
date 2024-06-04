@@ -10,25 +10,31 @@ import env from "./util/validateEnv";
 import MongoStore from "connect-mongo";
 
 const app = express();
+const corsOptions = {
+  credentials: true,
+  origin: ["http://localhost:5173", "https://main--trackspence1.netlify.app/"], // Whitelist the domains you want to allow
+};
+app.use(cors(corsOptions));
 
-app.use(cors());
 //to get a console log message for any request
 app.use(morgan("dev"));
 //setup express to accept json bodies
 app.use(express.json());
 
-app.use(session({
-  secret: env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    maxAge: 60 * 60 * 1000,
-  },
-  rolling: true,
-  store: MongoStore.create({
-    mongoUrl: env.MONGO_CONNECTION_STRING
-  }),
-}));
+app.use(
+  session({
+    secret: env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 60 * 60 * 1000,
+    },
+    rolling: true,
+    store: MongoStore.create({
+      mongoUrl: env.MONGO_CONNECTION_STRING,
+    }),
+  })
+);
 
 app.use("/api/expenses", expenseRoutes);
 app.use("/api/users", userRoutes);
