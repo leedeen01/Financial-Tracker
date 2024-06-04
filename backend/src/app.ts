@@ -14,7 +14,7 @@ const corsOptions = {
   credentials: true,
   origin: [
     "http://localhost:5173",
-    "https://main--trackspence1.netlify.app/api/users",
+    "https://main--trackspence1.netlify.app/api",
     "https://financial-tracker-mtpk.onrender.com",
   ], // Whitelist the domains you want to allow
 };
