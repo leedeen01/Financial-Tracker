@@ -42,8 +42,8 @@ app.use(
   })
 );
 
-app.use("/api/expenses", expenseRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/expenses", expenseRoutes);
 
 app.use((req, res, next) => {
   next(createHttpError(404, "Endpoint not found"));
