@@ -21,6 +21,8 @@ app.use(morgan("dev"));
 //setup express to accept json bodies
 app.use(express.json());
 
+app.set("trust proxy", 1); // trust first proxy
+
 app.use(
   session({
     secret: env.SESSION_SECRET,
