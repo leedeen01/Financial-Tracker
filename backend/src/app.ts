@@ -26,8 +26,10 @@ app.use(
     secret: env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    name: "MyCoolWebAppCookieName", // This needs to be unique per-host.
     cookie: {
       maxAge: 60 * 60 * 1000,
+      httpOnly: false,
       sameSite: "none",
       secure: true,
     },
