@@ -1,7 +1,7 @@
 import { Expense, mapExpenseJSONToExpense } from "../models/expense";
 import { User } from "../models/user";
 
-//const website = "http://localhost:6969";
+// const website = "http://localhost:6969";
 const website = "https://financial-tracker-mtpk.onrender.com";
 async function fetchData(input: RequestInfo, init?: RequestInit) {
   const response = await fetch(input, init);

@@ -25,9 +25,9 @@ app.set("trust proxy", 1); // trust first proxy
 
 app.use(
   session({
-    secret: env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET || env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     name: "MyCoolWebAppCookieName", // This needs to be unique per-host.
     cookie: {
       maxAge: 60 * 60 * 1000,
@@ -37,7 +37,8 @@ app.use(
     },
     rolling: true,
     store: MongoStore.create({
-      mongoUrl: env.MONGO_CONNECTION_STRING,
+      mongoUrl:
+        process.env.MONGO_CONNECTION_STRING || env.MONGO_CONNECTION_STRING,
     }),
   })
 );
