@@ -3,6 +3,7 @@ import { InferSchemaType, Schema, model } from "mongoose";
 //variables to be stored in database
 const expenseSchema = new Schema(
   {
+    userId: { type: Schema.Types.ObjectId, required: true },
     description: { type: String, required: true },
     amount: { type: Number, required: true },
     category: { type: String, required: true },

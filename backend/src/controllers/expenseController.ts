@@ -2,10 +2,16 @@ import { RequestHandler } from "express";
 import expenseModel from "../models/expense";
 import createHttpError from "http-errors";
 import mongoose from "mongoose";
+import { assertIsDefined } from "../util/assertIsDefined";
 
 export const getExpenses: RequestHandler = async (req, res, next) => {
+  const authenticatedUserId = req.session.userId;
   try {
-    const expenses = await expenseModel.find().exec();
+    assertIsDefined(authenticatedUserId);
+
+    const expenses = await expenseModel
+      .find({ userId: authenticatedUserId })
+      .exec();
     res.status(200).json(expenses);
   } catch (error) {
     next(error);
@@ -14,7 +20,10 @@ export const getExpenses: RequestHandler = async (req, res, next) => {
 
 export const getExpense: RequestHandler = async (req, res, next) => {
   const expenseId = req.params.expenseId;
+  const authenticatedUserId = req.session.userId;
   try {
+    assertIsDefined(authenticatedUserId);
+
     //if format of expenseID is invalid
     if (!mongoose.isValidObjectId(expenseId)) {
       throw createHttpError(400, "Invalid expenseID");
@@ -25,6 +34,10 @@ export const getExpense: RequestHandler = async (req, res, next) => {
     //if epenseID given is invalid
     if (!expense) {
       throw createHttpError(404, "Expense not found");
+    }
+
+    if (!expense.userId.equals(authenticatedUserId)) {
+      throw createHttpError(401, "You cannot access this note");
     }
     res.status(200).json(expense);
   } catch (error) {
@@ -48,12 +61,15 @@ export const createExpense: RequestHandler<
   const amount = req.body.amount;
   const category = req.body.category;
   /*const time = req.body.category;*/
-
+  const authenticatedUserId = req.session.userId;
   try {
+    assertIsDefined(authenticatedUserId);
+
     if (!description || !amount || !category) {
       throw createHttpError(400, "Please enter all input correctly");
     }
     const newExpense = await expenseModel.create({
+      userId: authenticatedUserId,
       description: description,
       amount: amount,
       category: category,
@@ -86,8 +102,10 @@ export const updateExpense: RequestHandler<
   const newDescription = req.body.description;
   const newAmount = req.body.amount;
   const newCategory = req.body.category;
-
+  const authenticatedUserId = req.session.userId;
   try {
+    assertIsDefined(authenticatedUserId);
+
     if (!mongoose.isValidObjectId(expenseId)) {
       throw createHttpError(400, "Invalid expenseID");
     }
@@ -99,6 +117,11 @@ export const updateExpense: RequestHandler<
     if (!expense) {
       throw createHttpError(404, "Expense not found");
     }
+
+    if (!expense.userId.equals(authenticatedUserId)) {
+      throw createHttpError(401, "You cannot access this note");
+    }
+
     expense.description = newDescription;
     expense.amount = newAmount;
     expense.category = newCategory;
@@ -113,8 +136,10 @@ export const updateExpense: RequestHandler<
 
 export const deleteExpense: RequestHandler = async (req, res, next) => {
   const expenseId = req.params.expenseId;
-
+  const authenticatedUserId = req.session.userId;
   try {
+    assertIsDefined(authenticatedUserId);
+
     if (!mongoose.isValidObjectId(expenseId)) {
       throw createHttpError(400, "Invalid expenseID");
     }
@@ -122,6 +147,10 @@ export const deleteExpense: RequestHandler = async (req, res, next) => {
 
     if (!expense) {
       throw createHttpError(404, "Expense not found");
+    }
+
+    if (!expense.userId.equals(authenticatedUserId)) {
+      throw createHttpError(401, "You cannot access this note");
     }
 
     await expenseModel.findByIdAndDelete(expenseId);

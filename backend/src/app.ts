@@ -8,6 +8,7 @@ import cors from "cors";
 import session from "express-session";
 import env from "./util/validateEnv";
 import MongoStore from "connect-mongo";
+import { requiresAuth } from "./middleware/auth";
 
 const app = express();
 const corsOptions = {
@@ -21,7 +22,7 @@ app.use(morgan("dev"));
 //setup express to accept json bodies
 app.use(express.json());
 
-app.set("trust proxy", 1); // trust first proxy
+app.set("trust proxy", 1); // trust first proxyS
 
 app.use(
   session({
@@ -33,7 +34,7 @@ app.use(
       maxAge: 60 * 60 * 1000,
       httpOnly: false,
       sameSite: "none",
-      secure: true,
+      secure: false,
     },
     rolling: true,
     store: MongoStore.create({
@@ -44,7 +45,7 @@ app.use(
 );
 
 app.use("/api/users", userRoutes);
-app.use("/api/expenses", expenseRoutes);
+app.use("/api/expenses", requiresAuth, expenseRoutes);
 
 app.use((req, res, next) => {
   next(createHttpError(404, "Endpoint not found"));

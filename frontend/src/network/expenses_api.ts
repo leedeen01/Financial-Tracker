@@ -68,6 +68,7 @@ export async function logout() {
 export async function fetchExpense(): Promise<Expense[]> {
   const response = await fetchData(`${website}/api/expenses`, {
     method: "GET",
+    credentials: "include",
   });
   const expensesJSON = await response.json();
 
@@ -86,9 +87,11 @@ export async function createExpense(expense: expenseInput): Promise<Expense[]> {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(expense),
+    credentials: "include",
   });
   const expenses = await fetchData(`${website}/api/expenses`, {
     method: "GET",
+    credentials: "include",
   });
   const expensesJSON = await expenses.json();
   return mapExpenseJSONToExpense(expensesJSON);
@@ -104,6 +107,7 @@ export async function updateExpense(
       "Content-Type": "application/json",
     },
     body: JSON.stringify(expense),
+    credentials: "include",
   });
   return response.json();
 }
@@ -111,5 +115,6 @@ export async function updateExpense(
 export async function deleteExpense(expenseId: string) {
   return await fetchData(`${website}/api/expenses/` + expenseId, {
     method: "DELETE",
+    credentials: "include",
   });
 }

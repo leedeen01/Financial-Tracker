@@ -103,8 +103,6 @@ export const login: RequestHandler<
     }
 
     req.session.userId = user._id;
-    console.log(req.session);
-
     res.status(201).json(user);
   } catch (error) {
     next(error);
