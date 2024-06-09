@@ -47,6 +47,7 @@ export const getExpense: RequestHandler = async (req, res, next) => {
 
 interface createExpenseBody {
   description?: string;
+  date?: Date;
   amount?: number;
   category?: string;
 }
@@ -58,6 +59,7 @@ export const createExpense: RequestHandler<
   unknown
 > = async (req, res, next) => {
   const description = req.body.description;
+  const date = req.body.date;
   const amount = req.body.amount;
   const category = req.body.category;
   /*const time = req.body.category;*/
@@ -65,11 +67,12 @@ export const createExpense: RequestHandler<
   try {
     assertIsDefined(authenticatedUserId);
 
-    if (!description || !amount || !category) {
+    if (!description || !amount || !category || !date) {
       throw createHttpError(400, "Please enter all input correctly");
     }
     const newExpense = await expenseModel.create({
       userId: authenticatedUserId,
+      date: date,
       description: description,
       amount: amount,
       category: category,
@@ -88,6 +91,7 @@ interface updateExpenseParams {
 
 interface updateExpenseBody {
   description?: string;
+  date?: Date;
   amount?: number;
   category?: string;
 }
@@ -100,6 +104,7 @@ export const updateExpense: RequestHandler<
 > = async (req, res, next) => {
   const expenseId = req.params.expenseId;
   const newDescription = req.body.description;
+  const newDate = req.body.date;
   const newAmount = req.body.amount;
   const newCategory = req.body.category;
   const authenticatedUserId = req.session.userId;
@@ -109,7 +114,7 @@ export const updateExpense: RequestHandler<
     if (!mongoose.isValidObjectId(expenseId)) {
       throw createHttpError(400, "Invalid expenseID");
     }
-    if (!newDescription || !newAmount || !newCategory) {
+    if (!newDescription || !newAmount || !newCategory || !newDate) {
       throw createHttpError(400, "Please enter all input correctly");
     }
     const expense = await expenseModel.findById(expenseId).exec();
@@ -123,6 +128,7 @@ export const updateExpense: RequestHandler<
     }
 
     expense.description = newDescription;
+    expense.date = newDate;
     expense.amount = newAmount;
     expense.category = newCategory;
 

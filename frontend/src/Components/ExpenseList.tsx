@@ -18,35 +18,47 @@ const ExpenseList = ({ expenses, onDelete, onAdd, onEdit }: Props) => {
               <th>Description</th>
               <th>Amount</th>
               <th>Category</th>
+              <th>Date</th>
               <th>
                 <MdAdd onClick={() => onAdd()} className="w-25 text-muted" />
               </th>
             </tr>
           </thead>
           <tbody>
-            {expenses.map((expense) => (
-              <tr key={expense._id}>
-                <td>{expense.description}</td>
-                <td>{expense.amount.toFixed(2)}</td>
-                <td>{expense.category}</td>
-                <td>
-                  <MdDelete
-                    className="text-muted w-25"
-                    onClick={(e) => {
-                      onDelete(expense);
-                      e.stopPropagation();
-                    }}
-                  />
-                  <MdEdit
-                    className="text-muted w-25"
-                    onClick={() => {
-                      onAdd();
-                      onEdit(expense._id);
-                    }}
-                  />
-                </td>
-              </tr>
-            ))}
+            {expenses.map((expense) => {
+              const date = new Date(expense.date);
+              const formattedDate = `${date
+                .getDate()
+                .toString()
+                .padStart(2, "0")}-${(date.getMonth() + 1)
+                .toString()
+                .padStart(2, "0")}-${date.getFullYear().toString().slice(2)}`;
+
+              return (
+                <tr key={expense._id}>
+                  <td>{expense.description}</td>
+                  <td>{expense.amount.toFixed(2)}</td>
+                  <td>{expense.category}</td>
+                  <td>{formattedDate}</td>
+                  <td>
+                    <MdDelete
+                      className="text-muted w-25"
+                      onClick={(e) => {
+                        onDelete(expense);
+                        e.stopPropagation();
+                      }}
+                    />
+                    <MdEdit
+                      className="text-muted w-25"
+                      onClick={() => {
+                        onAdd();
+                        onEdit(expense._id);
+                      }}
+                    />
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
           <tfoot>
             <tr>

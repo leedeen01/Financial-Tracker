@@ -1,7 +1,9 @@
-import { FieldValues, useForm } from "react-hook-form";
+import { FieldValues, useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod/dist/zod.js";
 import { Expense } from "../models/expense";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 interface Category {
   name: string;
@@ -14,6 +16,7 @@ const schema = z.object({
   amount: z
     .number({ invalid_type_error: "Please enter valid amount" })
     .min(0, { message: "Amount must be positive" }),
+  date: z.date(),
   category: z.string().nonempty({ message: "Please choose a category" }),
 });
 
@@ -28,6 +31,7 @@ interface Props {
 
 const Form = ({ onInclude, onUpdate, categories, expenseToEdit }: Props) => {
   const {
+    control,
     register,
     handleSubmit,
     formState: { errors },
@@ -36,6 +40,7 @@ const Form = ({ onInclude, onUpdate, categories, expenseToEdit }: Props) => {
     defaultValues: {
       description: expenseToEdit?.description || "",
       amount: expenseToEdit?.amount || 0,
+      date: expenseToEdit?.date || new Date(),
       category: expenseToEdit?.category || "",
     },
   });
@@ -45,8 +50,10 @@ const Form = ({ onInclude, onUpdate, categories, expenseToEdit }: Props) => {
       _id: "",
       description: data.description,
       amount: data.amount,
+      date: data.date,
       category: data.category,
     };
+
     if (expenseToEdit) {
       onUpdate(newExpense);
     } else {
@@ -85,6 +92,22 @@ const Form = ({ onInclude, onUpdate, categories, expenseToEdit }: Props) => {
           {errors.amount && (
             <p className="text-danger"> {errors.amount.message} </p>
           )}
+        </div>
+        <label htmlFor="date" className="form-label">
+          Date
+        </label>
+        <div className="mb-3">
+          <Controller
+            control={control}
+            name="date"
+            render={({ field }) => (
+              <DatePicker
+                placeholderText="Select date"
+                onChange={(date) => field.onChange(date)}
+                selected={field.value}
+              />
+            )}
+          />
         </div>
         <div className="mb-3">
           <label htmlFor="category" className="form-label">

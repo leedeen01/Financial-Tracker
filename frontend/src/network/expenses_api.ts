@@ -1,4 +1,4 @@
-import { Expense, mapExpenseJSONToExpense } from "../models/expense";
+import { Expense } from "../models/expense";
 import { User } from "../models/user";
 
 // const website = "http://localhost:6969";
@@ -70,9 +70,16 @@ export async function fetchExpense(): Promise<Expense[]> {
     method: "GET",
     credentials: "include",
   });
-  const expensesJSON = await response.json();
+  const expenses: Expense[] = await response.json();
 
-  return mapExpenseJSONToExpense(expensesJSON);
+  // Sort expenses by date in ascending order
+  expenses.sort((a, b) => {
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
+    return dateA.getTime() - dateB.getTime();
+  });
+
+  return expenses;
 }
 
 export interface expenseInput {
@@ -89,12 +96,21 @@ export async function createExpense(expense: expenseInput): Promise<Expense[]> {
     body: JSON.stringify(expense),
     credentials: "include",
   });
-  const expenses = await fetchData(`${website}/api/expenses`, {
+  const response = await fetchData(`${website}/api/expenses`, {
     method: "GET",
     credentials: "include",
   });
-  const expensesJSON = await expenses.json();
-  return mapExpenseJSONToExpense(expensesJSON);
+
+  const expenses: Expense[] = await response.json();
+
+  // Sort expenses by date in ascending order
+  expenses.sort((a, b) => {
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
+    return dateA.getTime() - dateB.getTime();
+  });
+
+  return expenses;
 }
 
 export async function updateExpense(
