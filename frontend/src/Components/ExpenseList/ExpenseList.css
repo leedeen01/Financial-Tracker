@@ -1,0 +1,12 @@
+/* ExpenseList.css */
+
+@media (max-width: 768px) {
+  .hide-header,
+  .hide-cell {
+    display: none;
+  }
+
+  .table {
+    overflow-x: hidden; /* Enable horizontal scrolling */
+  }
+}

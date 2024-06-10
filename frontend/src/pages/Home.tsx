@@ -1,7 +1,7 @@
 import "bootstrap/dist/css/bootstrap.css";
 
 import ExpenseFilter from "../Components/ExpenseFilter";
-import ExpenseList from "../Components/ExpenseList";
+import ExpenseList from "../Components/ExpenseList/ExpenseList";
 import OverviewChart from "../Components/OverviewChart";
 
 import { useEffect, useState } from "react";
