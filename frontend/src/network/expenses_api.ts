@@ -1,8 +1,8 @@
 import { Expense } from "../models/expense";
 import { User } from "../models/user";
 
-// const website = "http://localhost:6969";
-const website = "https://financial-tracker-mtpk.onrender.com";
+const website = "http://localhost:6969";
+//const website = "https://financial-tracker-mtpk.onrender.com";
 async function fetchData(input: RequestInfo, init?: RequestInit) {
   const response = await fetch(input, init);
   if (response.ok) {
@@ -71,13 +71,6 @@ export async function fetchExpense(): Promise<Expense[]> {
     credentials: "include",
   });
   const expenses: Expense[] = await response.json();
-
-  // Sort expenses by date in ascending order
-  expenses.sort((a, b) => {
-    const dateA = new Date(a.date);
-    const dateB = new Date(b.date);
-    return dateA.getTime() - dateB.getTime();
-  });
 
   return expenses;
 }

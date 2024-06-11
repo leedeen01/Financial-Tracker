@@ -1,7 +1,7 @@
 import "./App.css";
-import Login from "./Components/Login.tsx";
-import SignUp from "./Components/SignUp.tsx";
-import NavBar from "./Components/Nav/NavBar.tsx";
+import Login from "./components/Login.tsx";
+import SignUp from "./components/SignUp.tsx";
+import NavBar from "./components/nav/NavBar.tsx";
 import { useEffect, useState } from "react";
 import { User } from "./models/user.ts";
 import * as ExpensesApi from "./network/expenses_api";

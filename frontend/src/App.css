@@ -1,25 +1,63 @@
-/* .top {
-  display: flex;
-  height: fit-content;
-  align-items: center;
-  padding: 20px;
-}
-
-.appName {
-  margin:10px;
-  font-size:larger;
-}
-
-.container-fluid {
-  padding: 0px;
-  margin: 0px;
-}
-
-.content {
-  padding: 0px;
-  margin: 20px;
-} */
-
 .width100 {
   width: 100%;
+}
+
+.expenselist-heading {
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.expenselist-heading:hover {
+  background-color: #f6f6f6;
+}
+
+.expenselist-button {
+  appearance: none;
+  background-color: transparent;
+  border: 2px solid #1A1A1A;
+  border-radius: 20%;
+  box-sizing: border-box;
+  color: #3B3B3B;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 1.5em;
+  outline: none;
+  text-align: center;
+  transition: all 0.5s cubic-bezier(.23, 1, 0.32, 1);
+  user-select: none;
+  touch-action: manipulation;
+  width: 100%;
+  will-change: transform;
+}
+
+.expenselist-button:disabled {
+  pointer-events: none;
+}
+
+.expenselist-button:hover {
+  color: #fff;
+  background-color: #1a1a1a;
+  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+  transform: translateY(-2px);
+}
+
+.expenselist-button:active {
+  box-shadow: none;
+  transform: translateY(0);
+}
+
+.expenselist-button-container {
+  display: flex;
+  gap: 0.5em;
+  justify-content: center;
+  align-items: center;
+}
+
+.expenselist-editdel {
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.expenselist-editdel:hover {
+  transform: translateY(-3px);
 }

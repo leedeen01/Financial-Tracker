@@ -1,14 +1,14 @@
 import "bootstrap/dist/css/bootstrap.css";
 
-import ExpenseList from "../Components/ExpenseList/ExpenseList";
-import OverviewChart from "../Components/OverviewChart";
+import ExpenseList from "../components/expenselist/ExpenseList";
+import OverviewChart from "../components/OverviewChart";
 
 import { useEffect, useState } from "react";
-import AddEditExpenseDialog from "../Components/AddEditExpenseDialog";
+import AddEditExpenseDialog from "../components/AddEditExpenseDialog";
 import { Expense, categories } from "../models/expense";
 import * as expensesApi from "../network/expenses_api";
 import { months } from "../models/expense";
-import Filter from "../Components/Filter/Filter";
+import Filter from "../components/filter/Filter";
 
 function Home() {
   const [selectedExpense, setSelectedExpense] = useState("");

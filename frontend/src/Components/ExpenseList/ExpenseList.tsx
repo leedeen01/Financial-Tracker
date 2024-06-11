@@ -3,6 +3,7 @@ import { MdDelete, MdAdd, MdEdit } from "react-icons/md";
 import { IoFilter } from "react-icons/io5";
 
 import "./ExpenseList.css";
+import { useState } from "react";
 interface Props {
   expenses: Expense[];
   onDelete: (expense: Expense) => void;
@@ -20,6 +21,40 @@ const ExpenseList = ({
 }: Props) => {
   const isSmallScreen = window.innerWidth <= 996; // Define your screen width threshold
 
+  const [sortConfig, setSortConfig] = useState<{ key: keyof Expense | null; direction: string }>({ key: "date", direction: "asc" });
+
+  const sortedExpenses = expenses.sort((a, b) => {
+    if (sortConfig.key === null) return 0;
+
+    const aValue = a[sortConfig.key];
+    const bValue = b[sortConfig.key];
+
+    if (typeof aValue === 'string' && typeof bValue === 'string') {
+      return sortConfig.direction === "asc"
+        ? aValue.localeCompare(bValue)
+        : bValue.localeCompare(aValue);
+    } else if (typeof aValue === 'number' && typeof bValue === 'number') {
+      return sortConfig.direction === "asc"
+        ? aValue - bValue
+        : bValue - aValue;
+    } else if (sortConfig.key === 'date') {
+      const dateA = new Date(aValue as string | number | Date);
+      const dateB = new Date(bValue as string | number | Date);
+      return sortConfig.direction === "asc"
+        ? dateA.getTime() - dateB.getTime()
+        : dateB.getTime() - dateA.getTime();
+    }
+    return 0;
+  });
+
+  const handleSort = (key: any) => {
+    let direction = "asc";
+    if (sortConfig.key === key && sortConfig.direction === "asc") {
+      direction = "desc";
+    }
+    setSortConfig({ key, direction });
+  };
+
   return (
     <>
       <div className="d-flex justify-content-center table-responsive">
@@ -30,21 +65,35 @@ const ExpenseList = ({
         >
           <thead>
             <tr>
-              <th>Description</th>
-              <th>Amount</th>
-              <th className="hide-header">Category</th>
-              <th className="hide-header">Date</th>
+            <th onClick={() => handleSort("description")} className="expenselist-heading">
+                Description
+                {sortConfig.key === "description" && (sortConfig.direction === "asc" ? " 🔼" : " 🔽")}
+              </th>
+              <th onClick={() => handleSort("amount")} className="expenselist-heading">
+                Amount
+                {sortConfig.key === "amount" && (sortConfig.direction === "asc" ? " 🔼" : " 🔽")}
+              </th>
+              <th onClick={() => handleSort("category")} className="expenselist-heading hide-header">
+                Category
+                {sortConfig.key === "category" && (sortConfig.direction === "asc" ? " 🔼" : " 🔽")}
+              </th>
+              <th onClick={() => handleSort("date")} className="expenselist-heading hide-header">
+                Date
+                {sortConfig.key === "date" && (sortConfig.direction === "asc" ? " 🔼" : " 🔽")}
+              </th>
               <th>
-                <MdAdd onClick={() => onAdd()} className="w-50 text-muted" />
-                <IoFilter
-                  onClick={() => onFilter()}
-                  className="text-muted w-50"
-                />
+                <div className="expenselist-button-container">
+                  <MdAdd onClick={() => onAdd()} className="w-25 expenselist-button" />
+                  <IoFilter
+                    onClick={() => onFilter()}
+                    className="w-25 expenselist-button"
+                  />
+                </div>
               </th>
             </tr>
           </thead>
           <tbody>
-            {expenses.map((expense) => {
+            {sortedExpenses.map((expense) => {
               const date = new Date(expense.date);
               const formattedDate = `${date
                 .getDate()
@@ -67,21 +116,23 @@ const ExpenseList = ({
                   <td className="hide-cell">{expense.category}</td>
                   <td className="hide-header">{formattedDate}</td>
                   <td>
-                    <MdDelete
-                      className="text-muted w-50"
-                      onClick={(e) => {
-                        onDelete(expense);
-                        e.stopPropagation();
-                      }}
-                    />
-                    <MdEdit
-                      className="text-muted w-50"
-                      onClick={(e) => {
-                        onAdd();
-                        onEdit(expense._id);
-                        e.stopPropagation();
-                      }}
-                    />
+                    <div className="expenselist-button-container">
+                      <MdDelete
+                        className="text-muted expenselist-editdel"
+                        onClick={(e) => {
+                          onDelete(expense);
+                          e.stopPropagation();
+                        }}
+                      />
+                      <MdEdit
+                        className="text-muted expenselist-editdel"
+                        onClick={(e) => {
+                          onAdd();
+                          onEdit(expense._id);
+                          e.stopPropagation();
+                        }}
+                      />
+                    </div>
                   </td>
                 </tr>
               );
