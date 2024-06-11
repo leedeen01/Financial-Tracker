@@ -7,17 +7,19 @@ interface Category {
 interface Props {
   onSelectCategory: (category: string) => void;
   categories: Category[];
+  category: string;
 }
 
-const ExpenseFilter = ({ onSelectCategory, categories }: Props) => {
+const FilterCategory = ({ onSelectCategory, categories, category }: Props) => {
   return (
-    <div className="d-flex justify-content-center">
+    <div className="d-flex justify-content-center mb-3">
       <select
         onChange={(event) => onSelectCategory(event.target.value)}
-        className="form-control w-25 text-center"
+        className="form-control w-100 text-center"
         id="category"
+        value={category || "All categories"}
       >
-        <option value="">All categories</option>
+        <option value="">{"All categories"}</option>
         {categories.map((category) => (
           <option key={category.name} value={category.name}>
             {category.name}
@@ -28,4 +30,4 @@ const ExpenseFilter = ({ onSelectCategory, categories }: Props) => {
   );
 };
 
-export default ExpenseFilter;
+export default FilterCategory;

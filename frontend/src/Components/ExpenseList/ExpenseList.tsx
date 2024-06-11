@@ -1,15 +1,24 @@
 import { Expense } from "../../models/expense";
 import { MdDelete, MdAdd, MdEdit } from "react-icons/md";
+import { IoFilter } from "react-icons/io5";
+
 import "./ExpenseList.css";
 interface Props {
   expenses: Expense[];
   onDelete: (expense: Expense) => void;
   onAdd: () => void;
   onEdit: (id: string) => void;
+  onFilter: () => void;
 }
 
-const ExpenseList = ({ expenses, onDelete, onAdd, onEdit }: Props) => {
-  const isSmallScreen = window.innerWidth <= 1200; // Define your screen width threshold
+const ExpenseList = ({
+  expenses,
+  onDelete,
+  onAdd,
+  onEdit,
+  onFilter,
+}: Props) => {
+  const isSmallScreen = window.innerWidth <= 996; // Define your screen width threshold
 
   return (
     <>
@@ -19,7 +28,6 @@ const ExpenseList = ({ expenses, onDelete, onAdd, onEdit }: Props) => {
             isSmallScreen ? "w-100" : "w-75"
           } table-bordered table-striped text-center`}
         >
-          {" "}
           <thead>
             <tr>
               <th>Description</th>
@@ -27,7 +35,11 @@ const ExpenseList = ({ expenses, onDelete, onAdd, onEdit }: Props) => {
               <th className="hide-header">Category</th>
               <th className="hide-header">Date</th>
               <th>
-                <MdAdd onClick={() => onAdd()} className="w-25 text-muted" />
+                <MdAdd onClick={() => onAdd()} className="w-50 text-muted" />
+                <IoFilter
+                  onClick={() => onFilter()}
+                  className="text-muted w-50"
+                />
               </th>
             </tr>
           </thead>
