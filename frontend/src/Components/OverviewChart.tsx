@@ -60,9 +60,9 @@ const OverviewChart = ({ expenses, categories }: Props) => {
   };
 
   return (
-    <div className="container w-75 mt-5">
+    <div className="container w-100 mt-5">
       <div className="row justify-content-center">
-        <div className="col-md-6">
+        <div className="col-md-8 col-sm-12">
           <div className="card text-center">
             <div className="card-body">
               <ResponsiveContainer width="100%" height={450}>
