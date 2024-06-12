@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Expense } from "../models/expense";
 import {
   PieChart,
@@ -59,6 +60,26 @@ const OverviewChart = ({ expenses, categories }: Props) => {
     return <span style={{ color: payload.borderColor }}>{value}</span>;
   };
 
+  const [radius, setRadius] = useState({ outerRadius: 180, innerRadius: 100 });
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width < 768) {
+        // Small devices (tablets)
+        setRadius({ outerRadius: 160, innerRadius: 80 });
+      } else {
+        // Medium devices (desktops) and up
+        setRadius({ outerRadius: 180, innerRadius: 100 });
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize(); // Set initial radius
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <div className="container w-100 mt-5">
       <div className="row justify-content-center">
@@ -74,8 +95,8 @@ const OverviewChart = ({ expenses, categories }: Props) => {
                     cornerRadius={10}
                     cx="50%"
                     cy="50%"
-                    outerRadius={180}
-                    innerRadius={100}
+                    outerRadius={radius.outerRadius}
+                    innerRadius={radius.innerRadius}
                     isAnimationActive={true}
                   >
                     {dataByCategory.map((entry, index) => (
