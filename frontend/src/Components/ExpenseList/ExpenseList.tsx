@@ -19,8 +19,6 @@ const ExpenseList = ({
   onEdit,
   onFilter,
 }: Props) => {
-  const isSmallScreen = window.innerWidth <= 996; // Define your screen width threshold
-
   const [sortConfig, setSortConfig] = useState<{ key: keyof Expense | null; direction: string }>({ key: "date", direction: "asc" });
 
   const sortedExpenses = expenses.sort((a, b) => {
@@ -59,9 +57,7 @@ const ExpenseList = ({
     <>
       <div className="d-flex justify-content-center table-responsive">
         <table
-          className={`table ${
-            isSmallScreen ? "w-100" : "w-75"
-          } table-bordered table-striped text-center`}
+          className="table table-bordered table-striped text-center"
         >
           <thead>
             <tr>
