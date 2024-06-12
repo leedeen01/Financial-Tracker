@@ -1,5 +1,6 @@
 import "bootstrap/dist/css/bootstrap.css";
-
+import { IoFilter } from "react-icons/io5";
+import { MdAdd } from "react-icons/md";
 import ExpenseList from "../Components/ExpenseList/ExpenseList";
 import OverviewChart from "../Components/OverviewChart";
 
@@ -93,16 +94,34 @@ function Home() {
                     category={selectedCategory}
                   />
                 )}
-              </div>
+                <div className="expenselist-heading-button-container">
+                  <span className="expenselist-title">Transactions</span>
+                  <span className="expenselist-AddFilter">
+                    <button
+                      className="expenselist-button"
+                      onClick={() => setShowAddDialog(true)}
+                    >
+                      <MdAdd className="w-50" />
+                      Add New
+                    </button>
+                    <button
+                      className="expenselist-button"
+                      onClick={() => setShowFilter(true)}
+                    >
+                      <IoFilter className="w-50" />
+                      Filter
+                    </button>
+                  </span>
+                </div>
 
-              {/* ExpenseList Section */}
-              <ExpenseList
-                expenses={selectedExpenses}
-                onDelete={(id) => deleteExpense(id)}
-                onAdd={() => setShowAddDialog(true)}
-                onEdit={(id) => setSelectedExpense(id)}
-                onFilter={() => setShowFilter(true)}
-              />
+                {/* ExpenseList Section */}
+                <ExpenseList
+                  expenses={selectedExpenses}
+                  onDelete={(id) => deleteExpense(id)}
+                  onAddEdit={() => setShowAddDialog(true)}
+                  onEdit={(id) => setSelectedExpense(id)}
+                />
+              </div>
 
               {showAddDialog && (
                 <AddEditExpenseDialog

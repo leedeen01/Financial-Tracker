@@ -10,23 +10,34 @@
 .expenselist-heading:hover {
   background-color: #f6f6f6;
 }
+.expenselist-heading-button-container {
+  display: flex;
+  justify-content: space-between; /* This will make items start and end */
+  align-items: center; /* Align items vertically */
+  margin: 10px;
+}
+
+.expenselist-title {
+  font-size: 1.5rem;
+}
+
+.expenselist-AddFilter {
+  gap: 0.5rem;
+}
 
 .expenselist-button {
   appearance: none;
   background-color: transparent;
-  border: 2px solid #1A1A1A;
+  border: 2px solid #1a1a1a;
   border-radius: 20%;
   box-sizing: border-box;
-  color: #3B3B3B;
+  color: #3b3b3b;
   cursor: pointer;
   display: inline-block;
-  font-size: 1.5em;
   outline: none;
-  text-align: center;
-  transition: all 0.5s cubic-bezier(.23, 1, 0.32, 1);
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
   user-select: none;
   touch-action: manipulation;
-  width: 100%;
   will-change: transform;
 }
 

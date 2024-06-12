@@ -1,25 +1,20 @@
 import { Expense } from "../../models/expense";
-import { MdDelete, MdAdd, MdEdit } from "react-icons/md";
-import { IoFilter } from "react-icons/io5";
+import { MdDelete, MdEdit } from "react-icons/md";
 
 import "./ExpenseList.css";
 import { useState } from "react";
 interface Props {
   expenses: Expense[];
   onDelete: (expense: Expense) => void;
-  onAdd: () => void;
+  onAddEdit: () => void;
   onEdit: (id: string) => void;
-  onFilter: () => void;
 }
 
-const ExpenseList = ({
-  expenses,
-  onDelete,
-  onAdd,
-  onEdit,
-  onFilter,
-}: Props) => {
-  const [sortConfig, setSortConfig] = useState<{ key: keyof Expense | null; direction: string }>({ key: "date", direction: "asc" });
+const ExpenseList = ({ expenses, onDelete, onAddEdit, onEdit }: Props) => {
+  const [sortConfig, setSortConfig] = useState<{
+    key: keyof Expense | null;
+    direction: string;
+  }>({ key: "date", direction: "asc" });
 
   const sortedExpenses = expenses.sort((a, b) => {
     if (sortConfig.key === null) return 0;
@@ -27,15 +22,13 @@ const ExpenseList = ({
     const aValue = a[sortConfig.key];
     const bValue = b[sortConfig.key];
 
-    if (typeof aValue === 'string' && typeof bValue === 'string') {
+    if (typeof aValue === "string" && typeof bValue === "string") {
       return sortConfig.direction === "asc"
         ? aValue.localeCompare(bValue)
         : bValue.localeCompare(aValue);
-    } else if (typeof aValue === 'number' && typeof bValue === 'number') {
-      return sortConfig.direction === "asc"
-        ? aValue - bValue
-        : bValue - aValue;
-    } else if (sortConfig.key === 'date') {
+    } else if (typeof aValue === "number" && typeof bValue === "number") {
+      return sortConfig.direction === "asc" ? aValue - bValue : bValue - aValue;
+    } else if (sortConfig.key === "date") {
       const dateA = new Date(aValue as string | number | Date);
       const dateB = new Date(bValue as string | number | Date);
       return sortConfig.direction === "asc"
@@ -56,36 +49,42 @@ const ExpenseList = ({
   return (
     <>
       <div className="d-flex justify-content-center table-responsive">
-        <table
-          className="table table-bordered table-striped text-center"
-        >
+        <table className="table table-bordered table-striped text-center">
           <thead>
             <tr>
-            <th onClick={() => handleSort("description")} className="expenselist-heading">
+              <th
+                onClick={() => handleSort("description")}
+                className="expenselist-heading"
+              >
                 Description
-                {sortConfig.key === "description" && (sortConfig.direction === "asc" ? " 🔼" : " 🔽")}
+                {sortConfig.key === "description" &&
+                  (sortConfig.direction === "asc" ? " 🔼" : " 🔽")}
               </th>
-              <th onClick={() => handleSort("amount")} className="expenselist-heading">
+              <th
+                onClick={() => handleSort("amount")}
+                className="expenselist-heading"
+              >
                 Amount
-                {sortConfig.key === "amount" && (sortConfig.direction === "asc" ? " 🔼" : " 🔽")}
+                {sortConfig.key === "amount" &&
+                  (sortConfig.direction === "asc" ? " 🔼" : " 🔽")}
               </th>
-              <th onClick={() => handleSort("category")} className="expenselist-heading hide-header">
+              <th
+                onClick={() => handleSort("category")}
+                className="expenselist-heading hide-header"
+              >
                 Category
-                {sortConfig.key === "category" && (sortConfig.direction === "asc" ? " 🔼" : " 🔽")}
+                {sortConfig.key === "category" &&
+                  (sortConfig.direction === "asc" ? " 🔼" : " 🔽")}
               </th>
-              <th onClick={() => handleSort("date")} className="expenselist-heading hide-header">
+              <th
+                onClick={() => handleSort("date")}
+                className="expenselist-heading hide-header"
+              >
                 Date
-                {sortConfig.key === "date" && (sortConfig.direction === "asc" ? " 🔼" : " 🔽")}
+                {sortConfig.key === "date" &&
+                  (sortConfig.direction === "asc" ? " 🔼" : " 🔽")}
               </th>
-              <th>
-                <div className="expenselist-button-container">
-                  <MdAdd onClick={() => onAdd()} className="w-25 expenselist-button" />
-                  <IoFilter
-                    onClick={() => onFilter()}
-                    className="w-25 expenselist-button"
-                  />
-                </div>
-              </th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -102,7 +101,7 @@ const ExpenseList = ({
                 <tr
                   key={expense._id}
                   onClick={(e) => {
-                    onAdd();
+                    onAddEdit();
                     onEdit(expense._id);
                     e.stopPropagation();
                   }}
@@ -123,7 +122,7 @@ const ExpenseList = ({
                       <MdEdit
                         className="text-muted expenselist-editdel"
                         onClick={(e) => {
-                          onAdd();
+                          onAddEdit();
                           onEdit(expense._id);
                           e.stopPropagation();
                         }}
