@@ -7,7 +7,7 @@ import AddEditExpenseDialog from "../components/AddEditExpenseDialog";
 import { Expense, categories } from "../models/expense";
 import * as expensesApi from "../network/expenses_api";
 import { months } from "../models/expense";
-import Filter from "../components/filter/Filter";
+import Filter from "../components/Filter/Filter";
 
 function Home() {
   const [selectedExpense, setSelectedExpense] = useState("");
@@ -63,13 +63,15 @@ function Home() {
       <div className="container content">
         <div className="row">
           <SectionOne expenses={expenses} />
-          <SectionTwo expenses={FilteredMonth}
-                      categories={categories}
-                      selectedExpenses={selectedExpenses}
-                      onDelete={(id) => deleteExpense(id)}
-                      onAddEdit={() => setShowAddDialog(true)}
-                      onEdit={(id) => setSelectedExpense(id)}
-                      onFilter={() => setShowFilter(true)} />
+          <SectionTwo
+            expenses={FilteredMonth}
+            categories={categories}
+            selectedExpenses={selectedExpenses}
+            onDelete={(id) => deleteExpense(id)}
+            onAddEdit={() => setShowAddDialog(true)}
+            onEdit={(id) => setSelectedExpense(id)}
+            onFilter={() => setShowFilter(true)}
+          />
         </div>
 
         {showAddDialog && (
@@ -88,9 +90,7 @@ function Home() {
           <Filter
             onDismiss={() => setShowFilter(false)}
             onSelectMonth={(month) => setSelectedMonth(month)}
-            onSelectCategory={(category) =>
-              setSelectedCategory(category)
-            }
+            onSelectCategory={(category) => setSelectedCategory(category)}
             categories={categories}
             month={selectedMonth}
             category={selectedCategory}
