@@ -1,4 +1,5 @@
 import "../../App.css";
+import Logo from "../../assets/logo.png";
 
 import { Container, Navbar, Nav } from "react-bootstrap";
 import { User } from "../../models/user";
@@ -24,11 +25,12 @@ const NavBar = ({
     navigate("/home"); // Navigate to '/home' when brand is clicked
   };
   return (
-    <Navbar bg="primary" variant="dark" expand="lg" sticky="top">
+    <Navbar variant="dark" expand="lg" sticky="top" className="navbar-custom">
       <Container>
         <Navbar.Brand>
-          <div className="navbar-logo" onClick={handleBrandClick}>
-            Trackspence
+          <div onClick={loggedInUser ? handleBrandClick : () => null} className="navbar-logo-container">
+            <img src={Logo} alt="Trackspence Logo" className="navbar-logo" />
+            <h2 className="navbar-text-logo">Trackspence</h2>
           </div>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="main-navbar" />

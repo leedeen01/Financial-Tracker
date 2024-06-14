@@ -179,7 +179,7 @@ const SectionOne = ({ expenses }: Props) => {
                       tick={false}
                     />
                     <Tooltip />
-                    <Bar dataKey="expense" fill="#8884d8" />
+                    <Bar dataKey="expense" fill="#8BAFFF" />
                   </BarChart>
                 </div>
               </div>
@@ -227,8 +227,8 @@ const SectionOne = ({ expenses }: Props) => {
                       innerRadius={30}
                       isAnimationActive={true}
                     >
-                      <Cell key={`Expenses`} fill="#8884d8" />
-                      <Cell key={`Income`} fill="#82ca9d" />
+                      <Cell key={`Expenses`} fill="#DA396A" />
+                      <Cell key={`Income`} fill="#04A85A" />
                     </Pie>
                     <Tooltip content={<CustomTooltip />} />
                   </PieChart>
@@ -276,12 +276,12 @@ const SectionOne = ({ expenses }: Props) => {
                       >
                         <stop
                           offset="5%"
-                          stopColor="#8884d8"
+                          stopColor="#DA396A"
                           stopOpacity={0.8}
                         />
                         <stop
                           offset="95%"
-                          stopColor="#8884d8"
+                          stopColor="#DA396A"
                           stopOpacity={0}
                         />
                       </linearGradient>
@@ -295,7 +295,7 @@ const SectionOne = ({ expenses }: Props) => {
                     <Tooltip />
                     <Area
                       dataKey="expense"
-                      stroke="#8884d8"
+                      stroke="#DA396A"
                       fillOpacity={1}
                       fill="url(#expenseColor)"
                     />
@@ -345,12 +345,12 @@ const SectionOne = ({ expenses }: Props) => {
                       >
                         <stop
                           offset="5%"
-                          stopColor="#82ca9d"
+                          stopColor="#04A85A"
                           stopOpacity={0.8}
                         />
                         <stop
                           offset="95%"
-                          stopColor="#82ca9d"
+                          stopColor="#04A85A"
                           stopOpacity={0}
                         />
                       </linearGradient>
@@ -364,7 +364,7 @@ const SectionOne = ({ expenses }: Props) => {
                     <Tooltip />
                     <Area
                       dataKey="expense"
-                      stroke="#82ca9d"
+                      stroke="#04A85A"
                       fillOpacity={1}
                       fill="url(#incomeColor)"
                     />

@@ -26,7 +26,7 @@ const NavBarLoggedInView = ({
   return (
     <>
       <Navbar.Text className="mx-auto">Welcome, {user.username}</Navbar.Text>
-      <Button onClick={() => navigate("/categories")}> Categories</Button>
+      <Button onClick={() => navigate("/categories")}>Categories</Button>
       <Button onClick={() => navigate("/budgets")}>Budgets</Button>
       <Button onClick={() => navigate("/investments")}>Investments</Button>
       <Button onClick={() => navigate("/friends")}>Friends</Button>
