@@ -1,7 +1,4 @@
 import "bootstrap/dist/css/bootstrap.css";
-import { IoFilter } from "react-icons/io5";
-import { MdAdd } from "react-icons/md";
-import ExpenseList from "../components/expenselist/ExpenseList";
 import SectionOne from "../components/SectionOne";
 import SectionTwo from "../components/SectionTwo";
 
