@@ -82,7 +82,7 @@ function Home() {
               setShowAddDialog(false);
               setSelectedExpense("");
             }}
-            updateExpenses={setExpenses} // Pass the updateExpenses function
+            updateExpenses={setExpenses}
           />
         )}
 
