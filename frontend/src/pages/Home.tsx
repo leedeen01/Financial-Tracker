@@ -2,7 +2,8 @@ import "bootstrap/dist/css/bootstrap.css";
 import { IoFilter } from "react-icons/io5";
 import { MdAdd } from "react-icons/md";
 import ExpenseList from "../components/expenselist/ExpenseList";
-import OverviewChart from "../components/OverviewChart";
+import SectionOne from "../components/SectionOne";
+import SectionTwo from "../components/SectionTwo";
 
 import { useEffect, useState } from "react";
 import AddEditExpenseDialog from "../components/AddEditExpenseDialog";
@@ -62,81 +63,42 @@ function Home() {
   }
   return (
     <>
-      <div className="container-fluid gx-0">
+      <div className="container content">
         <div className="row">
-          <div className="col content gx-0">
-            {/* Overview Chart Section */}
-            <OverviewChart expenses={FilteredMonth} categories={categories} />
-            {/* ExpenseForm Section */}
-            {showAddDialog && (
-              <AddEditExpenseDialog
-                expenses={expenses}
-                onDismiss={() => {
-                  setShowAddDialog(false);
-                  setSelectedExpense("");
-                }}
-                updateExpenses={setExpenses} // Pass the updateExpenses function
-              />
-            )}
-
-            <div className="row z">
-              <div className="mt-5 mb-3">
-                {/* ExpenseFilter Section */}
-                {showFilter && (
-                  <Filter
-                    onDismiss={() => setShowFilter(false)}
-                    onSelectMonth={(month) => setSelectedMonth(month)}
-                    onSelectCategory={(category) =>
-                      setSelectedCategory(category)
-                    }
-                    categories={categories}
-                    month={selectedMonth}
-                    category={selectedCategory}
-                  />
-                )}
-                <div className="expenselist-heading-button-container">
-                  <span className="expenselist-title">Transactions</span>
-                  <span className="expenselist-AddFilter">
-                    <button
-                      className="expenselist-button"
-                      onClick={() => setShowAddDialog(true)}
-                    >
-                      <MdAdd className="w-50" />
-                      Add New
-                    </button>
-                    <button
-                      className="expenselist-button"
-                      onClick={() => setShowFilter(true)}
-                    >
-                      <IoFilter className="w-50" />
-                      Filter
-                    </button>
-                  </span>
-                </div>
-
-                {/* ExpenseList Section */}
-                <ExpenseList
-                  expenses={selectedExpenses}
-                  onDelete={(id) => deleteExpense(id)}
-                  onAddEdit={() => setShowAddDialog(true)}
-                  onEdit={(id) => setSelectedExpense(id)}
-                />
-              </div>
-
-              {showAddDialog && (
-                <AddEditExpenseDialog
-                  expenseToEdit={selectedExpense}
-                  expenses={expenses}
-                  onDismiss={() => {
-                    setShowAddDialog(false);
-                    setSelectedExpense("");
-                  }}
-                  updateExpenses={setExpenses} // Pass the updateExpenses function
-                />
-              )}
-            </div>
-          </div>
+          <SectionOne expenses={expenses} />
+          <SectionTwo expenses={FilteredMonth}
+                      categories={categories}
+                      selectedExpenses={selectedExpenses}
+                      onDelete={(id) => deleteExpense(id)}
+                      onAddEdit={() => setShowAddDialog(true)}
+                      onEdit={(id) => setSelectedExpense(id)}
+                      onFilter={() => setShowFilter(true)} />
         </div>
+
+        {showAddDialog && (
+          <AddEditExpenseDialog
+            expenseToEdit={selectedExpense}
+            expenses={expenses}
+            onDismiss={() => {
+              setShowAddDialog(false);
+              setSelectedExpense("");
+            }}
+            updateExpenses={setExpenses} // Pass the updateExpenses function
+          />
+        )}
+
+        {showFilter && (
+          <Filter
+            onDismiss={() => setShowFilter(false)}
+            onSelectMonth={(month) => setSelectedMonth(month)}
+            onSelectCategory={(category) =>
+              setSelectedCategory(category)
+            }
+            categories={categories}
+            month={selectedMonth}
+            category={selectedCategory}
+          />
+        )}
       </div>
     </>
   );

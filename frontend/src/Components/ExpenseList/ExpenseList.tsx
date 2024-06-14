@@ -84,7 +84,7 @@ const ExpenseList = ({ expenses, onDelete, onAddEdit, onEdit }: Props) => {
                 {sortConfig.key === "date" &&
                   (sortConfig.direction === "asc" ? " 🔼" : " 🔽")}
               </th>
-              <th></th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -111,7 +111,7 @@ const ExpenseList = ({ expenses, onDelete, onAddEdit, onEdit }: Props) => {
                   <td className="hide-cell">{expense.category}</td>
                   <td className="hide-header">{formattedDate}</td>
                   <td>
-                    <div className="expenselist-button-container">
+                    <div className="expenselist-button-container gap-2">
                       <MdDelete
                         className="text-muted expenselist-editdel"
                         onClick={(e) => {

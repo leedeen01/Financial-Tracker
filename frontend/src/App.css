@@ -10,6 +10,7 @@
 .expenselist-heading:hover {
   background-color: #f6f6f6;
 }
+
 .expenselist-heading-button-container {
   display: flex;
   justify-content: space-between; /* This will make items start and end */
@@ -17,49 +18,45 @@
   margin: 10px;
 }
 
-.expenselist-title {
-  font-size: 1.5rem;
-}
-
-.expenselist-AddFilter {
-  gap: 0.5rem;
-}
-
 .expenselist-button {
-  appearance: none;
-  background-color: transparent;
-  border: 2px solid #1a1a1a;
-  border-radius: 20%;
-  box-sizing: border-box;
-  color: #3b3b3b;
-  cursor: pointer;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  border: none;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
   outline: none;
-  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-  user-select: none;
-  touch-action: manipulation;
-  will-change: transform;
 }
 
-.expenselist-button:disabled {
-  pointer-events: none;
+.expenselist-button-add {
+  background-color: #8884d8;
+  color: #fff;
+}
+
+.expenselist-button-add:hover {
+  background-color: #64619d;
+}
+
+.expenselist-button-filter {
+  background-color: #82ca9d;
+  color: #fff;
+}
+
+.expenselist-button-filter:hover {
+  background-color: #619676;
 }
 
 .expenselist-button:hover {
-  color: #fff;
-  background-color: #1a1a1a;
   box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
   transform: translateY(-2px);
 }
 
-.expenselist-button:active {
-  box-shadow: none;
-  transform: translateY(0);
-}
-
 .expenselist-button-container {
   display: flex;
-  gap: 0.5em;
   justify-content: center;
   align-items: center;
 }
@@ -71,4 +68,53 @@
 
 .expenselist-editdel:hover {
   transform: translateY(-3px);
+}
+
+.sectionone-positive {
+  color: green !important;
+  background-color: lightgreen;
+}
+
+.sectionone-negative {
+  color: red !important;
+  background-color: pink;
+}
+
+.sectionone-tooltip-container {
+  position: relative;
+  display: inline-block;
+  cursor: help;
+}
+
+.sectionone-tooltip-container .sectionone-tooltip-text {
+  visibility: hidden;
+  width: 200px;
+  background-color: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%; /* Position above the icon */
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.sectionone-tooltip-container .sectionone-tooltip-text::after {
+  content: '';
+  position: absolute;
+  top: 100%; /* Arrow below the tooltip */
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+}
+
+.sectionone-tooltip-container:hover .sectionone-tooltip-text {
+  visibility: visible;
+  opacity: 1;
 }

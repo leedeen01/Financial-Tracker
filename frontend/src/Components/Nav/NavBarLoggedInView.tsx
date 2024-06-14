@@ -27,10 +27,13 @@ const NavBarLoggedInView = ({user, onLogoutSuccessful}: NavBarLoggedInViewProps)
                 Categories
             </Button>
             <Button onClick={logout}>
-                Goals & Budget
+                Budgets
             </Button>
             <Button onClick={logout}>
                 Investments
+            </Button>
+            <Button onClick={logout}>
+                Friends
             </Button>
             <Button onClick={logout}>
                 Log Out

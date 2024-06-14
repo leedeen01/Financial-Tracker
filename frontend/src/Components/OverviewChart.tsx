@@ -81,42 +81,32 @@ const OverviewChart = ({ expenses, categories }: Props) => {
   }, []);
 
   return (
-    <div className="container w-100 mt-5">
-      <div className="row justify-content-center">
-        <div className="col-md-8 col-sm-12">
-          <div className="card text-center">
-            <div className="card-body">
-              <ResponsiveContainer width="100%" height={450}>
-                <PieChart>
-                  <Pie
-                    data={dataByCategory}
-                    dataKey="value"
-                    nameKey="name"
-                    cornerRadius={10}
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={radius.outerRadius}
-                    innerRadius={radius.innerRadius}
-                    isAnimationActive={true}
-                  >
-                    {dataByCategory.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={entry.backgroundColor}
-                        stroke={entry.borderColor}
-                      />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                  <Legend formatter={legendFormatter} />
-                  <Customized component={expensesCenterText} />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <ResponsiveContainer width="100%" height={450}>
+      <PieChart>
+        <Pie
+          data={dataByCategory}
+          dataKey="value"
+          nameKey="name"
+          cornerRadius={10}
+          cx="50%"
+          cy="50%"
+          outerRadius={radius.outerRadius}
+          innerRadius={radius.innerRadius}
+          isAnimationActive={true}
+        >
+          {dataByCategory.map((entry, index) => (
+            <Cell
+              key={`cell-${index}`}
+              fill={entry.backgroundColor}
+              stroke={entry.borderColor}
+            />
+          ))}
+        </Pie>
+        <Tooltip />
+        <Legend formatter={legendFormatter} />
+        <Customized component={expensesCenterText} />
+      </PieChart>
+    </ResponsiveContainer>
   );
 };
 
