@@ -1,4 +1,4 @@
-import { Area, AreaChart, Bar, BarChart, Cell, Pie, PieChart, Tooltip, XAxis } from "recharts";
+import { Area, AreaChart, Bar, BarChart, Cell, Pie, PieChart, Tooltip, XAxis, YAxis } from "recharts";
 import { Expense } from "../models/expense";
 
 interface Props {
@@ -68,6 +68,30 @@ const SectionOne = ({ expenses }: Props) => {
         },
     ];
 
+    // Define the payload type
+    interface TooltipPayload {
+        name: string;
+        value: number;
+    }
+    
+    // Define the props for the CustomTooltip component
+    interface CustomTooltipProps {
+        active?: boolean;
+        payload?: TooltipPayload[];
+    }
+
+    const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload }) => {
+        if (active && payload && payload.length) {
+          return (
+            <div className="custom-tooltip" style={{ backgroundColor: '#fff', padding: '5px', border: '1px solid #ccc', borderRadius: '10px' }}>
+              <p>{`${payload[0].name}: $${payload[0].value.toFixed(2)}`}</p>
+            </div>
+          );
+        }
+      
+        return null;
+    };
+
     return (
     <>
         <div className="row g-3 mb-3">
@@ -87,7 +111,7 @@ const SectionOne = ({ expenses }: Props) => {
                                 <span className={`badge rounded-pill fs-11 ${percentageChangeResultExpense.className}`}>{percentageChangeResultExpense.percentage}</span>
                             </div>
                             <div className="col-auto ps-0">
-                                <BarChart width={200} height={100} data={expensesByDay} margin={{ top: 50 }}>
+                                <BarChart width={200} height={100} data={expensesByDay} margin={{ top: 50, right: 0, bottom: -50, left: 0 }}>
                                     <XAxis dataKey="name" axisLine={false} tickLine={false} tick={false} />
                                     <Tooltip />
                                     <Bar dataKey="expense" fill="#8884d8" />
@@ -131,7 +155,7 @@ const SectionOne = ({ expenses }: Props) => {
                                         <Cell key={`Expenses`} fill="#8884d8" />
                                         <Cell key={`Income`} fill="#82ca9d" />
                                     </Pie>
-                                    <Tooltip />
+                                    <Tooltip content={<CustomTooltip />} />
                                 </PieChart>
                             </div>
                         </div>
@@ -155,7 +179,7 @@ const SectionOne = ({ expenses }: Props) => {
                                 <span className={`badge rounded-pill fs-11 ${percentageChangeResultExpense.className}`}>{percentageChangeResultExpense.percentage}</span>
                             </div>
                             <div className="col-auto ps-0">
-                                <AreaChart width={200} height={100} data={expensesByDay} margin={{ top: 50, bottom: 0, left: 0, right: 0 }}>
+                                <AreaChart width={200} height={100} data={expensesByDay} margin={{ top: 60, right: 0, bottom: -20, left: 0 }}>
                                     <defs>
                                         <linearGradient id="expenseColor" x1="0" y1="0" x2="0" y2="1">
                                             <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
@@ -188,7 +212,7 @@ const SectionOne = ({ expenses }: Props) => {
                                 <span className="badge rounded-pill fs-11" style={{ color: 'red', backgroundColor: 'pink' }}>---</span>
                             </div>
                             <div className="col-auto ps-0">
-                                <AreaChart width={200} height={100} data={expensesByDay} margin={{ top: 50, bottom: 0, left: 0, right: 0 }}>
+                                <AreaChart width={200} height={100} data={expensesByDay} margin={{ top: 60, bottom: -20, left: 0, right: 0 }}>
                                     <defs>
                                         <linearGradient id="incomeColor" x1="0" y1="0" x2="0" y2="1">
                                             <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8}/>
