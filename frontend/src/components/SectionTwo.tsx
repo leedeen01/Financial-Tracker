@@ -1,6 +1,6 @@
 import { Expense } from "../models/expense";
 import OverviewChart from "./OverviewChart";
-import ExpenseList from "./ExpenseList/ExpenseList";
+import ExpenseList from "./expenselist/ExpenseList";
 import { IoFilter } from "react-icons/io5";
 import { MdAdd } from "react-icons/md";
 

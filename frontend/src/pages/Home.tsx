@@ -7,7 +7,7 @@ import AddEditExpenseDialog from "../components/AddEditExpenseDialog";
 import { Expense, categories } from "../models/expense";
 import * as expensesApi from "../network/expenses_api";
 import { months } from "../models/expense";
-import Filter from "../components/Filter/Filter";
+import Filter from "../components/filter/Filter";
 
 function Home() {
   const [selectedExpense, setSelectedExpense] = useState("");
