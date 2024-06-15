@@ -8,7 +8,6 @@ import {
   PieChart,
   Tooltip,
   XAxis,
-  YAxis,
 } from "recharts";
 import { Expense } from "../models/expense";
 
