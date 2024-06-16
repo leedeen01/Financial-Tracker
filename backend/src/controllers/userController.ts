@@ -122,6 +122,43 @@ export const logout: RequestHandler = (req, res, next) => {
   });
 };
 
+export const searchUsersByUsername: RequestHandler = async (req, res, next) => {
+  const username = req.params.username;
+
+  try {
+    if (!username || typeof username !== "string") {
+      throw createHttpError(400, "Username parameter is missing or invalid");
+    }
+
+    const regex = new RegExp(username, "i"); // Case-insensitive search regex
+    const users = await UserModel.find({ username: { $regex: regex } })
+      .select("+email")
+      .exec();
+
+    res.status(200).json(users);
+  } catch (error) {
+    console.error("Error searching users by username:", error);
+    next(error); // Pass the error to the error handling middleware
+  }
+};
+
+export const searchUsersById: RequestHandler = async (req, res, next) => {
+  const userId = req.params.Id;
+
+  try {
+    if (!userId || typeof userId !== "string") {
+      throw createHttpError(400, "userId parameter is missing or invalid");
+    }
+
+    const users = await UserModel.findById(userId).select("+email").exec();
+
+    res.status(200).json(users);
+  } catch (error) {
+    console.error("Error searching users by username:", error);
+    next(error); // Pass the error to the error handling middleware
+  }
+};
+
 interface AddFriendParams {
   _id?: string;
 }
@@ -208,6 +245,7 @@ export const sendFriendRquest: RequestHandler<
   const _id = req.params._id;
   const friendRequest = req.body.friendRequest;
   const authenticatedUserId = req.session.userId;
+  console.log(friendRequest);
 
   try {
     assertIsDefined(authenticatedUserId);
@@ -236,7 +274,7 @@ export const sendFriendRquest: RequestHandler<
 
     // Assuming friendlist is an array of strings in the UserModel schema
     if (
-      !friendUser.friendRequest.includes(_id!) ||
+      !friendUser.friendRequest.includes(_id!) &&
       !friendUser.friendlist.includes(_id!)
     ) {
       friendUser.friendRequest.push(_id!);
@@ -325,6 +363,8 @@ export const deleteFriend: RequestHandler<
   const _id = req.params._id;
   const friendRequest = req.body.friendRequest;
   const authenticatedUserId = req.session.userId;
+
+  console.log(friendRequest);
 
   try {
     assertIsDefined(authenticatedUserId);

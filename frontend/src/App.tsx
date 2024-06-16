@@ -16,23 +16,38 @@ import Friends from "./pages/Friends.tsx";
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
-
   const [showSignUp, setShowSignUp] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    async function fetchLoggedInUser() {
-      try {
-        const user = await ExpensesApi.getLoggedInUser();
-        navigate("/home");
-        setLoggedInUser(user);
-      } catch (error) {
-        console.error(error);
-      }
+    // Check local storage for logged-in user
+    const storedUser = localStorage.getItem("loggedInUser");
+    if (storedUser) {
+      setLoggedInUser(JSON.parse(storedUser));
+    } else {
+      fetchLoggedInUser();
     }
-    fetchLoggedInUser();
   }, []);
+
+  async function fetchLoggedInUser() {
+    try {
+      const user = await ExpensesApi.getLoggedInUser();
+      setLoggedInUser(user);
+      // Store user in local storage
+      localStorage.setItem("loggedInUser", JSON.stringify(user));
+      navigate("/home");
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  function handleLogout() {
+    // Clear user from local storage and state
+    localStorage.removeItem("loggedInUser");
+    setLoggedInUser(null);
+    navigate("/");
+  }
 
   return (
     <div>
@@ -41,10 +56,7 @@ function App() {
         loggedInUser={loggedInUser}
         onLoginClicked={() => setShowLogin(true)}
         onSignUpClicked={() => setShowSignUp(true)}
-        onLogoutSuccessful={() => {
-          navigate("/");
-          setLoggedInUser(null);
-        }}
+        onLogoutSuccessful={handleLogout}
       />
 
       <div>
@@ -63,8 +75,8 @@ function App() {
           onDismiss={() => setShowSignUp(false)}
           onSignUpSuccessful={(user) => {
             setLoggedInUser(user);
+            localStorage.setItem("loggedInUser", JSON.stringify(user));
             navigate("/home");
-
             setShowSignUp(false);
           }}
         />
@@ -74,8 +86,8 @@ function App() {
           onDismiss={() => setShowLogin(false)}
           onLoginSuccessful={(user) => {
             setLoggedInUser(user);
+            localStorage.setItem("loggedInUser", JSON.stringify(user));
             navigate("/home");
-
             setShowLogin(false);
           }}
         />

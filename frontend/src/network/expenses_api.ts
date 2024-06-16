@@ -1,8 +1,10 @@
 import { Expense } from "../models/expense";
 import { User } from "../models/user";
 
-// const website = "http://localhost:6969";
-const website = "https://financial-tracker-mtpk.onrender.com";
+const website = "http://localhost:6969";
+// const website = "https://financial-tracker-mtpk.onrender.com";
+
+//login/signup/logout related
 async function fetchData(input: RequestInfo, init?: RequestInit) {
   const response = await fetch(input, init);
   if (response.ok) {
@@ -65,6 +67,7 @@ export async function logout() {
   });
 }
 
+//friends related
 export async function sendRequest(
   userId: string,
   friendId: string
@@ -76,7 +79,7 @@ export async function sendRequest(
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(friendId),
+      body: JSON.stringify({ friendRequest: friendId }),
       credentials: "include",
     }
   );
@@ -86,7 +89,7 @@ export async function sendRequest(
 export async function deleteRequest(
   userId: string,
   friendId: string
-): Promise<Expense> {
+): Promise<User> {
   const response = await fetchData(
     `${website}/api/users/deleteRequest/` + userId,
     {
@@ -94,7 +97,7 @@ export async function deleteRequest(
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(friendId),
+      body: JSON.stringify({ friendRequest: friendId }),
       credentials: "include",
     }
   );
@@ -104,7 +107,7 @@ export async function deleteRequest(
 export async function acceptFriend(
   userId: string,
   friendId: string
-): Promise<Expense> {
+): Promise<User> {
   const response = await fetchData(
     `${website}/api/users/acceptFriend/` + userId,
     {
@@ -112,7 +115,7 @@ export async function acceptFriend(
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(friendId),
+      body: JSON.stringify({ newFriend: friendId }),
       credentials: "include",
     }
   );
@@ -122,7 +125,7 @@ export async function acceptFriend(
 export async function deleteFriend(
   userId: string,
   friendId: string
-): Promise<Expense> {
+): Promise<User> {
   const response = await fetchData(
     `${website}/api/users/deleteFriend/` + userId,
     {
@@ -130,13 +133,33 @@ export async function deleteFriend(
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(friendId),
+      body: JSON.stringify({ friendRequest: friendId }),
       credentials: "include",
     }
   );
   return response.json();
 }
 
+export async function searchUsersByUsername(username: string): Promise<User[]> {
+  const response = await fetchData(
+    `${website}/api/users/searchUsername/` + username,
+    {
+      method: "GET",
+      credentials: "include",
+    }
+  );
+  return response.json();
+}
+
+export async function searchUsersById(Id: string): Promise<User> {
+  const response = await fetchData(`${website}/api/users/searchId/` + Id, {
+    method: "GET",
+    credentials: "include",
+  });
+  return response.json();
+}
+
+//expenses related
 export async function fetchExpense(): Promise<Expense[]> {
   const response = await fetchData(`${website}/api/expenses`, {
     method: "GET",

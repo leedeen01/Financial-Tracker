@@ -1,4 +1,8 @@
 export interface User {
-    username: string,
-    email: string,
+  _id?: string;
+  username: string;
+  email: string;
+  friendlist: string[];
+  friendRequest: string[];
+  __v?: number;
 }

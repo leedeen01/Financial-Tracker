@@ -12,13 +12,17 @@ router.post("/login", UserController.login);
 
 router.post("/logout", UserController.logout);
 
+router.get("/searchUsername/:username", UserController.searchUsersByUsername);
+
+router.get("/searchId/:Id", UserController.searchUsersById);
+
 router.put(
   "/acceptFriend/:_id",
-  requiresAuth,
+
   UserController.acceptFriendRequest
 );
 
-router.put("/sendRequest/:_id", requiresAuth, UserController.sendFriendRquest);
+router.put("/sendRequest/:_id", UserController.sendFriendRquest);
 
 router.put(
   "/deleteRequest/:_id",
@@ -26,6 +30,6 @@ router.put(
   UserController.deleteFriendRquest
 );
 
-router.put("/deleteFriend/:_id", requiresAuth, UserController.deleteFriend);
+router.put("/deleteFriend/:_id", UserController.deleteFriend);
 
 export default router;
