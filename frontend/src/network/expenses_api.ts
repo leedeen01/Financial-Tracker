@@ -65,6 +65,78 @@ export async function logout() {
   });
 }
 
+export async function sendRequest(
+  userId: string,
+  friendId: string
+): Promise<User> {
+  const response = await fetchData(
+    `${website}/api/users/sendRequest/` + userId,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(friendId),
+      credentials: "include",
+    }
+  );
+  return response.json();
+}
+
+export async function deleteRequest(
+  userId: string,
+  friendId: string
+): Promise<Expense> {
+  const response = await fetchData(
+    `${website}/api/users/deleteRequest/` + userId,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(friendId),
+      credentials: "include",
+    }
+  );
+  return response.json();
+}
+
+export async function acceptFriend(
+  userId: string,
+  friendId: string
+): Promise<Expense> {
+  const response = await fetchData(
+    `${website}/api/users/acceptFriend/` + userId,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(friendId),
+      credentials: "include",
+    }
+  );
+  return response.json();
+}
+
+export async function deleteFriend(
+  userId: string,
+  friendId: string
+): Promise<Expense> {
+  const response = await fetchData(
+    `${website}/api/users/deleteFriend/` + userId,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(friendId),
+      credentials: "include",
+    }
+  );
+  return response.json();
+}
+
 export async function fetchExpense(): Promise<Expense[]> {
   const response = await fetchData(`${website}/api/expenses`, {
     method: "GET",

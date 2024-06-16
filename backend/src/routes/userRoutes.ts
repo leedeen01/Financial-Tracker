@@ -12,6 +12,20 @@ router.post("/login", UserController.login);
 
 router.post("/logout", UserController.logout);
 
-router.put("/:_id", requiresAuth, UserController.addFriend);
+router.put(
+  "/acceptFriend/:_id",
+  requiresAuth,
+  UserController.acceptFriendRequest
+);
+
+router.put("/sendRequest/:_id", requiresAuth, UserController.sendFriendRquest);
+
+router.put(
+  "/deleteRequest/:_id",
+  requiresAuth,
+  UserController.deleteFriendRquest
+);
+
+router.put("/deleteFriend/:_id", requiresAuth, UserController.deleteFriend);
 
 export default router;

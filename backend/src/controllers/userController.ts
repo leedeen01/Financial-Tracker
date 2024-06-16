@@ -129,7 +129,8 @@ interface AddFriendBody {
   newFriend: string;
 }
 
-export const addFriend: RequestHandler<
+//add 2 users as friends
+export const acceptFriendRequest: RequestHandler<
   AddFriendParams,
   unknown,
   AddFriendBody,
@@ -151,8 +152,78 @@ export const addFriend: RequestHandler<
     }
 
     const user = await UserModel.findById(_id).exec();
+    const friendUser = await UserModel.findById(newFriend).exec();
 
-    if (!user) {
+    if (!user || !friendUser) {
+      throw createHttpError(404, "User not found");
+    }
+
+    if (!user._id.equals(authenticatedUserId)) {
+      throw createHttpError(
+        401,
+        "You are not authorized to add friends for this user"
+      );
+    }
+
+    //skip adding if they are already friends
+    if (!user.friendlist.includes(newFriend)) {
+      user.friendlist.push(newFriend);
+      friendUser.friendlist.push(_id!);
+    }
+
+    //removes friend request
+    user.friendRequest = user.friendRequest.filter(
+      (friend) => friend !== newFriend
+    );
+
+    const updatedUser = await user.save();
+    await friendUser.save();
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error("Error adding friend:", error);
+    next(error); // Pass the error to the error handling middleware
+  }
+};
+
+//sending friend request
+//if user1 send friend request to user2
+//user2 will store user1 _id in its friendRequest array
+//user2 will need to accept the request by calling addFriend above to add Friend
+
+interface SendFriendRequestParams {
+  _id?: string; // ID of the recipient user (to whom friend request is sent)
+}
+
+interface SendFriendRequestBody {
+  friendRequest: string; // ID of the recipient user
+}
+
+export const sendFriendRquest: RequestHandler<
+  SendFriendRequestParams,
+  unknown,
+  SendFriendRequestBody,
+  unknown
+> = async (req, res, next) => {
+  const _id = req.params._id;
+  const friendRequest = req.body.friendRequest;
+  const authenticatedUserId = req.session.userId;
+
+  try {
+    assertIsDefined(authenticatedUserId);
+
+    if (!mongoose.isValidObjectId(_id)) {
+      throw createHttpError(400, "Invalid user ID");
+    }
+
+    if (!mongoose.isValidObjectId(friendRequest)) {
+      throw createHttpError(400, "Invalid friend ID");
+    }
+
+    const user = await UserModel.findById(_id).exec();
+    const friendUser = await UserModel.findById(friendRequest).exec();
+
+    if (!user || !friendUser) {
       throw createHttpError(404, "User not found");
     }
 
@@ -164,9 +235,134 @@ export const addFriend: RequestHandler<
     }
 
     // Assuming friendlist is an array of strings in the UserModel schema
-    user.friendlist.push(newFriend);
+    if (
+      !friendUser.friendRequest.includes(_id!) ||
+      !friendUser.friendlist.includes(_id!)
+    ) {
+      friendUser.friendRequest.push(_id!);
+    }
+    const updatedUser = await friendUser.save();
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error("Error adding friend:", error);
+    next(error); // Pass the error to the error handling middleware
+  }
+};
+
+interface DeleteFriendRequestParams {
+  _id?: string; // ID of the recipient user (to whom friend request is sent)
+}
+
+interface DeleteFriendRequestBody {
+  friendRequest: string; // ID of the recipient user
+}
+
+export const deleteFriendRquest: RequestHandler<
+  DeleteFriendRequestParams,
+  unknown,
+  DeleteFriendRequestBody,
+  unknown
+> = async (req, res, next) => {
+  const _id = req.params._id;
+  const friendRequest = req.body.friendRequest;
+  const authenticatedUserId = req.session.userId;
+
+  try {
+    assertIsDefined(authenticatedUserId);
+
+    if (!mongoose.isValidObjectId(_id)) {
+      throw createHttpError(400, "Invalid user ID");
+    }
+
+    if (!mongoose.isValidObjectId(friendRequest)) {
+      throw createHttpError(400, "Invalid friend ID");
+    }
+
+    const user = await UserModel.findById(_id).exec();
+    const friendUser = await UserModel.findById(friendRequest).exec();
+
+    if (!user || !friendUser) {
+      throw createHttpError(404, "User not found");
+    }
+
+    if (!user._id.equals(authenticatedUserId)) {
+      throw createHttpError(
+        401,
+        "You are not authorized to add friends for this user"
+      );
+    }
+
+    // Assuming friendlist is an array of strings in the UserModel schema
+    //removes friend request
+    user.friendRequest = user.friendRequest.filter(
+      (friend) => friend !== friendRequest
+    );
 
     const updatedUser = await user.save();
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error("Error adding friend:", error);
+    next(error); // Pass the error to the error handling middleware
+  }
+};
+
+interface DeleteFriendParams {
+  _id?: string; // ID of the recipient user (to whom friend request is sent)
+}
+
+interface DeleteFriendBody {
+  friendRequest: string; // ID of the recipient user
+}
+
+export const deleteFriend: RequestHandler<
+  DeleteFriendParams,
+  unknown,
+  DeleteFriendBody,
+  unknown
+> = async (req, res, next) => {
+  const _id = req.params._id;
+  const friendRequest = req.body.friendRequest;
+  const authenticatedUserId = req.session.userId;
+
+  try {
+    assertIsDefined(authenticatedUserId);
+
+    if (!mongoose.isValidObjectId(_id)) {
+      throw createHttpError(400, "Invalid user ID");
+    }
+
+    if (!mongoose.isValidObjectId(friendRequest)) {
+      throw createHttpError(400, "Invalid friend ID");
+    }
+
+    const user = await UserModel.findById(_id).exec();
+    const friendUser = await UserModel.findById(friendRequest).exec();
+
+    if (!user || !friendUser) {
+      throw createHttpError(404, "User not found");
+    }
+
+    if (!user._id.equals(authenticatedUserId)) {
+      throw createHttpError(
+        401,
+        "You are not authorized to add friends for this user"
+      );
+    }
+
+    // Assuming friendlist is an array of strings in the UserModel schema
+    //removes friend request
+    user.friendlist = user.friendlist.filter(
+      (friend) => friend !== friendRequest
+    );
+
+    friendUser.friendlist = friendUser.friendlist.filter(
+      (friend) => friend !== _id
+    );
+
+    const updatedUser = await user.save();
+    await friendUser.save();
 
     res.status(200).json(updatedUser);
   } catch (error) {
