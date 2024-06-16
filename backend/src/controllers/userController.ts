@@ -2,6 +2,8 @@ import { RequestHandler } from "express";
 import createHttpError from "http-errors";
 import UserModel from "../models/user";
 import bcrypt from "bcrypt";
+import { assertIsDefined } from "../util/assertIsDefined";
+import mongoose from "mongoose";
 
 export const getAuthenticatedUser: RequestHandler = async (req, res, next) => {
   try {
@@ -59,6 +61,7 @@ export const signUp: RequestHandler<
       username: username,
       email: email,
       password: passwordHashed,
+      friendlist: [],
     });
 
     req.session.userId = newUser._id;
@@ -117,4 +120,57 @@ export const logout: RequestHandler = (req, res, next) => {
       res.sendStatus(200);
     }
   });
+};
+
+interface AddFriendParams {
+  _id?: string;
+}
+interface AddFriendBody {
+  newFriend: string;
+}
+
+export const addFriend: RequestHandler<
+  AddFriendParams,
+  unknown,
+  AddFriendBody,
+  unknown
+> = async (req, res, next) => {
+  const _id = req.params._id;
+  const newFriend = req.body.newFriend;
+  const authenticatedUserId = req.session.userId;
+
+  try {
+    assertIsDefined(authenticatedUserId);
+
+    if (!mongoose.isValidObjectId(_id)) {
+      throw createHttpError(400, "Invalid user ID");
+    }
+
+    if (!mongoose.isValidObjectId(newFriend)) {
+      throw createHttpError(400, "Invalid friend ID");
+    }
+
+    const user = await UserModel.findById(_id).exec();
+
+    if (!user) {
+      throw createHttpError(404, "User not found");
+    }
+
+    if (!user._id.equals(authenticatedUserId)) {
+      throw createHttpError(
+        401,
+        "You are not authorized to add friends for this user"
+      );
+    }
+
+    // Assuming friendlist is an array of strings in the UserModel schema
+    user.friendlist.push(newFriend);
+
+    const updatedUser = await user.save();
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error("Error adding friend:", error);
+    next(error); // Pass the error to the error handling middleware
+  }
 };

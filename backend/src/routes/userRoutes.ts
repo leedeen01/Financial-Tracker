@@ -12,4 +12,6 @@ router.post("/login", UserController.login);
 
 router.post("/logout", UserController.logout);
 
+router.put("/:_id", requiresAuth, UserController.addFriend);
+
 export default router;
