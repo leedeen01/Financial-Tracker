@@ -25,6 +25,18 @@ const Friends = () => {
       fetchLoggedInUser();
     }
   }, [loggedInUser]);
+  // Periodic refresh mechanism using useEffect
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (loggedInUser) {
+        fetchLoggedInUser(); // Fetch updated friend requests periodically
+      }
+    }, 5000); // Refresh every 5 seconds (adjust as needed)
+
+    return () => clearInterval(interval); // Cleanup on component unmount
+  }, [loggedInUser]);
+
+  useEffect(() => {}, []);
 
   // Function to handle search
   const handleSearch = async () => {
@@ -77,17 +89,6 @@ const Friends = () => {
       console.error("Error deleting friend:", error);
     }
   };
-
-  // Periodic refresh mechanism using useEffect
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (loggedInUser) {
-        fetchLoggedInUser(); // Fetch updated friend requests periodically
-      }
-    }, 5000); // Refresh every 5 seconds (adjust as needed)
-
-    return () => clearInterval(interval); // Cleanup on component unmount
-  }, [loggedInUser]);
 
   return (
     <>
