@@ -4,16 +4,16 @@ import * as ExpensesApi from "../network/expenses_api";
 
 const Friends = () => {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
-  const [friendRequests, setFriendRequests] = useState<string[]>([]);
   const [username, setUsername] = useState("");
   const [searchResult, setSearchResult] = useState<User[]>([]);
+  const [friendDetails, setFriendDetails] = useState<User[]>([]); // Ensure friendDetails is typed as User[]
+  const [friendRequestDetails, setFriendRequestDetails] = useState<User[]>([]); // Ensure friendDetails is typed as User[]
 
   // Function to fetch logged-in user
   const fetchLoggedInUser = async () => {
     try {
       const fetchedUser = await ExpensesApi.getLoggedInUser();
       setLoggedInUser(fetchedUser);
-      setFriendRequests(fetchedUser.friendRequest); // Update friend requests
     } catch (error) {
       console.error("Error fetching logged-in user:", error);
     }
@@ -52,6 +52,7 @@ const Friends = () => {
   const handleSendRequest = async (userId: string) => {
     try {
       await ExpensesApi.sendRequest(loggedInUser!._id!, userId);
+      handleSearch();
       console.log("Friend request sent successfully!");
     } catch (error) {
       console.error("Error sending friend request:", error);
@@ -83,10 +84,46 @@ const Friends = () => {
   const handleDeleteFriend = async (friendId: string) => {
     try {
       await ExpensesApi.deleteFriend(loggedInUser!._id!, friendId);
+      console.log(friendId);
       console.log("Friend deleted successfully!");
       fetchLoggedInUser(); // Refresh friend list after deleting friend
     } catch (error) {
       console.error("Error deleting friend:", error);
+    }
+  };
+
+  //used to list friendlist and friend request
+  useEffect(() => {
+    if (loggedInUser?.friendlist) {
+      fetchFriendDetails();
+    }
+
+    if (loggedInUser?.friendRequest) {
+      fetchFriendRequestDetails();
+    }
+  }, [loggedInUser]); // Trigger effect when loggedInUser changes
+
+  const fetchFriendDetails = async () => {
+    try {
+      const promises = loggedInUser!.friendlist.map((friendId) =>
+        ExpensesApi.searchUsersById(friendId)
+      );
+      const friendData = await Promise.all(promises);
+      setFriendDetails(friendData);
+    } catch (error) {
+      console.error("Error fetching friends:", error);
+    }
+  };
+
+  const fetchFriendRequestDetails = async () => {
+    try {
+      const promises = loggedInUser!.friendRequest.map((friendId) =>
+        ExpensesApi.searchUsersById(friendId)
+      );
+      const friendData = await Promise.all(promises);
+      setFriendRequestDetails(friendData);
+    } catch (error) {
+      console.error("Error fetching friends request:", error);
     }
   };
 
@@ -100,7 +137,6 @@ const Friends = () => {
           placeholder="Enter username to search"
         />
         <button onClick={handleSearch}>Search</button>
-
         <ul>
           {searchResult
             .filter(
@@ -112,23 +148,26 @@ const Friends = () => {
               <li key={user.username}>
                 <p>Username: {user.username}</p>
                 <p>Email: {user.email}</p>
-                <button onClick={() => handleSendRequest(user._id!)}>
-                  "Send Friend Request"
+                <button
+                  onClick={() => handleSendRequest(user._id!)}
+                  disabled={user.friendRequest.includes(loggedInUser!._id!)}
+                >
+                  {user.friendRequest.includes(loggedInUser!._id!)
+                    ? "Request Sent"
+                    : "Send Friend Request"}
                 </button>
               </li>
             ))}
         </ul>
       </div>
       <div>
-        <h1>{`Friends of ${loggedInUser?.username}`}</h1>
-
         <div>
           <h2>Friend List:</h2>
           <ul>
-            {loggedInUser?.friendlist.map((friend, index) => (
+            {friendDetails.map((friend, index) => (
               <li key={index}>
-                {friend}
-                <button onClick={() => handleDeleteFriend(friend)}>
+                {friend.username}
+                <button onClick={() => handleDeleteFriend(friend._id!)}>
                   Delete
                 </button>
               </li>
@@ -139,13 +178,13 @@ const Friends = () => {
         <div>
           <h2>Friend Requests:</h2>
           <ul>
-            {friendRequests.map((request, index) => (
+            {friendRequestDetails.map((request, index) => (
               <li key={index}>
-                <p>Friend Request from User ID: {request}</p>
-                <button onClick={() => handleAcceptRequest(request)}>
+                <p>Friend Request from {request.username}</p>
+                <button onClick={() => handleAcceptRequest(request._id!)}>
                   Accept
                 </button>
-                <button onClick={() => handleDeleteRequest(request)}>
+                <button onClick={() => handleDeleteRequest(request._id!)}>
                   Delete
                 </button>
               </li>

@@ -7,7 +7,7 @@ import { User } from "./models/user.ts";
 import * as ExpensesApi from "./network/expenses_api";
 import Home from "./pages/Home.tsx";
 import HomeLoggedOut from "./pages/HomeLoggedOut.tsx";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Categories from "./pages/Categories.tsx";
 import Budget from "./pages/Budget.tsx";
@@ -19,31 +19,38 @@ function App() {
   const [showSignUp, setShowSignUp] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    // Check local storage for logged-in user
     const storedUser = localStorage.getItem("loggedInUser");
     if (storedUser) {
+      // User found in local storage
       setLoggedInUser(JSON.parse(storedUser));
+      if (location.pathname === "/" || location.pathname === "/home") {
+        // If on home page or root, navigate to /home
+        navigate("/home");
+      }
     } else {
+      // No user found in local storage, fetch from API
       fetchLoggedInUser();
     }
-  }, []);
+  }, [location.pathname]); // Trigger effect on pathname change
 
   async function fetchLoggedInUser() {
     try {
       const user = await ExpensesApi.getLoggedInUser();
       setLoggedInUser(user);
-      // Store user in local storage
       localStorage.setItem("loggedInUser", JSON.stringify(user));
-      navigate("/home");
+      if (location.pathname === "/" || location.pathname === "/home") {
+        // If on home page or root, navigate to /home
+        navigate("/home");
+      }
     } catch (error) {
       console.error(error);
     }
   }
 
   function handleLogout() {
-    // Clear user from local storage and state
     localStorage.removeItem("loggedInUser");
     setLoggedInUser(null);
     navigate("/");
@@ -51,7 +58,6 @@ function App() {
 
   return (
     <div>
-      {/* NavBar Section */}
       <NavBar
         loggedInUser={loggedInUser}
         onLoginClicked={() => setShowLogin(true)}
