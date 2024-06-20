@@ -245,7 +245,6 @@ export const sendFriendRquest: RequestHandler<
   const _id = req.params._id;
   const friendRequest = req.body.friendRequest;
   const authenticatedUserId = req.session.userId;
-  console.log(friendRequest);
 
   try {
     assertIsDefined(authenticatedUserId);
@@ -363,9 +362,6 @@ export const deleteFriend: RequestHandler<
   const _id = req.params._id;
   const friendRequest = req.body.friendRequest;
   const authenticatedUserId = req.session.userId;
-  console.log(_id);
-
-  console.log(friendRequest);
 
   try {
     assertIsDefined(authenticatedUserId);
