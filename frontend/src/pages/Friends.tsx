@@ -8,6 +8,8 @@ import SplitBill from "../components/friends/SplitBill";
 const Friends = () => {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
   const [showSplitBill, setShowSplitBill] = useState(false);
+  const [friendDetails, setFriendDetails] = useState<User[]>([]);
+  const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
 
   // Function to fetch logged-in user
   const fetchLoggedInUser = async () => {
@@ -19,32 +21,103 @@ const Friends = () => {
     }
   };
 
-  // Initial fetch of logged-in user
+  // Function to fetch friend details
+  const fetchFriendDetails = async () => {
+    try {
+      if (loggedInUser) {
+        const promises = loggedInUser.friendlist.map((friendId) =>
+          ExpensesApi.searchUsersById(friendId)
+        );
+        const friendData = await Promise.all(promises);
+        setFriendDetails([loggedInUser, ...friendData]);
+      }
+    } catch (error) {
+      console.error("Error fetching friends:", error);
+    }
+  };
+
   useEffect(() => {
     if (!loggedInUser) {
       fetchLoggedInUser();
     }
-  }, [loggedInUser]);
-  // Periodic refresh mechanism using useEffect
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (loggedInUser) {
-        fetchLoggedInUser(); // Fetch updated friend requests periodically
-      }
-    }, 5000); // Refresh every 5 seconds (adjust as needed)
+  }, []);
 
-    return () => clearInterval(interval); // Cleanup on component unmount
+  useEffect(() => {
+    if (loggedInUser) {
+      fetchFriendDetails();
+      const interval = setInterval(fetchLoggedInUser, 5000);
+      return () => clearInterval(interval);
+    }
   }, [loggedInUser]);
+
+  // Function to handle checkbox change
+  const handleCheckboxChange = (user: User) => {
+    setSelectedUsers((prevSelectedUsers) => {
+      if (prevSelectedUsers.some((u) => u._id === user._id)) {
+        return prevSelectedUsers.filter((u) => u._id !== user._id);
+      } else {
+        return [...prevSelectedUsers, user];
+      }
+    });
+  };
+
+  // Function to handle form submission
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // Here you can perform actions with selectedUsers array, such as saving it or sending to a server
+    console.log("Selected Users:", selectedUsers);
+
+    // Optionally, reset checkboxes to unchecked state
+    const checkboxes = document.querySelectorAll<HTMLInputElement>(
+      'input[type="checkbox"]'
+    );
+    checkboxes.forEach((checkbox) => {
+      checkbox.checked = false;
+    });
+
+    // Show the SplitBill component
+    setShowSplitBill(true);
+  };
+
+  if (!loggedInUser) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
-      <SearchFriend loggedInUser={loggedInUser!} />
+      <SearchFriend loggedInUser={loggedInUser} />
       <FriendList
-        loggedInUser={loggedInUser!}
+        loggedInUser={loggedInUser}
         fetchLoggedInUser={fetchLoggedInUser}
       />
-      <button onClick={() => setShowSplitBill(true)}> Split a Bill </button>
-      {showSplitBill && <SplitBill onDismiss={() => setShowSplitBill(false)} />}
+      <h1>Splitting Bill</h1>
+      <form onSubmit={handleSubmit}>
+        {friendDetails.map((user) => (
+          <label
+            key={user._id}
+            className="container"
+            style={{ display: "block" }}
+          >
+            <input
+              type="checkbox"
+              checked={selectedUsers.some((u) => u._id === user._id)}
+              onChange={() => handleCheckboxChange(user)}
+            />
+            {user.username}
+          </label>
+        ))}
+        <button type="submit" disabled={selectedUsers.length === 0}>
+          Split a Bill
+        </button>
+      </form>
+
+      {showSplitBill && (
+        <SplitBill
+          onDismiss={() => setShowSplitBill(false)}
+          loggedInUser={loggedInUser!}
+          userToSplit={selectedUsers} // Pass selectedUsers here
+        />
+      )}
     </>
   );
 };

@@ -407,3 +407,143 @@ export const deleteFriend: RequestHandler<
     next(error); // Pass the error to the error handling middleware
   }
 };
+
+interface updatecreateExpenseRequest {
+  _id: string;
+}
+
+interface createExpenseBody {
+  description?: string;
+  date?: Date;
+  amount?: number;
+  category?: string;
+}
+
+//creating expense request for another user
+export const sendExpenseRequest: RequestHandler<
+  updatecreateExpenseRequest,
+  unknown,
+  createExpenseBody,
+  unknown
+> = async (req, res, next) => {
+  const _id = req.params._id;
+  const description = req.body.description;
+  const date = req.body.date;
+  const amount = req.body.amount;
+  const category = req.body.category;
+  /*const time = req.body.category;*/
+  const authenticatedUserId = req.session.userId;
+  try {
+    assertIsDefined(authenticatedUserId);
+
+    if (!description || !amount || !category || !date) {
+      throw createHttpError(400, "Please enter all input correctly");
+    }
+
+    if (!mongoose.isValidObjectId(_id)) {
+      throw createHttpError(400, "Invalid user ID");
+    }
+
+    if (!mongoose.isValidObjectId(authenticatedUserId)) {
+      throw createHttpError(400, "Invalid friend ID");
+    }
+    const friendUser = await UserModel.findById(_id).exec();
+    const user = await UserModel.findById(authenticatedUserId).exec();
+
+    if (!friendUser) {
+      throw createHttpError(404, "User not found");
+    }
+
+    if (!user) {
+      throw createHttpError(404, "User not found");
+    }
+
+    friendUser.topay.push({
+      sendMoney: _id,
+      receiveMoney: authenticatedUserId,
+      date: date,
+      description: description,
+      amount: amount,
+      category: category,
+    });
+
+    user.topay.push({
+      sendMoney: _id,
+      receiveMoney: authenticatedUserId,
+      date: date,
+      description: description,
+      amount: amount,
+      category: category,
+    });
+
+    const updatedUser = await user.save();
+    await friendUser.save();
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    next(error);
+  }
+};
+
+interface AddExpenseParams {
+  _id?: string;
+}
+interface AddExpenseBody {
+  newFriend: string;
+}
+
+//add 2 users as friends
+export const acceptExpenseRequest: RequestHandler<
+  AddFriendParams,
+  unknown,
+  AddFriendBody,
+  unknown
+> = async (req, res, next) => {
+  const _id = req.params._id;
+  const newFriend = req.body.newFriend;
+  const authenticatedUserId = req.session.userId;
+
+  try {
+    assertIsDefined(authenticatedUserId);
+
+    if (!mongoose.isValidObjectId(_id)) {
+      throw createHttpError(400, "Invalid user ID");
+    }
+
+    if (!mongoose.isValidObjectId(newFriend)) {
+      throw createHttpError(400, "Invalid friend ID");
+    }
+
+    const user = await UserModel.findById(_id).exec();
+    const friendUser = await UserModel.findById(newFriend).exec();
+
+    if (!user || !friendUser) {
+      throw createHttpError(404, "User not found");
+    }
+
+    if (!user._id.equals(authenticatedUserId)) {
+      throw createHttpError(
+        401,
+        "You are not authorized to add friends for this user"
+      );
+    }
+
+    //skip adding if they are already friends
+    if (!user.friendlist.includes(newFriend)) {
+      user.friendlist.push(newFriend);
+      friendUser.friendlist.push(_id!);
+    }
+
+    //removes friend request
+    user.friendRequest = user.friendRequest.filter(
+      (friend) => friend !== newFriend
+    );
+
+    const updatedUser = await user.save();
+    await friendUser.save();
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error("Error adding friend:", error);
+    next(error); // Pass the error to the error handling middleware
+  }
+};

@@ -2,17 +2,30 @@ import "bootstrap/dist/css/bootstrap.css";
 import { Button, Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import TextInputField from "../form/TextInputField";
+import { User } from "../../models/user";
+import { Expense } from "../../models/expense";
+
+interface SplitExpense {
+  user: User;
+  expense: Expense;
+}
 
 interface SplitBillProps {
   onDismiss: () => void;
+  loggedInUser: User;
+  userToSplit: User[];
 }
 
-const SplitBill = ({ onDismiss }: SplitBillProps) => {
+const SplitBill = ({
+  onDismiss,
+  loggedInUser,
+  userToSplit,
+}: SplitBillProps) => {
   const {
     register,
     handleSubmit,
     formState: { isSubmitting },
-  } = useForm();
+  } = useForm<SplitExpense[]>();
 
   async function onSubmit() {
     try {
@@ -29,16 +42,32 @@ const SplitBill = ({ onDismiss }: SplitBillProps) => {
       <Modal.Body>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <TextInputField
-            name="User"
-            label="User"
+            name="description"
+            label="description"
             type="text"
-            placeholder="Username"
+            placeholder="description"
             register={register}
-            registerOptions={{ required: "Required" }}
           />
+          <TextInputField
+            name="category"
+            label="category"
+            type="text"
+            placeholder="category"
+            register={register}
+          />
+          {userToSplit.map((user) => (
+            <TextInputField
+              key={user._id}
+              name="amount"
+              label={`${user.username} to pay`}
+              type="number"
+              placeholder="amount"
+              register={register}
+            />
+          ))}
 
           <Button type="submit" disabled={isSubmitting} className="width100">
-            Log In
+            Split Bill
           </Button>
         </Form>
       </Modal.Body>

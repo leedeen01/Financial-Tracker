@@ -175,6 +175,7 @@ export interface expenseInput {
   amount: number;
   category: string;
 }
+
 export async function createExpense(expense: expenseInput): Promise<Expense[]> {
   await fetchData(`${website}/api/expenses`, {
     method: "POST",
