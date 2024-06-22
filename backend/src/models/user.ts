@@ -7,7 +7,7 @@ const userSchema = new Schema({
   password: { type: String, required: true, select: false },
   friendlist: { type: [String], required: true },
   friendRequest: { type: [String], required: true },
-  topay: { type: [Object], required: true },
+  topay: { type: [], required: true },
 });
 
 type User = InferSchemaType<typeof userSchema>;

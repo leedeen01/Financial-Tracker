@@ -34,4 +34,8 @@ router.put("/deleteFriend/:_id", UserController.deleteFriend);
 
 router.put("/sendExpenseRequest/:_id", UserController.sendExpenseRequest);
 
+router.put("/acceptExpenseRequest/:_id", UserController.acceptExpenseRequest);
+
+router.put("/declineExpenseRequest/:_id", UserController.declineExpenseRequest);
+
 export default router;
