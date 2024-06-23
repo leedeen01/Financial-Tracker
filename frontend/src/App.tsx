@@ -25,14 +25,10 @@ function App() {
     const storedUser = localStorage.getItem("loggedInUser");
     if (storedUser) {
       // User found in local storage
-      setLoggedInUser(JSON.parse(storedUser));
-      if (location.pathname === "/" || location.pathname === "/home") {
-        // If on home page or root, navigate to /home
-        navigate("/home");
-      }
-    } else {
-      // No user found in local storage, fetch from API
       fetchLoggedInUser();
+    } else {
+      // No user found in local storage, need to log in
+      navigate("/");
     }
   }, [location.pathname]); // Trigger effect on pathname change
 
