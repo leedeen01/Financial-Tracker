@@ -86,6 +86,7 @@ const FriendList = ({ loggedInUser, fetchLoggedInUser }: FriendListProps) => {
             {friendDetails.map((friend, index) => (
               <li key={index}>
                 {friend.username}
+
                 <button onClick={() => handleDeleteFriend(friend._id!)}>
                   Delete
                 </button>

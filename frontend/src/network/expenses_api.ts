@@ -1,8 +1,8 @@
-import { Expense } from "../models/expense";
+import { Expense, FriendsExpenseRequestBody } from "../models/expense";
 import { User } from "../models/user";
 
-const website = "http://localhost:6969";
-// const website = "https://financial-tracker-mtpk.onrender.com";
+// const website = "http://localhost:6969";
+const website = "https://financial-tracker-mtpk.onrender.com";
 
 //login/signup/logout related
 async function fetchData(input: RequestInfo, init?: RequestInit) {
@@ -222,4 +222,24 @@ export async function deleteExpense(expenseId: string) {
     method: "DELETE",
     credentials: "include",
   });
+}
+
+export async function sendFriendExpense(
+  userId: string,
+  expense: FriendsExpenseRequestBody
+): Promise<User> {
+  console.log(userId);
+
+  const response = await fetchData(
+    `${website}/api/users/sendExpenseRequest/` + userId,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(expense),
+      credentials: "include",
+    }
+  );
+  return response.json();
 }

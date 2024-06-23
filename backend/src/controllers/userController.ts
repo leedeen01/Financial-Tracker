@@ -470,6 +470,7 @@ export const sendExpenseRequest: RequestHandler<
     });
 
     user.topay.push({
+      status: "pending",
       sendMoney: _id,
       receiveMoney: authenticatedUserId,
       date: date,

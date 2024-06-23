@@ -45,3 +45,14 @@ export interface Expense {
   createdAt?: string;
   updatedAt?: string;
 }
+
+export interface FriendsExpenseRequestBody {
+  status: string;
+  sendMoney: string;
+  receiveMoney: string;
+  description: string;
+  date: Date;
+  amount: number;
+  category: string;
+  [key: string]: string | Date | number; // Index signature
+}

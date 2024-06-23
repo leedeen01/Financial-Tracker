@@ -4,7 +4,9 @@ import * as ExpensesApi from "../network/expenses_api";
 import FriendList from "../components/friends/FriendList";
 import SearchFriend from "../components/friends/SearchFriend";
 import SplitBill from "../components/friends/SplitBill";
-
+import PendingPayment from "../components/friends/PendingPayment";
+import AcceptedPayment from "../components/friends/AcceptedPayment";
+import DeclinedPayment from "../components/friends/DeclinedPayment";
 const Friends = () => {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
   const [showSplitBill, setShowSplitBill] = useState(false);
@@ -37,16 +39,13 @@ const Friends = () => {
   };
 
   useEffect(() => {
-    if (!loggedInUser) {
-      fetchLoggedInUser();
-    }
-  }, []);
-
-  useEffect(() => {
     if (loggedInUser) {
       fetchFriendDetails();
+
       const interval = setInterval(fetchLoggedInUser, 5000);
       return () => clearInterval(interval);
+    } else {
+      fetchLoggedInUser();
     }
   }, [loggedInUser]);
 
@@ -110,6 +109,18 @@ const Friends = () => {
           Split a Bill
         </button>
       </form>
+      <PendingPayment
+        expenseFromFriends={loggedInUser.topay}
+        loggedInUser={loggedInUser}
+      />
+      <AcceptedPayment
+        expenseFromFriends={loggedInUser.topay}
+        loggedInUser={loggedInUser}
+      />
+      <DeclinedPayment
+        expenseFromFriends={loggedInUser.topay}
+        loggedInUser={loggedInUser}
+      />
 
       {showSplitBill && (
         <SplitBill
