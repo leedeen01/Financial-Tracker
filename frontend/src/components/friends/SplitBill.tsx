@@ -35,7 +35,7 @@ const SplitBill = ({
   const onSubmit = async (formData: SplitExpense) => {
     try {
       const { description, category, date, amounts } = formData;
-
+      onDismiss();
       // Example logic to process the bill split
       const billSplitData = {
         description,

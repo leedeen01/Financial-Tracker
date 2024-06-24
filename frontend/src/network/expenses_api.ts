@@ -243,3 +243,39 @@ export async function sendFriendExpense(
   );
   return response.json();
 }
+
+export async function declineExpenseRequest(
+  userId: string,
+  expense: FriendsExpenseRequestBody
+): Promise<User> {
+  const response = await fetchData(
+    `${website}/api/users/declineExpenseRequest/` + userId,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(expense),
+      credentials: "include",
+    }
+  );
+  return response.json();
+}
+
+export async function acceptExpenseRequest(
+  userId: string,
+  expense: FriendsExpenseRequestBody
+): Promise<User> {
+  const response = await fetchData(
+    `${website}/api/users/acceptExpenseRequest/` + userId,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(expense),
+      credentials: "include",
+    }
+  );
+  return response.json();
+}

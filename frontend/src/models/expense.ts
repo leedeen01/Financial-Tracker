@@ -49,10 +49,11 @@ export interface Expense {
 export interface FriendsExpenseRequestBody {
   status: string;
   sendMoney: string;
+  sendMoneyName?: string;
   receiveMoney: string;
+  receiveMoneyName?: string;
   description: string;
   date: Date;
   amount: number;
   category: string;
-  [key: string]: string | Date | number; // Index signature
 }

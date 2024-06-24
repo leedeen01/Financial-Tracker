@@ -27,8 +27,8 @@ const AcceptedPayment: React.FC<AcceptedPaymentProps> = ({
             );
             const send = await ExpensesApi.searchUsersById(expense.sendMoney);
 
-            expense.sendMoney = send.username; // Update the sendMoney property with the fetched result
-            expense.receiveMoney = receive.username; // Update the receiveMoney property with the fetched result
+            expense.sendMoneyName = send.username; // Update the sendMoney property with the fetched result
+            expense.receiveMoneyName = receive.username; // Update the receiveMoney property with the fetched result
 
             return expense; // Return the updated expense object
           } catch (error) {
@@ -47,6 +47,7 @@ const AcceptedPayment: React.FC<AcceptedPaymentProps> = ({
       // Optionally, handle errors or show error message to user
     }
   };
+  console.log(expenseFromFriends);
 
   useEffect(() => {
     fetchFriendExpenseRequest();
@@ -58,16 +59,16 @@ const AcceptedPayment: React.FC<AcceptedPaymentProps> = ({
       <ul>
         {friendExpenseRequest.map((expense, index) => (
           <li key={index}>
-            {expense.sendMoney === loggedInUser.username ? (
+            {expense.sendMoneyName === loggedInUser.username ? (
               <>
-                <div>Name: {expense.receiveMoney}</div>
+                <div>Name: {expense.receiveMoneyName}</div>
                 <div>Description: {expense.description}</div>
                 <div>Date: {expense.date.toString()}</div>
                 <div>Amount: {expense.amount}</div>
               </>
             ) : (
               <>
-                <div>Expense Name: {expense.sendMoney}</div>
+                <div>Expense Name: {expense.sendMoneyName}</div>
                 <div>Description: {expense.description}</div>
                 <div>Date: {expense.date.toString()}</div>
                 <div>Amount: {expense.amount}</div>

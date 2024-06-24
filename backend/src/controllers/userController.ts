@@ -5,6 +5,7 @@ import expenseModel from "../models/expense";
 import bcrypt from "bcrypt";
 import { assertIsDefined } from "../util/assertIsDefined";
 import mongoose from "mongoose";
+import expense from "../models/expense";
 
 export const getAuthenticatedUser: RequestHandler = async (req, res, next) => {
   try {
@@ -533,33 +534,41 @@ export const acceptExpenseRequest: RequestHandler<
     const reqBody = req.body as acceptExpenseRequestBody;
 
     // Filter user.topay
-    user.topay = user.topay.filter((expense) =>
-      Object.keys(reqBody).every((key) => reqBody[key] !== expense[key])
-    );
 
-    // Filter friendUser.topay
-    friendUser.topay = friendUser.topay.filter((expense) =>
-      Object.keys(reqBody).every((key) => reqBody[key] !== expense[key])
-    );
+    console.log(reqBody);
+    console.log(user.topay);
 
-    user.topay.push({
-      status: "accepted",
-      sendMoney: _id,
-      receiveMoney: authenticatedUserId,
-      date: date,
-      description: description,
-      amount: amount,
-      category: category,
+    user.topay = user.topay.map((expense) => {
+      if (Object.keys(reqBody).some((key) => reqBody[key] !== expense[key])) {
+        return expense;
+      } else {
+        return {
+          status: "accepted",
+          sendMoney: _id,
+          receiveMoney: authenticatedUserId,
+          date: date,
+          description: description,
+          amount: amount,
+          category: category,
+        };
+      }
     });
 
-    friendUser.topay.push({
-      status: "accepted",
-      sendMoney: _id,
-      receiveMoney: authenticatedUserId,
-      date: date,
-      description: description,
-      amount: amount,
-      category: category,
+    // Filter friendUser.topay
+    friendUser.topay = friendUser.topay.map((expense) => {
+      if (Object.keys(reqBody).some((key) => reqBody[key] !== expense[key])) {
+        return expense;
+      } else {
+        return {
+          status: "accepted",
+          sendMoney: _id,
+          receiveMoney: authenticatedUserId,
+          date: date,
+          description: description,
+          amount: amount,
+          category: category,
+        };
+      }
     });
 
     await user.save();
@@ -613,33 +622,37 @@ export const declineExpenseRequest: RequestHandler<
     const reqBody = req.body as acceptExpenseRequestBody;
 
     // Filter user.topay
-    user.topay = user.topay.filter((expense) =>
-      Object.keys(reqBody).every((key) => reqBody[key] !== expense[key])
-    );
-
-    // Filter friendUser.topay
-    friendUser.topay = friendUser.topay.filter((expense) =>
-      Object.keys(reqBody).every((key) => reqBody[key] !== expense[key])
-    );
-
-    user.topay.push({
-      status: "declined",
-      sendMoney: _id,
-      receiveMoney: authenticatedUserId,
-      date: date,
-      description: description,
-      amount: amount,
-      category: category,
+    user.topay = user.topay.map((expense) => {
+      if (Object.keys(reqBody).some((key) => reqBody[key] !== expense[key])) {
+        return expense;
+      } else {
+        return {
+          status: "declined",
+          sendMoney: _id,
+          receiveMoney: authenticatedUserId,
+          date: date,
+          description: description,
+          amount: amount,
+          category: category,
+        };
+      }
     });
 
-    friendUser.topay.push({
-      status: "declined",
-      sendMoney: _id,
-      receiveMoney: authenticatedUserId,
-      date: date,
-      description: description,
-      amount: amount,
-      category: category,
+    // Filter friendUser.topay
+    friendUser.topay = friendUser.topay.map((expense) => {
+      if (Object.keys(reqBody).some((key) => reqBody[key] !== expense[key])) {
+        return expense;
+      } else {
+        return {
+          status: "declined",
+          sendMoney: _id,
+          receiveMoney: authenticatedUserId,
+          date: date,
+          description: description,
+          amount: amount,
+          category: category,
+        };
+      }
     });
 
     await user.save();

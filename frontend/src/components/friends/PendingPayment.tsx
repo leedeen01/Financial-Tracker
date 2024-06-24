@@ -26,8 +26,8 @@ const PendingPayment = ({
           );
           const send = await ExpensesApi.searchUsersById(expense.sendMoney);
 
-          expense.sendMoney = send.username; // Update the sendMoney property with the fetched result
-          expense.receiveMoney = receive.username; // Update the receiveMoney property with the fetched result
+          expense.sendMoneyName = send.username; // Update the sendMoney property with the fetched result
+          expense.receiveMoneyName = receive.username; // Update the receiveMoney property with the fetched result
 
           return expense; // Return the updated expense object
         });
@@ -46,25 +46,83 @@ const PendingPayment = ({
     fetchFriendExpenseRequest();
   }, [expenseFromFriends]); // Fetch expenses whenever expenseFromFriends changes
 
+  const acceptFriendExpenseRequest = async (
+    userId: string,
+    expense: FriendsExpenseRequestBody
+  ) => {
+    ExpensesApi.acceptExpenseRequest(userId, {
+      status: expense.status,
+      sendMoney: expense.sendMoney,
+      receiveMoney: expense.receiveMoney,
+      description: expense.description,
+      date: expense.date,
+      amount: expense.amount,
+      category: expense.category,
+    });
+  };
+  const declineFriendExpenseRequest = async (
+    userId: string,
+    expense: FriendsExpenseRequestBody
+  ) => {
+    ExpensesApi.declineExpenseRequest(userId, {
+      status: expense.status,
+      sendMoney: expense.sendMoney,
+      receiveMoney: expense.receiveMoney,
+      description: expense.description,
+      date: expense.date,
+      amount: expense.amount,
+      category: expense.category,
+    });
+  };
+  console.log(friendExpenseRequest);
+
   return (
     <div>
       <h1>Pending Payment</h1>
       <ul>
         {friendExpenseRequest.map((expense, index) => (
           <li key={index}>
-            {expense.sendMoney === loggedInUser.username ? (
+            {expense.sendMoneyName === loggedInUser.username ? (
               <>
-                <div>Expense Name: {expense.receiveMoney}</div>
+                <div>Expense Name: {expense.receiveMoneyName}</div>
                 <div>Description: {expense.description}</div>
                 <div>Date: {expense.date.toString()}</div>
                 <div>Amount: {expense.amount}</div>
+                <button
+                  onClick={() =>
+                    acceptFriendExpenseRequest(expense.receiveMoney, expense)
+                  }
+                >
+                  Accept
+                </button>
+                <button
+                  onClick={() =>
+                    declineFriendExpenseRequest(expense.receiveMoney, expense)
+                  }
+                >
+                  Decline
+                </button>
               </>
             ) : (
               <>
-                <div>Expense Name: {expense.sendMoney}</div>
+                <div>Expense Name: {expense.sendMoneyName}</div>
                 <div>Description: {expense.description}</div>
                 <div>Date: {expense.date.toString()}</div>
                 <div>Amount: {expense.amount}</div>
+                <button
+                  onClick={() =>
+                    acceptFriendExpenseRequest(expense.sendMoney, expense)
+                  }
+                >
+                  Accept
+                </button>
+                <button
+                  onClick={() =>
+                    declineFriendExpenseRequest(expense.sendMoney, expense)
+                  }
+                >
+                  Decline
+                </button>
               </>
             )}
           </li>
