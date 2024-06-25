@@ -47,7 +47,6 @@ const DeclinedPayment: React.FC<DeclinedPaymentProps> = ({
       // Optionally, handle errors or show error message to user
     }
   };
-  console.log(expenseFromFriends);
 
   useEffect(() => {
     fetchFriendExpenseRequest();

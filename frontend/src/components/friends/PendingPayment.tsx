@@ -74,7 +74,6 @@ const PendingPayment = ({
       category: expense.category,
     });
   };
-  console.log(friendExpenseRequest);
 
   return (
     <div>
@@ -84,9 +83,8 @@ const PendingPayment = ({
           <li key={index}>
             {expense.sendMoneyName === loggedInUser.username ? (
               <>
-                <div>Expense Name: {expense.receiveMoneyName}</div>
+                <div>Username: {expense.receiveMoneyName}</div>
                 <div>Description: {expense.description}</div>
-                <div>Date: {expense.date.toString()}</div>
                 <div>Amount: {expense.amount}</div>
                 <button
                   onClick={() =>
@@ -105,24 +103,10 @@ const PendingPayment = ({
               </>
             ) : (
               <>
-                <div>Expense Name: {expense.sendMoneyName}</div>
+                <div>Username: {expense.sendMoneyName}</div>
                 <div>Description: {expense.description}</div>
-                <div>Date: {expense.date.toString()}</div>
                 <div>Amount: {expense.amount}</div>
-                <button
-                  onClick={() =>
-                    acceptFriendExpenseRequest(expense.sendMoney, expense)
-                  }
-                >
-                  Accept
-                </button>
-                <button
-                  onClick={() =>
-                    declineFriendExpenseRequest(expense.sendMoney, expense)
-                  }
-                >
-                  Decline
-                </button>
+                <h5>Request Sent</h5>
               </>
             )}
           </li>

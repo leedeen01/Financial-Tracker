@@ -47,7 +47,6 @@ const AcceptedPayment: React.FC<AcceptedPaymentProps> = ({
       // Optionally, handle errors or show error message to user
     }
   };
-  console.log(expenseFromFriends);
 
   useEffect(() => {
     fetchFriendExpenseRequest();

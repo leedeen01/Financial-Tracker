@@ -1,3 +1,4 @@
+import { FriendsExpenseRequestBody } from "../../models/expense";
 import { User } from "../../models/user";
 import * as ExpensesApi from "../../network/expenses_api";
 import { useEffect, useState } from "react";
@@ -86,7 +87,38 @@ const FriendList = ({ loggedInUser, fetchLoggedInUser }: FriendListProps) => {
             {friendDetails.map((friend, index) => (
               <li key={index}>
                 {friend.username}
-
+                {friend.topay
+                  .filter(
+                    (item: FriendsExpenseRequestBody) =>
+                      item.sendMoney === loggedInUser._id
+                  )
+                  .filter(
+                    (item: FriendsExpenseRequestBody) =>
+                      item.status === "accepted"
+                  )
+                  .map((item: FriendsExpenseRequestBody) =>
+                    parseInt(item.amount)
+                  )
+                  .reduce(
+                    (accumulator, currentValue) => accumulator + currentValue,
+                    0
+                  ) -
+                  friend.topay
+                    .filter(
+                      (item: FriendsExpenseRequestBody) =>
+                        item.receiveMoney === loggedInUser._id
+                    )
+                    .filter(
+                      (item: FriendsExpenseRequestBody) =>
+                        item.status === "accepted"
+                    )
+                    .map((item: FriendsExpenseRequestBody) =>
+                      parseInt(item.amount)
+                    )
+                    .reduce(
+                      (accumulator, currentValue) => accumulator + currentValue,
+                      0
+                    )}
                 <button onClick={() => handleDeleteFriend(friend._id!)}>
                   Delete
                 </button>

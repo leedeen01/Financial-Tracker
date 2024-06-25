@@ -54,6 +54,6 @@ export interface FriendsExpenseRequestBody {
   receiveMoneyName?: string;
   description: string;
   date: Date;
-  amount: number;
+  amount: string;
   category: string;
 }
