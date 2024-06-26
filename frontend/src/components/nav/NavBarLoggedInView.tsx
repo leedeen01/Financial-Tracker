@@ -1,7 +1,8 @@
 import { User } from "../../models/user";
 import { Navbar, Button } from "react-bootstrap";
 import * as ExpensesApi from "../../network/expenses_api";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { Nav } from "react-bootstrap";
 
 interface NavBarLoggedInViewProps {
   user: User;
@@ -21,15 +22,24 @@ const NavBarLoggedInView = ({
       alert(error);
     }
   }
-  const navigate = useNavigate();
 
   return (
     <>
       <Navbar.Text className="mx-auto">Welcome, {user.username}</Navbar.Text>
-      <Button onClick={() => navigate("/categories")}>Categories</Button>
-      <Button onClick={() => navigate("/budgets")}>Budgets</Button>
-      <Button onClick={() => navigate("/investments")}>Investments</Button>
-      <Button onClick={() => navigate("/friends")}>Friends</Button>
+      <Nav>
+        <Nav.Link as={Link} to="/categories">
+          Categories
+        </Nav.Link>
+        <Nav.Link as={Link} to="/budgets">
+          Budgets
+        </Nav.Link>
+        <Nav.Link as={Link} to="/investments">
+          Investments
+        </Nav.Link>
+        <Nav.Link as={Link} to="/friends">
+          Friends
+        </Nav.Link>
+      </Nav>
       <Button onClick={logout}>Log Out</Button>
     </>
   );

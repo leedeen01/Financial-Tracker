@@ -5,7 +5,7 @@ import { Container, Navbar, Nav } from "react-bootstrap";
 import { User } from "../../models/user";
 import NavBarLoggedInView from "./NavBarLoggedInView";
 import NavBarLoggedOutView from "./NavBarLoggedOutView";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 interface NavBarProps {
   loggedInUser: User | null;
@@ -20,15 +20,11 @@ const NavBar = ({
   onLoginClicked,
   onLogoutSuccessful,
 }: NavBarProps) => {
-  const navigate = useNavigate();
-  const handleBrandClick = () => {
-    navigate("/home"); // Navigate to '/home' when brand is clicked
-  };
   return (
     <Navbar variant="dark" expand="lg" sticky="top" className="navbar-custom">
       <Container>
-        <Navbar.Brand>
-          <div onClick={loggedInUser ? handleBrandClick : () => null} className="navbar-logo-container">
+        <Navbar.Brand as={Link} to="/home">
+          <div className="navbar-logo-container">
             <img src={Logo} alt="Trackspence Logo" className="navbar-logo" />
             <h2 className="navbar-text-logo">Trackspence</h2>
           </div>
