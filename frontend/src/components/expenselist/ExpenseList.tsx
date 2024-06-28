@@ -14,7 +14,7 @@ const ExpenseList = ({ expenses, onDelete, onAddEdit, onEdit }: Props) => {
   const [sortConfig, setSortConfig] = useState<{
     key: keyof Expense | null;
     direction: string;
-  }>({ key: "date", direction: "asc" });
+  }>({ key: "date", direction: "desc" });
 
   const sortedExpenses = expenses.sort((a, b) => {
     if (sortConfig.key === null) return 0;
