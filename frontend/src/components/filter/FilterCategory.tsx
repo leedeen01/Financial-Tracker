@@ -17,9 +17,9 @@ const FilterCategory = ({ onSelectCategory, categories, category }: Props) => {
         onChange={(event) => onSelectCategory(event.target.value)}
         className="form-control w-100 text-center"
         id="category"
-        value={category || "All categories"}
+        value={category || "All Categories"}
       >
-        <option value="">{"All categories"}</option>
+        <option value="">{"All Categories"}</option>
         {categories.map((category) => (
           <option key={category.name} value={category.name}>
             {category.name}
