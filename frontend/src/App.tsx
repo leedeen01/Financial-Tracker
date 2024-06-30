@@ -8,7 +8,8 @@ import Home from "./pages/Home.tsx";
 import HomeLoggedOut from "./pages/HomeLoggedOut.tsx";
 import Categories from "./pages/Categories.tsx";
 import Budget from "./pages/Budget.tsx";
-import Investment from "./pages/Investment.tsx";
+import Investments from "./pages/Investments.tsx";
+import Split from "./pages/Split.tsx";
 import Friends from "./pages/Friends.tsx";
 import { Route, Routes, useNavigate } from "react-router-dom";
 
@@ -62,7 +63,8 @@ function App() {
         <Route path="/home" element={<Home />}></Route>
         <Route path="/categories" element={<Categories />}></Route>
         <Route path="/budgets" element={<Budget />}></Route>
-        <Route path="/investments" element={<Investment />}></Route>
+        <Route path="/investments" element={<Investments />}></Route>
+        <Route path="/split" element={<Split />}></Route>
         <Route path="/friends" element={<Friends />}></Route>
       </Routes>
 

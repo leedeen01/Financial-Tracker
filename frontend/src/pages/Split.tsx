@@ -1,14 +1,10 @@
 import { useEffect, useState } from "react";
 import { User } from "../models/user";
 import * as ExpensesApi from "../network/expenses_api";
-import FriendList from "../components/friends/FriendList";
-import SearchFriend from "../components/friends/SearchFriend";
 import SplitBill from "../components/split/SplitBill";
-import PendingPayment from "../components/friends/PendingPayment";
-import AcceptedPayment from "../components/friends/AcceptedPayment";
-import DeclinedPayment from "../components/friends/DeclinedPayment";
-import "../components/friends/Friends.css";
-const Friends = () => {
+import "../components/split/Split.css";
+
+const Split = () => {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
   const [showSplitBill, setShowSplitBill] = useState(false);
   const [friendDetails, setFriendDetails] = useState<User[]>([]);
@@ -85,33 +81,52 @@ const Friends = () => {
 
   return (
     <>
-      <div className="container content">
-        <div className="row gap-5 mt-5">
-          <div className="col-md-8 mx-auto">
-            <SearchFriend loggedInUser={loggedInUser} />
-          </div>
-          <div className="col-md-8 mx-auto">
-            <FriendList
-              loggedInUser={loggedInUser}
-              fetchLoggedInUser={fetchLoggedInUser}
-            />
-          </div>
-          <PendingPayment
-            expenseFromFriends={loggedInUser.topay}
-            loggedInUser={loggedInUser}
-          />
-          <AcceptedPayment
-            expenseFromFriends={loggedInUser.topay}
-            loggedInUser={loggedInUser}
-          />
-          <DeclinedPayment
-            expenseFromFriends={loggedInUser.topay}
-            loggedInUser={loggedInUser}
-          />
+    <div className="container content">
+      <div className="row mt-5">
+        <div className="col-md-8 d-flex flex-column align-items-center justify-content-center mx-auto gap-3">
+          <h1>Split Bills</h1>
+          <p className="text-center">Use this interface to split a bill with your friends below.</p>
+          <form onSubmit={handleSubmit} className="d-flex flex-column align-items-center">
+            <div className="checkbox-container d-flex flex-wrap gap-5 align-items-center justify-content-center">
+              {friendDetails.map((user) => (
+                  <label className="checkbox-wrapper" key={user._id}>
+                    <input className="checkbox-input" type="checkbox" checked={selectedUsers.some((u) => u._id === user._id)}  onChange={() => handleCheckboxChange(user)}/>
+                    <span className="checkbox-tile">
+                      <span className="checkbox-icon">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          width="24"
+                          height="24"
+                          className="icon"
+                        >
+                          <path
+                            d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+                          ></path>
+                        </svg>
+                      </span>
+                      <span className="checkbox-label">{user.username}</span>
+                    </span>
+                  </label>
+              ))}
+            </div>
+            <button type="submit" className="split-button" disabled={selectedUsers.length === 0}>
+              Split a Bill
+            </button>
+          </form>
         </div>
       </div>
+    </div>
+
+    {showSplitBill && (
+      <SplitBill
+        onDismiss={() => setShowSplitBill(false)}
+        loggedInUser={loggedInUser!}
+        userToSplit={selectedUsers} // Pass selectedUsers here
+      />
+    )}
     </>
   );
 };
 
-export default Friends;
+export default Split;

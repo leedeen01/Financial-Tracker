@@ -1,0 +1,174 @@
+.checkbox-container *,
+  .checkbox-container *:after,
+  .checkbox-container *:before {
+  box-sizing: border-box;
+}
+
+.checkbox-container .checkbox-input {
+  clip: rect(0 0 0 0);
+  -webkit-clip-path: inset(100%);
+  clip-path: inset(100%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.checkbox-container .checkbox-input:checked + .checkbox-tile {
+  border-color: var(--dark-blue);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  color: var(--dark-blue);
+}
+
+.checkbox-container .checkbox-input:checked + .checkbox-tile:before {
+  transform: scale(1);
+  opacity: 1;
+  background-color: var(--dark-blue);
+  border-color: var(--dark-blue);
+}
+
+.checkbox-container .checkbox-input:checked + .checkbox-tile .checkbox-icon,
+  .checkbox-container .checkbox-input:checked + .checkbox-tile .checkbox-label {
+  color: var(--dark-blue);
+}
+
+.checkbox-container .checkbox-input:focus + .checkbox-tile {
+  border-color: var(--dark-blue);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1), 0 0 0 4px var(--blue);
+}
+
+.checkbox-container .checkbox-input:focus + .checkbox-tile:before {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.checkbox-container .checkbox-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 7rem;
+  min-height: 7rem;
+  border-radius: 0.5rem;
+  border: 2px solid var(--blue);
+  background-color: #fff;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  transition: 0.15s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.checkbox-container .checkbox-tile:before {
+  content: "";
+  position: absolute;
+  display: block;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid var(--blue);
+  background-color: white;
+  border-radius: 50%;
+  top: 0.25rem;
+  left: 0.25rem;
+  opacity: 0;
+  transform: scale(0);
+  transition: 0.25s ease;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='://www.w3.org/2000/svg' width='192' height='192' fill='%233B4555' viewBox='0 0 256 256'%3E%3Crect width='256' height='256' fill='none'%3E%3C/rect%3E%3Cpolyline points='216 72.005 104 184 48 128.005' fill='none' stroke='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' stroke-width='32'%3E%3C/polyline%3E%3C/svg%3E");
+  background-size: 12px;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+}
+
+.checkbox-container .checkbox-tile:hover {
+  border-color: var(--dark-blue);
+}
+
+.checkbox-container .checkbox-tile:hover:before {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.checkbox-container .checkbox-icon {
+  transition: 0.375s ease;
+  color: var(--black);
+}
+
+.checkbox-container .checkbox-icon svg {
+  width: 3rem;
+  height: 3rem;
+}
+
+.checkbox-container .checkbox-label {
+  color: var(--grey);
+  transition: 0.375s ease;
+  text-align: center;
+}
+
+.split-button {
+    padding: 5px 10px 5px 10px;
+    margin: 20px auto;
+    background-color: transparent;
+    border-radius: .3em;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: .5s;
+    font-weight: 400;
+    font-size: 17px;
+    border: 1px solid;
+    font-family: inherit;
+    text-transform: uppercase;
+    color: var(--dark-blue);
+    z-index: 1;
+}
+
+.split-button::before, .split-button::after {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 50px;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    border-radius: 50%;
+    z-index: -1;
+    background-color: var(--dark-blue);
+    transition: 1s ease;
+}
+
+.split-button::before {
+    top: -1em;
+    left: -1em;
+}
+
+.split-button::after {
+    left: calc(100% + 1em);
+    top: calc(100% + 1em);
+}
+
+.split-button:hover::before, .split-button:hover::after {
+    height: 410px;
+    width: 410px;
+}
+
+.split-button:hover {
+    color: white;
+}
+
+.split-button:active {
+    filter: brightness(.8);
+}
+
+.split-button:disabled {
+    cursor: not-allowed;
+    color: var(--light-grey);
+}
+
+.split-button:disabled:hover {
+    color: var(--light-grey);
+}
+
+.split-button:disabled:hover::before, .split-button:disabled:hover::after {
+    cursor: not-allowed;
+    height: 0px;
+    width: 0px;
+}
