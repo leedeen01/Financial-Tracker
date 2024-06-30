@@ -1,5 +1,5 @@
 import { User } from "../../models/user";
-import { Navbar, Button } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import * as ExpensesApi from "../../network/expenses_api";
 import { Link } from "react-router-dom";
 import { Nav } from "react-bootstrap";
