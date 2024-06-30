@@ -25,7 +25,6 @@ const NavBarLoggedInView = ({
 
   return (
     <>
-      <Navbar.Text className="mx-auto">Welcome, {user.username}</Navbar.Text>
       <Nav className="mx-auto">
         {/* <Nav.Link className="mx-auto" as={Link} to="/categories">
           Categories
@@ -36,6 +35,9 @@ const NavBarLoggedInView = ({
         <Nav.Link className="mx-auto" as={Link} to="/investments">
           Investments
         </Nav.Link> */}
+        <Nav.Link className="mx-auto" as={Link} to="/home">
+        {user.username}'s Dashboard
+        </Nav.Link>
         <Nav.Link className="mx-auto" as={Link} to="/split">
           Split
         </Nav.Link>
