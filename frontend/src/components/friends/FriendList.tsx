@@ -1,7 +1,7 @@
 import { FriendsExpenseRequestBody } from "../../models/expense";
 import { User } from "../../models/user";
 import * as ExpensesApi from "../../network/expenses_api";
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 
 interface FriendListProps {
   loggedInUser: User;
@@ -78,35 +78,46 @@ const FriendList = ({ loggedInUser, fetchLoggedInUser }: FriendListProps) => {
       console.error("Error fetching friends request:", error);
     }
   };
+
+  const [activeTab, setActiveTab] = useState('f-list');
+
+  const handleTabClick = (tab: SetStateAction<string>) => {
+    setActiveTab(tab);
+  };
+
   return (
     <>
-      <div>
-        <div>
-          <h2>Friend List:</h2>
-          <ul>
-            {friendDetails.map((friend, index) => (
-              <li key={index}>
-                {friend.username}
-                {friend.topay
-                  .filter(
-                    (item: FriendsExpenseRequestBody) =>
-                      item.sendMoney === loggedInUser._id
-                  )
-                  .filter(
-                    (item: FriendsExpenseRequestBody) =>
-                      item.status === "accepted"
-                  )
-                  .map((item: FriendsExpenseRequestBody) =>
-                    parseInt(item.amount)
-                  )
-                  .reduce(
-                    (accumulator, currentValue) => accumulator + currentValue,
-                    0
-                  ) -
-                  friend.topay
+    <div>
+      <nav className="nav nav-pills flex-row justify-content-between">
+        <a
+          className={`flex-fill text-center nav-link ${activeTab === 'f-list' ? 'active' : ''}`}
+          aria-current={activeTab === 'f-list' ? 'page' : undefined}
+          onClick={() => handleTabClick('f-list')}
+        >
+          Friends List
+        </a>
+        <a
+          className={`flex-fill text-center nav-link ${activeTab === 'f-req' ? 'active' : ''}`}
+          onClick={() => handleTabClick('f-req')}
+        >
+          Friend Requests
+        </a>
+      </nav>
+    </div>
+    <div>
+      {activeTab === 'f-list' && 
+        <div id="f-list">
+          {friendDetails.map((friend) => (
+              <div className="col-md-12">
+              <div className="card h-md-100">
+                <div className="card-body d-flex flex-row justify-content-between align-items-center">
+                  <h6 className="overflow-text mb-0">{friend.username}</h6>
+                  <div className="d-flex flex-column justify-content-between align-items-center w-25">
+                    <p>You owe: </p>
+                    <p>${friend.topay
                     .filter(
                       (item: FriendsExpenseRequestBody) =>
-                        item.receiveMoney === loggedInUser._id
+                        item.sendMoney === loggedInUser._id
                     )
                     .filter(
                       (item: FriendsExpenseRequestBody) =>
@@ -118,32 +129,53 @@ const FriendList = ({ loggedInUser, fetchLoggedInUser }: FriendListProps) => {
                     .reduce(
                       (accumulator, currentValue) => accumulator + currentValue,
                       0
-                    )}
-                <button onClick={() => handleDeleteFriend(friend._id!)}>
-                  Delete
-                </button>
-              </li>
+                    ) -
+                    friend.topay
+                      .filter(
+                        (item: FriendsExpenseRequestBody) =>
+                          item.receiveMoney === loggedInUser._id
+                      )
+                      .filter(
+                        (item: FriendsExpenseRequestBody) =>
+                          item.status === "accepted"
+                      )
+                      .map((item: FriendsExpenseRequestBody) =>
+                        parseInt(item.amount)
+                      )
+                      .reduce(
+                        (accumulator, currentValue) => accumulator + currentValue,
+                        0
+                      )}</p>
+                  </div>
+                  <button onClick={() => handleDeleteFriend(friend._id!)}>
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
             ))}
-          </ul>
-        </div>
+        </div>}
 
-        <div>
-          <h2>Friend Requests:</h2>
-          <ul>
-            {friendRequestDetails.map((request, index) => (
-              <li key={index}>
-                <p>Friend Request from {request.username}</p>
+      {activeTab === 'f-req' && 
+        <div id="f-req">
+          {friendRequestDetails.map((request) => (
+            <div className="col-md-12">
+            <div className="card h-md-100">
+              <div className="card-body d-flex flex-row justify-content-between align-items-center">
+                <h6 className="overflow-text mb-0">{request.username}</h6>
+                
                 <button onClick={() => handleAcceptRequest(request._id!)}>
                   Accept
                 </button>
                 <button onClick={() => handleDeleteRequest(request._id!)}>
                   Delete
                 </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
+              </div>
+            </div>
+          </div>
+          ))}
+        </div>}
+    </div>  
     </>
   );
 };

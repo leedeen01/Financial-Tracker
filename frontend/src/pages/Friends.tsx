@@ -7,6 +7,7 @@ import SplitBill from "../components/friends/SplitBill";
 import PendingPayment from "../components/friends/PendingPayment";
 import AcceptedPayment from "../components/friends/AcceptedPayment";
 import DeclinedPayment from "../components/friends/DeclinedPayment";
+import "../components/friends/Friends.css";
 const Friends = () => {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
   const [showSplitBill, setShowSplitBill] = useState(false);
@@ -84,43 +85,51 @@ const Friends = () => {
 
   return (
     <>
-      <SearchFriend loggedInUser={loggedInUser} />
-      <FriendList
-        loggedInUser={loggedInUser}
-        fetchLoggedInUser={fetchLoggedInUser}
-      />
-      <h1>Splitting Bill</h1>
-      <form onSubmit={handleSubmit}>
-        {friendDetails.map((user) => (
-          <label
-            key={user._id}
-            className="container"
-            style={{ display: "block" }}
-          >
-            <input
-              type="checkbox"
-              checked={selectedUsers.some((u) => u._id === user._id)}
-              onChange={() => handleCheckboxChange(user)}
+      <div className="container content">
+        <div className="row gap-5 mt-5">
+          <div className="col-md-8 mx-auto">
+            <SearchFriend loggedInUser={loggedInUser} />
+          </div>
+          <div className="col-md-8 mx-auto">
+            <FriendList
+              loggedInUser={loggedInUser}
+              fetchLoggedInUser={fetchLoggedInUser}
             />
-            {user.username}
-          </label>
-        ))}
-        <button type="submit" disabled={selectedUsers.length === 0}>
-          Split a Bill
-        </button>
-      </form>
-      <PendingPayment
-        expenseFromFriends={loggedInUser.topay}
-        loggedInUser={loggedInUser}
-      />
-      <AcceptedPayment
-        expenseFromFriends={loggedInUser.topay}
-        loggedInUser={loggedInUser}
-      />
-      <DeclinedPayment
-        expenseFromFriends={loggedInUser.topay}
-        loggedInUser={loggedInUser}
-      />
+          </div>
+          <h1>Splitting Bill</h1>
+          <form onSubmit={handleSubmit}>
+            {friendDetails.map((user) => (
+              <label
+                key={user._id}
+                className="container"
+                style={{ display: "block" }}
+              >
+                <input
+                  type="checkbox"
+                  checked={selectedUsers.some((u) => u._id === user._id)}
+                  onChange={() => handleCheckboxChange(user)}
+                />
+                {user.username}
+              </label>
+            ))}
+            <button type="submit" disabled={selectedUsers.length === 0}>
+              Split a Bill
+            </button>
+          </form>
+          <PendingPayment
+            expenseFromFriends={loggedInUser.topay}
+            loggedInUser={loggedInUser}
+          />
+          <AcceptedPayment
+            expenseFromFriends={loggedInUser.topay}
+            loggedInUser={loggedInUser}
+          />
+          <DeclinedPayment
+            expenseFromFriends={loggedInUser.topay}
+            loggedInUser={loggedInUser}
+          />
+        </div>
+      </div>
 
       {showSplitBill && (
         <SplitBill
