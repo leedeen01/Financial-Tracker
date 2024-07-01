@@ -23,7 +23,7 @@ const NavBar = ({
   return (
     <Navbar variant="dark" expand="lg" sticky="top" className="navbar-custom">
       <Container>
-        <Navbar.Brand as={Link} to="/home">
+        <Navbar.Brand>
           <div className="navbar-logo-container">
             <img src={Logo} alt="Trackspence Logo" className="navbar-logo" />
             <h2 className="navbar-text-logo">Trackspence</h2>
