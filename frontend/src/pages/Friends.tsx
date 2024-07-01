@@ -3,7 +3,6 @@ import { User } from "../models/user";
 import * as ExpensesApi from "../network/expenses_api";
 import FriendList from "../components/friends/FriendList";
 import SearchFriend from "../components/friends/SearchFriend";
-import PendingPayment from "../components/friends/PendingPayment";
 import AcceptedPayment from "../components/friends/AcceptedPayment";
 import DeclinedPayment from "../components/friends/DeclinedPayment";
 import "../components/friends/Friends.css";
