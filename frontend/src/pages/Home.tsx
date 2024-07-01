@@ -64,9 +64,7 @@ function Home() {
   return (
     <>
       {loading ? (
-        <div className="loader-container">
-          <Loader />
-        </div>
+        <Loader />
       ) : (
         <div className="container content">
           <div className="row">

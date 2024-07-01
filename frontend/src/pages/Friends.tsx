@@ -31,9 +31,7 @@ const Friends = () => {
 
   if (!loggedInUser) {
     return (
-      <div className="loader-container">
-        <Loader />
-      </div>
+      <Loader />
     );
   }
 

@@ -78,9 +78,7 @@ const Split = () => {
 
   if (!loggedInUser) {
     return (
-      <div className="loader-container">
-        <Loader />
-      </div>
+      <Loader />
     );
   }
 
