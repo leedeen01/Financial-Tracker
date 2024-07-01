@@ -6,7 +6,6 @@ import { User } from "../../models/user";
 import { FriendsExpenseRequestBody, categories } from "../../models/expense";
 import * as ExpensesApi from "../../network/expenses_api";
 import DatePicker from "react-datepicker";
-import { ToastContainer, toast } from 'react-toastify';
 
 interface SplitExpense {
   description: string;
