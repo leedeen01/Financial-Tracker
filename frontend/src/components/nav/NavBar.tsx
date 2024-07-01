@@ -5,7 +5,6 @@ import { Container, Navbar, Nav } from "react-bootstrap";
 import { User } from "../../models/user";
 import NavBarLoggedInView from "./NavBarLoggedInView";
 import NavBarLoggedOutView from "./NavBarLoggedOutView";
-import { Link } from "react-router-dom";
 
 interface NavBarProps {
   loggedInUser: User | null;
