@@ -48,14 +48,18 @@ const Friends = () => {
               fetchLoggedInUser={fetchLoggedInUser}
             />
           </div>
-          <AcceptedPayment
-            expenseFromFriends={loggedInUser.topay}
-            loggedInUser={loggedInUser}
-          />
-          <DeclinedPayment
-            expenseFromFriends={loggedInUser.topay}
-            loggedInUser={loggedInUser}
-          />
+          <div className="col-md-8 mx-auto">
+            <AcceptedPayment
+              expenseFromFriends={loggedInUser.topay}
+              loggedInUser={loggedInUser}
+            />
+            <br></br>
+            <DeclinedPayment
+              expenseFromFriends={loggedInUser.topay}
+              loggedInUser={loggedInUser}
+            />
+            <br></br>
+          </div>
         </div>
       </div>
     </>

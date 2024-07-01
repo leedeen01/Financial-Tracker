@@ -20,6 +20,10 @@
   height: 80vh;
 }
 
+.card {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
 .navbar-logo-container {
   display: flex;
   align-items: center;

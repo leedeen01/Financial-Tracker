@@ -86,9 +86,9 @@ const Split = () => {
     <>
     <div className="container content">
       <div className="row mt-5">
-        <div className="col-md-8 d-flex flex-column align-items-center justify-content-center mx-auto gap-3">
+        <div className="col-md-8 d-flex flex-column align-items-center justify-content-center mx-auto gap-2">
           <h1>Split Bills</h1>
-          <p className="text-center">Use this interface to split a bill with your friends below.</p>
+          <p className="text-center">Select recipients, input their respective amounts, and confirm by clicking 'Split Bill'.</p>
           <form onSubmit={handleSubmit} className="d-flex flex-column align-items-center">
             <div className="checkbox-container d-flex flex-wrap gap-5 align-items-center justify-content-center">
               {friendDetails.map((user) => (
@@ -114,7 +114,7 @@ const Split = () => {
               ))}
             </div>
             <button type="submit" className="split-button" disabled={selectedUsers.length === 0}>
-              Split a Bill
+              Split Bill
             </button>
           </form>
         </div>

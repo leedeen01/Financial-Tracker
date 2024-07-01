@@ -340,4 +340,13 @@
     .search-friend-input:focus {
         width: 200px;
     }
+
+    .hide-header,
+    .hide-cell {
+        display: none;
+    }
+
+    .table {
+        overflow-x: hidden; /* Enable horizontal scrolling */
+    }
 }
