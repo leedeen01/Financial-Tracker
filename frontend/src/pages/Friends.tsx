@@ -46,10 +46,6 @@ const Friends = () => {
               fetchLoggedInUser={fetchLoggedInUser}
             />
           </div>
-          <PendingPayment
-            expenseFromFriends={loggedInUser.topay}
-            loggedInUser={loggedInUser}
-          />
           <AcceptedPayment
             expenseFromFriends={loggedInUser.topay}
             loggedInUser={loggedInUser}
