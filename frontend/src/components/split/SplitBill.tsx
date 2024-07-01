@@ -52,11 +52,15 @@ const SplitBill = ({
         async ([userId, amount]) => {
           const user = userToSplit.find((u) => u._id === userId);
           if (user) {
+            const receive = await ExpensesApi.searchUsersById(userId);
+            const send = await ExpensesApi.searchUsersById(loggedInUser._id!);
             const expense: FriendsExpenseRequestBody = {
               description,
               category,
               date,
               amount: amount.toString(),
+              sendMoneyName: send.username,
+              receiveMoneyName: receive.username,
               sendMoney: loggedInUser._id!,
               receiveMoney: userId,
               status: "pending",

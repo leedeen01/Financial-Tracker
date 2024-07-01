@@ -443,11 +443,11 @@ export const sendExpenseRequest: RequestHandler<
     }
 
     if (!mongoose.isValidObjectId(_id)) {
-      throw createHttpError(400, "Invalid user ID");
+      throw createHttpError(400, "Invalid friend ID");
     }
 
     if (!mongoose.isValidObjectId(authenticatedUserId)) {
-      throw createHttpError(400, "Invalid friend ID");
+      throw createHttpError(400, "Invalid user ID");
     }
     const friendUser = await UserModel.findById(_id).exec();
     const user = await UserModel.findById(authenticatedUserId).exec();
@@ -465,7 +465,9 @@ export const sendExpenseRequest: RequestHandler<
       user.topay.push({
         status: "pending",
         sendMoney: _id,
+        sendMoneyName: friendUser.username,
         receiveMoney: authenticatedUserId,
+        receiveMoneyName: user.username,
         date: date,
         description: description,
         amount: amount,
@@ -477,7 +479,9 @@ export const sendExpenseRequest: RequestHandler<
       friendUser.topay.push({
         status: "pending",
         sendMoney: _id,
+        sendMoneyName: friendUser.username,
         receiveMoney: authenticatedUserId,
+        receiveMoneyName: user.username,
         date: date,
         description: description,
         amount: amount,
@@ -487,7 +491,9 @@ export const sendExpenseRequest: RequestHandler<
       user.topay.push({
         status: "pending",
         sendMoney: _id,
+        sendMoneyName: friendUser.username,
         receiveMoney: authenticatedUserId,
+        receiveMoneyName: user.username,
         date: date,
         description: description,
         amount: amount,

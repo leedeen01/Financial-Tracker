@@ -18,19 +18,9 @@ const PendingPayment = ({
 
   const fetchFriendExpenseRequest = async () => {
     try {
-      const promises = expenseFromFriends
-        .filter((item) => item.status === "pending")
-        .map(async (expense: FriendsExpenseRequestBody) => {
-          const receive = await ExpensesApi.searchUsersById(
-            expense.receiveMoney
-          );
-          const send = await ExpensesApi.searchUsersById(expense.sendMoney);
-
-          expense.sendMoneyName = send.username; // Update the sendMoney property with the fetched result
-          expense.receiveMoneyName = receive.username; // Update the receiveMoney property with the fetched result
-
-          return expense; // Return the updated expense object
-        });
+      const promises = expenseFromFriends.filter(
+        (item) => item.status === "pending"
+      );
 
       // Wait for all promises to resolve
       const updatedExpenses = await Promise.all(promises);
@@ -41,7 +31,6 @@ const PendingPayment = ({
       console.error("Error fetching friend expenses:", error);
     }
   };
-  console.log(expenseFromFriends);
 
   useEffect(() => {
     fetchFriendExpenseRequest();
@@ -55,6 +44,8 @@ const PendingPayment = ({
       status: expense.status,
       sendMoney: expense.sendMoney,
       receiveMoney: expense.receiveMoney,
+      sendMoneyName: expense.sendMoneyName,
+      receiveMoneyName: expense.receiveMoneyName,
       description: expense.description,
       date: expense.date,
       amount: expense.amount,
@@ -69,6 +60,8 @@ const PendingPayment = ({
       status: expense.status,
       sendMoney: expense.sendMoney,
       receiveMoney: expense.receiveMoney,
+      sendMoneyName: expense.sendMoneyName,
+      receiveMoneyName: expense.receiveMoneyName,
       description: expense.description,
       date: expense.date,
       amount: expense.amount,

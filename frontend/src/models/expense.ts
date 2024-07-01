@@ -49,9 +49,9 @@ export interface Expense {
 export interface FriendsExpenseRequestBody {
   status: string;
   sendMoney: string;
-  sendMoneyName?: string;
+  sendMoneyName: string;
   receiveMoney: string;
-  receiveMoneyName?: string;
+  receiveMoneyName: string;
   description: string;
   date: Date;
   amount: string;
