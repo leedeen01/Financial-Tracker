@@ -105,7 +105,7 @@ const Split = () => {
                           ></path>
                         </svg>
                       </span>
-                      <span className="checkbox-label">{user.username}</span>
+                      <span className="checkbox-label overflow-name">{user.username}</span>
                     </span>
                   </label>
               ))}

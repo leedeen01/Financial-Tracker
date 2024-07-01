@@ -6,6 +6,7 @@ import { User } from "../../models/user";
 import { FriendsExpenseRequestBody } from "../../models/expense";
 import * as ExpensesApi from "../../network/expenses_api";
 import DatePicker from "react-datepicker";
+import { ToastContainer, toast } from 'react-toastify';
 
 interface SplitExpense {
   description: string;
@@ -46,6 +47,7 @@ const SplitBill = ({
 
       console.log("Submitting bill split data:", billSplitData);
       console.log(amounts);
+      alert("Successfully sent a bill split request.");
 
       // Example: Sending each user's share as an expense
       const expensePromises = Object.entries(amounts).map(

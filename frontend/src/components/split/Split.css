@@ -172,3 +172,10 @@
     height: 0px;
     width: 0px;
 }
+
+.overflow-name {
+  max-width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
