@@ -3,7 +3,7 @@ import { Button, Form, Modal } from "react-bootstrap";
 import { useForm, Controller } from "react-hook-form";
 import TextInputField from "../form/TextInputField";
 import { User } from "../../models/user";
-import { FriendsExpenseRequestBody } from "../../models/expense";
+import { FriendsExpenseRequestBody, categories } from "../../models/expense";
 import * as ExpensesApi from "../../network/expenses_api";
 import DatePicker from "react-datepicker";
 
@@ -93,13 +93,23 @@ const SplitBill = ({
             placeholder="Enter description"
             register={register}
           />
-          <TextInputField
-            name="category"
-            label="Category"
-            type="text"
-            placeholder="Enter category"
-            register={register}
-          />
+          <div className="mb-3">
+            <label htmlFor="category" className="form-label">
+              Category
+            </label>
+            <select
+              {...register("category")}
+              id="category"
+              className="form-control"
+            >
+              <option value=""></option>
+              {categories.map((category) => (
+                <option key={category.name} value={category.name}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+          </div>
           <div className="mb-3">
             <Controller
               control={control}
@@ -120,6 +130,7 @@ const SplitBill = ({
               name={`amounts.${user._id}`}
               label={`${user.username} to pay`}
               type="number"
+              step="0.01"
               placeholder={`Enter amount for ${user.username}`}
               register={register}
             />

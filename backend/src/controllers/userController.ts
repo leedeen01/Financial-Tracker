@@ -604,6 +604,8 @@ export const acceptExpenseRequest: RequestHandler<
       category: category,
     });
 
+    console.log(newExpense);
+
     res.status(200).json(user); // Sending back updated user object
   } catch (error) {
     console.error("Error adding friend:", error);
