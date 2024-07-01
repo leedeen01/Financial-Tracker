@@ -41,6 +41,7 @@ const PendingPayment = ({
       console.error("Error fetching friend expenses:", error);
     }
   };
+  console.log(expenseFromFriends);
 
   useEffect(() => {
     fetchFriendExpenseRequest();

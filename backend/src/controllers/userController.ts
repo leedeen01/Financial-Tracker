@@ -459,26 +459,41 @@ export const sendExpenseRequest: RequestHandler<
     if (!user) {
       throw createHttpError(404, "User not found");
     }
+    if (_id === authenticatedUserId.toString()) {
+      console.log("t");
 
-    friendUser.topay.push({
-      status: "pending",
-      sendMoney: _id,
-      receiveMoney: authenticatedUserId,
-      date: date,
-      description: description,
-      amount: amount,
-      category: category,
-    });
+      user.topay.push({
+        status: "pending",
+        sendMoney: _id,
+        receiveMoney: authenticatedUserId,
+        date: date,
+        description: description,
+        amount: amount,
+        category: category,
+      });
+    } else {
+      console.log("test2");
 
-    user.topay.push({
-      status: "pending",
-      sendMoney: _id,
-      receiveMoney: authenticatedUserId,
-      date: date,
-      description: description,
-      amount: amount,
-      category: category,
-    });
+      friendUser.topay.push({
+        status: "pending",
+        sendMoney: _id,
+        receiveMoney: authenticatedUserId,
+        date: date,
+        description: description,
+        amount: amount,
+        category: category,
+      });
+
+      user.topay.push({
+        status: "pending",
+        sendMoney: _id,
+        receiveMoney: authenticatedUserId,
+        date: date,
+        description: description,
+        amount: amount,
+        category: category,
+      });
+    }
 
     const updatedUser = await user.save();
     await friendUser.save();

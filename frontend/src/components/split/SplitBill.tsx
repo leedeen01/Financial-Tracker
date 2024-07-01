@@ -11,7 +11,7 @@ interface SplitExpense {
   description: string;
   category: string;
   date: Date;
-  amounts: Record<string, number>; // Record<string, number> for dynamic user amounts
+  amounts: Record<string, number>;
 }
 
 interface SplitBillProps {
@@ -36,7 +36,6 @@ const SplitBill = ({
     try {
       const { description, category, date, amounts } = formData;
       onDismiss();
-      // Example logic to process the bill split
       const billSplitData = {
         description,
         category,
@@ -46,6 +45,7 @@ const SplitBill = ({
       };
 
       console.log("Submitting bill split data:", billSplitData);
+      console.log(amounts);
 
       // Example: Sending each user's share as an expense
       const expensePromises = Object.entries(amounts).map(
@@ -56,7 +56,7 @@ const SplitBill = ({
               description,
               category,
               date,
-              amount,
+              amount: amount.toString(),
               sendMoney: loggedInUser._id!,
               receiveMoney: userId,
               status: "pending",
