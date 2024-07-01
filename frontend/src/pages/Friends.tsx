@@ -6,6 +6,7 @@ import SearchFriend from "../components/friends/SearchFriend";
 import AcceptedPayment from "../components/friends/AcceptedPayment";
 import DeclinedPayment from "../components/friends/DeclinedPayment";
 import "../components/friends/Friends.css";
+import Loader from "../components/loader/Loader";
 const Friends = () => {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 
@@ -29,7 +30,11 @@ const Friends = () => {
   }, [loggedInUser]);
 
   if (!loggedInUser) {
-    return <div>Loading...</div>;
+    return (
+      <div className="loader-container">
+        <Loader />
+      </div>
+    );
   }
 
   return (

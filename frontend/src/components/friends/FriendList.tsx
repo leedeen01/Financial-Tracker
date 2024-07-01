@@ -142,7 +142,7 @@ const FriendList = ({ loggedInUser, fetchLoggedInUser }: FriendListProps) => {
 
                   <div className="d-flex flex-column justify-content-between align-items-center w-25">
                     <p className="text-center">{calculateBalance(friend) >= 0 ? "They owe you" : "You owe them"}: </p>
-                    <p className={`${calculateBalance(friend) >= 0 ? 'they-owe' : 'you-owe'}`}>${Math.abs(calculateBalance(friend))}</p>
+                    <p className={`${calculateBalance(friend) >= 0 ? 'they-owe' : 'you-owe'}`}>${Math.abs(calculateBalance(friend)).toFixed(2)}</p>
                   </div>
 
                   <button onClick={() => handleDeleteFriend(friend._id!)} className="friend-button">

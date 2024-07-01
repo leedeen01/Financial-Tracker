@@ -5,6 +5,7 @@ import { Container, Navbar, Nav } from "react-bootstrap";
 import { User } from "../../models/user";
 import NavBarLoggedInView from "./NavBarLoggedInView";
 import NavBarLoggedOutView from "./NavBarLoggedOutView";
+import { Link } from "react-router-dom";
 
 interface NavBarProps {
   loggedInUser: User | null;
@@ -22,7 +23,7 @@ const NavBar = ({
   return (
     <Navbar variant="dark" expand="lg" sticky="top" className="navbar-custom">
       <Container>
-        <Navbar.Brand>
+        <Navbar.Brand as={Link} to={loggedInUser ? "/home" : "/"}>
           <div className="navbar-logo-container">
             <img src={Logo} alt="Trackspence Logo" className="navbar-logo" />
             <h2 className="navbar-text-logo">Trackspence</h2>

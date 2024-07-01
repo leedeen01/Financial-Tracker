@@ -192,20 +192,12 @@
 }
 
 .they-owe {
-    color: white;
-    background-color: var(--green);
-    border-radius: 20px;
-    padding: 5px;
-    min-width: 40px;
+    color: var(--green);
     text-align: center;
 }
 
 .you-owe {
-    color: white;
-    background-color: var(--red);
-    border-radius: 20px;
-    padding: 5px;
-    min-width: 40px;
+    color: var(--red);
     text-align: center;
 }
 

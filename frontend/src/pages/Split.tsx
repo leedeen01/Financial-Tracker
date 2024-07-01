@@ -3,6 +3,7 @@ import { User } from "../models/user";
 import * as ExpensesApi from "../network/expenses_api";
 import SplitBill from "../components/split/SplitBill";
 import "../components/split/Split.css";
+import Loader from "../components/loader/Loader";
 
 const Split = () => {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
@@ -76,7 +77,9 @@ const Split = () => {
   };
 
   if (!loggedInUser) {
-    return <div>Loading...</div>;
+    <div className="loader-container">
+      <Loader />
+    </div>
   }
 
   return (

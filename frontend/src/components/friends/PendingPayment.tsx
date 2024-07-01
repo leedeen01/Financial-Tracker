@@ -91,7 +91,7 @@ const PendingPayment = ({
   return (
     <>
     <button className="pending-btn" onClick={handleButtonClick}>
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" height="16">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" height="16" className="icon">
           <path d="M256 0C114.62 0 0 114.6 0 256s114.62 256 256 256 256-114.6 256-256S397.38 0 256 0zm0 472c-119.4 0-216-96.6-216-216S136.6 40 256 40s216 96.6 216 216-96.6 216-216 216z"/>
           <path d="M360.52 303.98l-84.58-84.6V112c0-8.84-7.16-16-16-16s-16 7.16-16 16v120c0 4.24 1.68 8.32 4.69 11.31l88.58 88.6c6.25 6.26 16.38 6.26 22.62 0 6.25-6.26 6.25-16.38 0-22.63z"/>
         </svg>

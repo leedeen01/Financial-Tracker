@@ -8,6 +8,7 @@ import { Expense, categories } from "../models/expense";
 import * as expensesApi from "../network/expenses_api";
 import { months } from "../models/expense";
 import Filter from "../components/filter/Filter";
+import Loader from "../components/loader/Loader";
 
 function Home() {
   const [selectedExpense, setSelectedExpense] = useState("");
@@ -20,6 +21,8 @@ function Home() {
   const [selectedMonth, setSelectedMonth] = useState("");
 
   const [showFilter, setShowFilter] = useState(false);
+
+  const [loading, setLoading] = useState(false);
 
   const FilteredMonth = selectedMonth
     ? expenses.filter((expense) => {
@@ -42,8 +45,8 @@ function Home() {
         const expenses = await expensesApi.fetchExpense();
         setExpenses(expenses);
       } catch (error) {
+        setLoading(true);
         console.error(error);
-        alert(error);
       }
     }
     loadExpenses();
@@ -54,49 +57,55 @@ function Home() {
       await expensesApi.deleteExpense(expense._id);
       setExpenses(expenses.filter((e) => e._id !== expense._id));
     } catch (error) {
+      setLoading(true);
       console.error(error);
-      alert(error);
     }
   }
   return (
     <>
-      <div className="container content">
-        <div className="row">
-          <SectionOne expenses={expenses} />
-          <SectionTwo
-            expenses={FilteredMonth}
-            categories={categories}
-            selectedExpenses={selectedExpenses}
-            onDelete={(id) => deleteExpense(id)}
-            onAddEdit={() => setShowAddDialog(true)}
-            onEdit={(id) => setSelectedExpense(id)}
-            onFilter={() => setShowFilter(true)}
-          />
+      {loading ? (
+        <div className="loader-container">
+          <Loader />
         </div>
+      ) : (
+        <div className="container content">
+          <div className="row">
+            <SectionOne expenses={expenses} />
+            <SectionTwo
+              expenses={FilteredMonth}
+              categories={categories}
+              selectedExpenses={selectedExpenses}
+              onDelete={(id) => deleteExpense(id)}
+              onAddEdit={() => setShowAddDialog(true)}
+              onEdit={(id) => setSelectedExpense(id)}
+              onFilter={() => setShowFilter(true)}
+            />
+          </div>
 
-        {showAddDialog && (
-          <AddEditExpenseDialog
-            expenseToEdit={selectedExpense}
-            expenses={expenses}
-            onDismiss={() => {
-              setShowAddDialog(false);
-              setSelectedExpense("");
-            }}
-            updateExpenses={setExpenses}
-          />
-        )}
+          {showAddDialog && (
+            <AddEditExpenseDialog
+              expenseToEdit={selectedExpense}
+              expenses={expenses}
+              onDismiss={() => {
+                setShowAddDialog(false);
+                setSelectedExpense("");
+              }}
+              updateExpenses={setExpenses}
+            />
+          )}
 
-        {showFilter && (
-          <Filter
-            onDismiss={() => setShowFilter(false)}
-            onSelectMonth={(month) => setSelectedMonth(month)}
-            onSelectCategory={(category) => setSelectedCategory(category)}
-            categories={categories}
-            month={selectedMonth}
-            category={selectedCategory}
-          />
-        )}
-      </div>
+          {showFilter && (
+            <Filter
+              onDismiss={() => setShowFilter(false)}
+              onSelectMonth={(month) => setSelectedMonth(month)}
+              onSelectCategory={(category) => setSelectedCategory(category)}
+              categories={categories}
+              month={selectedMonth}
+              category={selectedCategory}
+            />
+          )}
+        </div>
+      )} 
     </>
   );
 }

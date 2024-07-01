@@ -11,7 +11,7 @@ import Budget from "./pages/Budget.tsx";
 import Investments from "./pages/Investments.tsx";
 import Split from "./pages/Split.tsx";
 import Friends from "./pages/Friends.tsx";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate, Navigate } from "react-router-dom";
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
@@ -59,13 +59,14 @@ function App() {
       />
 
       <Routes>
-        <Route index element={<HomeLoggedOut />}></Route>
+        <Route index element={loggedInUser ? <Home /> : <HomeLoggedOut />}></Route>
         <Route path="/home" element={<Home />}></Route>
         <Route path="/categories" element={<Categories />}></Route>
         <Route path="/budgets" element={<Budget />}></Route>
         <Route path="/investments" element={<Investments />}></Route>
         <Route path="/split" element={<Split />}></Route>
         <Route path="/friends" element={<Friends />}></Route>
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
 
       {showSignUp && (
