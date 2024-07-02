@@ -25,6 +25,7 @@ const SignUp = ({onDismiss, onSignUpSuccessful}: SignUpModalProps) => {
             setLoading(false);
             onSignUpSuccessful(newUser);
         } catch (error) {
+            setLoading(false);
             alert(error);
             console.error(error);
         }
