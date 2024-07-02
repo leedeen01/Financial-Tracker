@@ -2,13 +2,14 @@ import "bootstrap/dist/css/bootstrap.css";
 import SectionOne from "../components/SectionOne";
 import SectionTwo from "../components/SectionTwo";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import AddEditExpenseDialog from "../components/AddEditExpenseDialog";
 import { Expense, categories } from "../models/expense";
 import * as expensesApi from "../network/expenses_api";
 import { months } from "../models/expense";
 import Filter from "../components/filter/Filter";
 import Loader from "../components/loader/Loader";
+import { Context } from "../App";
 
 function Home() {
   const [selectedExpense, setSelectedExpense] = useState("");
@@ -22,7 +23,7 @@ function Home() {
 
   const [showFilter, setShowFilter] = useState(false);
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useContext(Context);
 
   const FilteredMonth = selectedMonth
     ? expenses.filter((expense) => {
@@ -105,7 +106,7 @@ function Home() {
             />
           )}
         </div>
-      )} 
+      )}
     </>
   );
 }
