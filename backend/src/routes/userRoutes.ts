@@ -38,4 +38,6 @@ router.put("/acceptExpenseRequest/:_id", UserController.acceptExpenseRequest);
 
 router.put("/declineExpenseRequest/:_id", UserController.declineExpenseRequest);
 
+router.put("/settleExpenseRequest/:_id", UserController.settleExpenseRequest);
+
 export default router;

@@ -279,3 +279,17 @@ export async function acceptExpenseRequest(
   );
   return response.json();
 }
+
+export async function settleExpenseRequest(userId: string): Promise<User> {
+  const response = await fetchData(
+    `${website}/api/users/settleExpenseRequest/` + userId,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    }
+  );
+  return response.json();
+}
