@@ -34,7 +34,15 @@ const Login = ({onDismiss, onLoginSuccessful}: LoginModalProps) => {
     return (
         <>
         {loading ? (
-            <Loader />
+            <Modal show onHide={onDismiss}>
+                <Modal.Header closeButton>
+                    Log In
+                </Modal.Header>
+
+                <Modal.Body>
+                    <Loader />
+                </Modal.Body>
+            </Modal>
         ) : (
             <Modal show onHide={onDismiss}>
                 <Modal.Header closeButton>

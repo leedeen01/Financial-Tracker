@@ -33,7 +33,15 @@ const SignUp = ({onDismiss, onSignUpSuccessful}: SignUpModalProps) => {
     return (
         <>
         {loading ? (
-            <Loader />
+            <Modal show onHide={onDismiss}>
+                <Modal.Header closeButton>
+                    Sign Up
+                </Modal.Header>
+
+                <Modal.Body>
+                    <Loader />
+                </Modal.Body>
+            </Modal>
         ) : (
             <Modal show onHide={onDismiss}>
                 <Modal.Header closeButton>
