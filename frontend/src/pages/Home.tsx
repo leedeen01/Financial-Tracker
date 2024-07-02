@@ -42,10 +42,11 @@ function Home() {
   useEffect(() => {
     async function loadExpenses() {
       try {
+        setLoading(true);
         const expenses = await expensesApi.fetchExpense();
+        setLoading(false);
         setExpenses(expenses);
       } catch (error) {
-        setLoading(true);
         console.error(error);
       }
     }
@@ -54,10 +55,11 @@ function Home() {
 
   async function deleteExpense(expense: Expense) {
     try {
+      setLoading(true);
       await expensesApi.deleteExpense(expense._id);
+      setLoading(false);
       setExpenses(expenses.filter((e) => e._id !== expense._id));
     } catch (error) {
-      setLoading(true);
       console.error(error);
     }
   }
