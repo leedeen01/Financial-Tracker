@@ -79,9 +79,9 @@ const PendingPayment = ({
     setShowModal(true);
   };
 
-  const clearOwed = async (userId: string) => {
-    await ExpensesApi.settleExpenseRequest(userId);
-  };
+  // const clearOwed = async (userId: string) => {
+  //   await ExpensesApi.settleExpenseRequest(userId);
+  // };
 
   const handleClose = () => {
     setShowModal(false);
@@ -97,7 +97,7 @@ const PendingPayment = ({
 
   return (
     <>
-      <button
+      {/* <button
         className="pending-btn"
         onClick={() => clearOwed(userToPay!._id!)}
       >
@@ -107,7 +107,7 @@ const PendingPayment = ({
           height="16"
           className="icon"
         ></svg>
-      </button>
+      </button> */}
 
       <button className="pending-btn" onClick={handleButtonClick}>
         <svg
