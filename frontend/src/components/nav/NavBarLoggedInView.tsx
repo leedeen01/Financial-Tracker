@@ -36,7 +36,7 @@ const NavBarLoggedInView = ({
           Investments
         </Nav.Link> */}
         <Nav.Link className="mx-auto" as={Link} to="/home">
-        {user.username}'s Dashboard
+          {user.username}'s Dashboard
         </Nav.Link>
         <Nav.Link className="mx-auto" as={Link} to="/friends">
           Friends

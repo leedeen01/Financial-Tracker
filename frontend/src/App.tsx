@@ -79,7 +79,6 @@ function App() {
             path="/home"
             element={loggedInUser ? <Home /> : <HomeLoggedOut />}
           ></Route>
-
           <Route
             path="/split"
             element={loggedInUser ? <Split /> : <HomeLoggedOut />}
