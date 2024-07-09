@@ -1,8 +1,8 @@
 import { Expense, FriendsExpenseRequestBody } from "../models/expense";
 import { User } from "../models/user";
 
-const website = "http://localhost:6969";
-// const website = "https://financial-tracker-mtpk.onrender.com";
+// const website = "http://localhost:6969";
+const website = "https://financial-tracker-mtpk.onrender.com";
 
 //login/signup/logout related
 async function fetchData(input: RequestInfo, init?: RequestInit) {
