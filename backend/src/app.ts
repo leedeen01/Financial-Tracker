@@ -2,6 +2,7 @@ import "dotenv/config";
 import express, { NextFunction, Request, Response } from "express";
 import expenseRoutes from "./routes/expenseRoutes";
 import userRoutes from "./routes/userRoutes";
+import geminiRoutes from "./routes/geminiRoutes"
 import morgan from "morgan";
 import createHttpError, { isHttpError } from "http-errors";
 import cors from "cors";
@@ -32,9 +33,9 @@ app.use(
     name: "MyCoolWebAppCookieName", // This needs to be unique per-host.
     cookie: {
       maxAge: 60 * 60 * 1000,
-      httpOnly: false,
-      sameSite: "none",
-      secure: true,
+      // httpOnly: false,
+      // sameSite: "none",
+      // secure: true,
     },
     rolling: true,
     store: MongoStore.create({
@@ -43,9 +44,11 @@ app.use(
     }),
   })
 );
-
+app.use("/api/gemini", geminiRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/expenses", requiresAuth, expenseRoutes);
+
+
 
 app.use((req, res, next) => {
   next(createHttpError(404, "Endpoint not found"));
