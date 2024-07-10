@@ -34,6 +34,7 @@ function App() {
 
   useEffect(() => {
     fetchLoggedInUser();
+    
   }, []);
 
   function handleLogout() {

@@ -10,6 +10,7 @@ const Insights = () => {
   const [value, setValue] = useState("");
   const [error, setError] = useState("");
   const [chatHistory, setChatHistory] = useState<history[]>([]);
+
   const surpriseOptions = [
     "How can i improve my finances?",
     "Where do i spend majority of my money on?",
@@ -19,15 +20,77 @@ const Insights = () => {
   const [loading, setLoading] = useContext(Context);
 
   useEffect(() => {
-
-  },[])
+    async function loadExpenses() {
+      try {
+        const expenses = await expensesApi.fetchExpense(); // Assuming fetchExpense() returns a Promise<Expense[]>
+        return expenses;
+      } catch (error) {
+        console.error(error);
+        return []; // Return empty array or handle error case appropriately
+      }
+    }
+  
+    async function fetchData() {
+      setLoading(true);
+  
+      try {
+        const expenses = await loadExpenses();
+  
+        if (expenses.length > 0) {
+          let prompt = "Here are my expenses, how can i save more money";
+          prompt += expenses.map(e => `Description: ${e.description}, Amount: ${e.amount}, Category: ${e.category}, Date: ${e.date}`).join("\n");
+          prompt += "Make it in point form and send without any bold or newline"
+          await initialResponse(prompt);          
+        } else {
+          setValue("No expenses found."); 
+        }
+      } catch (error) {
+        console.error("Error loading expenses:", error);
+        setError("Failed to load expenses. Please try again."); 
+      } finally {
+        setLoading(false);
+      }
+    }
+  
+    fetchData(); 
+  
+  }, []); 
+  
 
   const surprise = () => {
     const randomValue = surpriseOptions[Math.floor(Math.random() * surpriseOptions.length)];
     setValue(randomValue);
   };
 
+  const initialResponse = async (value: string) => {
+    setLoading(true);
+    if (!value) {
+      setError("Please ask a question");
+      return;
+    }
+    try {
+      const response = await expensesApi.getGeminiResponse( [], value);
+      console.log(response);
+      console.log("hi2");
+
+      setChatHistory([
+        {
+          role: "model",
+          parts: [{text: response}],
+        }
+      ]);
+      setValue("");
+      setLoading(false);
+      
+    } catch (error) {
+      console.error("Error fetching response:", error);
+      setError("Something went wrong! Please try again.");
+    }
+  };
+
   const getResponse = async () => {
+    console.log("hi");
+
     setLoading(true);
     if (!value) {
       setError("Please ask a question");
@@ -37,7 +100,8 @@ const Insights = () => {
     try {
       const response = await expensesApi.getGeminiResponse( chatHistory, value);
       console.log(response);
-      
+      console.log("hi2");
+
       setChatHistory([
         ...chatHistory,
         {
