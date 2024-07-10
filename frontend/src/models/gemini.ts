@@ -1,5 +1,5 @@
 export interface history {
     role: string;
-    parts: string;
-  }
+    parts: { text: string }[];  }
+  
   
