@@ -1,4 +1,5 @@
 import { Expense, FriendsExpenseRequestBody } from "../models/expense";
+import { history } from "../models/gemini";
 import { User } from "../models/user";
 
 // const website = "http://localhost:6969";
@@ -294,12 +295,12 @@ export async function settleExpenseRequest(userId: string): Promise<User> {
   return response.json();
 }
 
-export async function getGeminiResponse(chatHistory: string[], value: string): Promise<string> {
+export async function getGeminiResponse(chatHistory: history[], value: string): Promise<string> {
   const response = await fetchData(`${website}/api/gemini/getSuggestion`, {
     method: "POST",
     body: JSON.stringify({
-      history: chatHistory,
-      message: value
+      chatHistory: chatHistory,
+      message: value,
     }),
     headers: {
       "Content-Type": "application/json",
