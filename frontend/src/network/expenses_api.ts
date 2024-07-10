@@ -293,3 +293,18 @@ export async function settleExpenseRequest(userId: string): Promise<User> {
   );
   return response.json();
 }
+
+export async function getGeminiResponse(chatHistory: string[], value: string): Promise<string> {
+  const response = await fetchData(`${website}/api/gemini/getSuggestion`, {
+    method: "POST",
+    body: JSON.stringify({
+      history: chatHistory,
+      message: value
+    }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+  return response.text();
+}

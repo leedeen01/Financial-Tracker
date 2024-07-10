@@ -10,6 +10,7 @@ import HomeLoggedOut from "./pages/HomeLoggedOut.tsx";
 import Split from "./pages/Split.tsx";
 import Friends from "./pages/Friends.tsx";
 import { Route, Routes, useNavigate, Navigate } from "react-router-dom";
+import Insights from "./pages/Insights.tsx";
 
 export const Context = createContext<
   [boolean, React.Dispatch<React.SetStateAction<boolean>>]
@@ -86,6 +87,10 @@ function App() {
           <Route
             path="/friends"
             element={loggedInUser ? <Friends /> : <HomeLoggedOut />}
+          ></Route>
+          <Route
+            path="/insights"
+            element={loggedInUser ? <Insights /> : <HomeLoggedOut />}
           ></Route>
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
