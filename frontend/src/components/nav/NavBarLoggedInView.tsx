@@ -26,13 +26,10 @@ const NavBarLoggedInView = ({
   return (
     <>
       <Nav className="mx-auto">
-        {/* <Nav.Link className="mx-auto" as={Link} to="/categories">
-          Categories
-        </Nav.Link>
         <Nav.Link className="mx-auto" as={Link} to="/budgets">
-          Budgets
+          Budget
         </Nav.Link>
-        <Nav.Link className="mx-auto" as={Link} to="/investments">
+        {/* <Nav.Link className="mx-auto" as={Link} to="/investments">
           Investments
         </Nav.Link> */}
         <Nav.Link className="mx-auto" as={Link} to="/home">

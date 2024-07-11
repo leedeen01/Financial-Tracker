@@ -131,32 +131,34 @@ const Insights = () => {
   };
 
   return (
-    <div className="app">
-      <p>
-        How can I help you
-        <button className="surprise" onClick={surprise} disabled={!chatHistory}>
-          Surprise ME!
-        </button>
-      </p>
-      {loading ? <Loader /> : <div className="input-container">
-        <input
-          value={value}
-          type="text"
-          placeholder="Ask me anything about your expenses!"
-          onChange={(e) => setValue(e.target.value)}
-        />
-        {!error && <button onClick={getResponse}>Ask Me!</button>}
-        {error && <button onClick={clear}>Clear</button>}
-      </div>}
+    <div className="container content">
+      <div className="row gap-5 mt-5">
+        <p className="insights-text">
+          How can I help you
+          <button className="surprise" onClick={surprise} disabled={!chatHistory}>
+            Surprise ME!
+          </button>
+        </p>
+        {loading ? <Loader /> : <div className="input-container">
+          <input
+            value={value}
+            type="text"
+            placeholder="Ask me anything about your expenses!"
+            onChange={(e) => setValue(e.target.value)}
+          />
+          {!error && <button onClick={getResponse}>Ask Me!</button>}
+          {error && <button onClick={clear}>Clear</button>}
+        </div>}
 
-      {error && <p>{error}</p>}
+        {error && <p className="insights-text">{error}</p>}
 
-      <div className="search-result">
-        {chatHistory.map((chatItem, index) => (
-          <div key={index}>
-            <p className="answer">{chatItem.role} : {chatItem.parts[0].text}</p>          
-          </div>
-        ))}
+        <div className="search-result">
+          {chatHistory.map((chatItem, index) => (
+            <div key={index}>
+              <p className="answer insights-text">{chatItem.role} : {chatItem.parts[0].text}</p>          
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

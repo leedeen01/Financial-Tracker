@@ -2,28 +2,9 @@
     font-family: sans-serif;
 }
 
-body {
-    margin: 0;
-    padding: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: #fafafa;
-    color: #777;
-    display: flex;
-    justify-content: center;
-}
-
-p {
+.insights-text {
     font-weight: 200;
     font-size:14px;
-}
-
-.app {
-    width: 80vw;
-    margin:10vw;
-    height: 80vh;
-    display: flex;
-    flex-direction: column;
 }
 
 .search-result {

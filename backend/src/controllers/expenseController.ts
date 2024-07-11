@@ -124,7 +124,7 @@ export const updateExpense: RequestHandler<
     }
 
     if (!expense.userId.equals(authenticatedUserId)) {
-      throw createHttpError(401, "You cannot access this note");
+      throw createHttpError(401, "No access");
     }
 
     expense.description = newDescription;

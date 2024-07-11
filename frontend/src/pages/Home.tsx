@@ -4,7 +4,8 @@ import SectionTwo from "../components/SectionTwo";
 
 import { useContext, useEffect, useState } from "react";
 import AddEditExpenseDialog from "../components/AddEditExpenseDialog";
-import { Expense, categories } from "../models/expense";
+import { Expense } from "../models/expense";
+import { Category } from "../models/category";
 import * as expensesApi from "../network/expenses_api";
 import { months } from "../models/expense";
 import Filter from "../components/filter/Filter";
@@ -14,15 +15,11 @@ import { Context } from "../App";
 function Home() {
   const [selectedExpense, setSelectedExpense] = useState("");
   const [showAddDialog, setShowAddDialog] = useState(false);
-
   const [expenses, setExpenses] = useState<Expense[]>([]);
-
+  const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState("");
-
   const [selectedMonth, setSelectedMonth] = useState("");
-
   const [showFilter, setShowFilter] = useState(false);
-
   const [loading, setLoading] = useContext(Context);
 
   const FilteredMonth = selectedMonth
@@ -39,6 +36,20 @@ function Home() {
   const selectedExpenses = selectedCategory
     ? FilteredMonth.filter((e) => e.category === selectedCategory)
     : FilteredMonth;
+
+  useEffect(() => {
+      async function loadCategories() {
+      try {
+          setLoading(true);
+          const categories = await expensesApi.fetchCategory();
+          setLoading(false);
+          setCategories(categories);
+      } catch (error) {
+          console.error(error);
+      }
+      }
+      loadCategories();
+  }, []);
 
   useEffect(() => {
     async function loadExpenses() {
@@ -64,6 +75,7 @@ function Home() {
       console.error(error);
     }
   }
+  
   return (
     <>
       {loading ? (

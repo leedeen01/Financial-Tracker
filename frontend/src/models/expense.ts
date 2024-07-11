@@ -5,7 +5,7 @@ export const categories = [
     border: "rgba(75, 192, 192, 1)",
   },
   {
-    name: "Groceries",
+    name: "Transport",
     background: "rgba(54, 162, 235, 0.2)",
     border: "rgba(54, 162, 235, 1)",
   },

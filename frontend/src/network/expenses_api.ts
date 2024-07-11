@@ -1,6 +1,7 @@
 import { Expense, FriendsExpenseRequestBody } from "../models/expense";
 import { history } from "../models/gemini";
 import { User } from "../models/user";
+import { Category } from "../models/category";
 
 // const website = "http://localhost:6969";
 const website = "https://financial-tracker-mtpk.onrender.com";
@@ -158,6 +159,43 @@ export async function searchUsersById(Id: string): Promise<User> {
     credentials: "include",
   });
   return response.json();
+}
+
+//category related
+export async function fetchCategory(): Promise<Category[]> {
+  const response = await fetchData(`${website}/api/categories`, {
+    method: "GET",
+    credentials: "include",
+  });
+  const categories: Category[] = await response.json();
+
+  return categories;
+}
+
+export async function createCategory(category: Category): Promise<Category[]> {
+  await fetchData(`${website}/api/categories`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(category),
+    credentials: "include",
+  });
+  const response = await fetchData(`${website}/api/categories`, {
+    method: "GET",
+    credentials: "include",
+  });
+
+  const categories: Category[] = await response.json();
+
+  return categories;
+}
+
+export async function deleteCategory(categoryId: string) {
+  return await fetchData(`${website}/api/categories/` + categoryId, {
+    method: "DELETE",
+    credentials: "include",
+  });
 }
 
 //expenses related
