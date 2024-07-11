@@ -83,7 +83,7 @@ function Home() {
       ) : (
         <div className="container content">
           <div className="row">
-            <SectionOne expenses={expenses} />
+            <SectionOne expenses={expenses} categories={categories} />
             <SectionTwo
               expenses={FilteredMonth}
               categories={categories}

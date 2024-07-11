@@ -4,11 +4,7 @@ import { useForm } from "react-hook-form";
 import { SignUpCredentials } from "../../network/expenses_api";
 import FilterCategory from "./FilterCategory";
 import FilterMonth from "./FilterMonth";
-interface Category {
-  name: string;
-  background: string;
-  border: string;
-}
+import { Category } from "../../models/category";
 
 interface FilterProps {
   onDismiss: () => void;

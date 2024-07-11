@@ -10,16 +10,26 @@ import {
   XAxis,
 } from "recharts";
 import { Expense } from "../models/expense";
+import { Category } from "../models/category";
 
 interface Props {
   expenses: Expense[];
+  categories: Category[];
 }
 
-const SectionOne = ({ expenses }: Props) => {
-  const totalExpenses = expenses.reduce(
-    (sum, expense) => sum + expense.amount,
-    0
-  );
+const SectionOne = ({ expenses, categories }: Props) => {
+  const totalExpenses = expenses.reduce((sum, expense) => {
+    const category = categories.find(cat => cat.name === expense.category);
+    if (category && category.type !== "Income") {
+      return sum + expense.amount;
+    }
+    return sum;
+  }, 0);
+
+  function isIncomeCategory(categoryName: string) {
+    const category = categories.find(cat => cat.name === categoryName);
+    return category && category.type === "Income";
+  }
 
   const today = new Date();
   const dates: string[] = [];
@@ -29,10 +39,10 @@ const SectionOne = ({ expenses }: Props) => {
     dates.push(date.toISOString().split("T")[0]);
   }
   const todayExpenses = expenses
-    .filter(
-      (expense) =>
-        new Date(expense.date).toISOString().split("T")[0] === dates[4]
-    )
+    .filter(expense => {
+      const expenseDate = new Date(expense.date).toISOString().split("T")[0];
+      return expenseDate === dates[4] && !isIncomeCategory(expense.category);
+    })
     .reduce((sum, expense) => sum + expense.amount, 0);
   const getDayName = (dayIndex: number) => {
     const days = [
@@ -48,16 +58,33 @@ const SectionOne = ({ expenses }: Props) => {
   };
   const expensesByDay = dates.map((date) => {
     const expensesOnDate = expenses
-      .filter(
-        (expense) => new Date(expense.date).toISOString().split("T")[0] === date
-      )
+      .filter((expense) => {
+        const expenseDate = new Date(expense.date).toISOString().split("T")[0];
+        return expenseDate === date && !isIncomeCategory(expense.category);
+      })
       .reduce((sum, expense) => sum + expense.amount, 0);
-
+  
     const dayName = getDayName(new Date(date).getDay());
-
+  
     return {
       name: dayName,
       expense: expensesOnDate.toFixed(2),
+    };
+  });
+
+  const incomeByDay = dates.map((date) => {
+    const incomeOnDate = expenses
+      .filter((expense) => {
+        const expenseDate = new Date(expense.date).toISOString().split("T")[0];
+        return expenseDate === date && isIncomeCategory(expense.category);
+      })
+      .reduce((sum, expense) => sum + expense.amount, 0);
+  
+    const dayName = getDayName(new Date(date).getDay());
+  
+    return {
+      name: dayName,
+      income: incomeOnDate.toFixed(2),
     };
   });
 
@@ -97,8 +124,12 @@ const SectionOne = ({ expenses }: Props) => {
     yesterdayExpense
   );
 
-  // PLACEHOLDER VARIABLES
-  const totalIncome = 230.45;
+  const totalIncome = expenses
+    .filter(expense => {
+      const category = categories.find(cat => cat.name === expense.category);
+      return category && category.type === "Income";
+    })
+    .reduce((acc, expense) => acc + expense.amount, 0);
   const savingsData = [
     {
       type: "Expenses",
@@ -331,7 +362,7 @@ const SectionOne = ({ expenses }: Props) => {
                   <AreaChart
                     width={200}
                     height={100}
-                    data={expensesByDay}
+                    data={incomeByDay}
                     margin={{ top: 60, bottom: -20, left: 0, right: 0 }}
                   >
                     <defs>
@@ -362,7 +393,7 @@ const SectionOne = ({ expenses }: Props) => {
                     />
                     <Tooltip />
                     <Area
-                      dataKey="expense"
+                      dataKey="income"
                       stroke="#04A85A"
                       fillOpacity={1}
                       fill="url(#incomeColor)"

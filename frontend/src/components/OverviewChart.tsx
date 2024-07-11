@@ -17,22 +17,27 @@ interface Props {
 }
 
 const OverviewChart = ({ expenses, categories }: Props) => {
-  const dataByCategory = categories.map((category) => {
-    const total = expenses
-      .filter((expense) => expense.category === category.name)
-      .reduce((sum, expense) => sum + expense.amount, 0);
+  const dataByCategory = categories
+    .filter(category => category.type !== "Income")
+    .map(category => {
+      const total = expenses
+        .filter(expense => expense.category === category.name)
+        .reduce((sum, expense) => sum + expense.amount, 0);
 
-    return {
-      name: category.name,
-      value: parseFloat(total.toFixed(2)),
-      color: category.color,
-    };
-  });
+  return {
+    name: category.name,
+    value: parseFloat(total.toFixed(2)),
+    color: category.color,
+  };
+});
 
-  const totalExpenses = expenses.reduce(
-    (sum, expense) => sum + expense.amount,
-    0
-  );
+  const totalExpenses = expenses.reduce((sum, expense) => {
+    const category = categories.find(cat => cat.name === expense.category);
+    if (category && category.type !== "Income") {
+      return sum + expense.amount;
+    }
+    return sum;
+  }, 0);
 
   const expensesCenterText = () => {
     return (

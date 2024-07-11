@@ -6,11 +6,13 @@ import BudgetList from "../components/budgets/BudgetList";
 import BudgetForm from "../components/budgets/BudgetForm";
 import "../components/budgets/Budget.css";
 import { Category } from "../models/category";
+import { Expense } from "../models/expense";
 
 const Budgets = () => {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [expenses, setExpenses] = useState<Expense[]>([]);
 
   // Function to fetch logged-in user
   const fetchLoggedInUser = async () => {
@@ -41,6 +43,18 @@ const Budgets = () => {
     }
   }, [loggedInUser]);
 
+  useEffect(() => {
+    async function loadExpenses() {
+      try {
+        const expenses = await ExpensesApi.fetchExpense();
+        setExpenses(expenses);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    loadExpenses();
+  }, []);
+
   if (!loggedInUser) {
     return (
       <Loader />
@@ -64,7 +78,7 @@ const Budgets = () => {
   return (
     <>
     <div className="d-flex flex-column">
-      <BudgetList categories={categories} deleteCategory={deleteCategory} />
+      <BudgetList expenses={expenses} categories={categories} deleteCategory={deleteCategory} />
       <button onClick={() => setShowForm(true)} className="budget-button mt-5">
         +
       </button>

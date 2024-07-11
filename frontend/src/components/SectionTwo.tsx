@@ -1,14 +1,9 @@
 import { Expense } from "../models/expense";
+import { Category } from "../models/category";
 import OverviewChart from "./OverviewChart";
 import ExpenseList from "./expenselist/ExpenseList";
 import { IoFilter } from "react-icons/io5";
 import { MdAdd } from "react-icons/md";
-
-interface Category {
-  name: string;
-  background: string;
-  border: string;
-}
 
 interface Props {
   expenses: Expense[];
@@ -36,7 +31,7 @@ const SectionTwo = ({
           <div className="card h-md-100">
             <div className="card-header pb-0">
               <h6 className="mb-2 mt-2 d-flex align-items-center">
-                Overview Chart
+                Expenses Chart
               </h6>
             </div>
 

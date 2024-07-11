@@ -1,8 +1,4 @@
-interface Category {
-  name: string;
-  background: string;
-  border: string;
-}
+import { Category } from "../../models/category";
 
 interface Props {
   onSelectCategory: (category: string) => void;
