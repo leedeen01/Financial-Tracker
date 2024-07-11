@@ -43,7 +43,7 @@ const ColorInputField = ({
         </Form.Control>
       </div>
       <div className="overflow-x-auto">
-        {/* <ButtonGroup className="mb-3">
+        <ButtonGroup className="mb-3">
           {options.map((color) => (
             <Button
               key={color}
@@ -53,7 +53,7 @@ const ColorInputField = ({
             >
             </Button>
           ))}
-        </ButtonGroup> */}
+        </ButtonGroup>
       </div>
       <Form.Control.Feedback type="invalid">
         {error?.message}
