@@ -1,5 +1,5 @@
 import { MdDelete } from "react-icons/md";
-import { Category } from "../models/category";
+import { Category } from "../../models/category";
 
 interface BudgetListProps {
     categories: Category[];
@@ -7,6 +7,13 @@ interface BudgetListProps {
 }
 
 const BudgetList = ({ categories, deleteCategory }: BudgetListProps) => {
+    const rgba = (color: string, alpha: number) => {
+        const r = parseInt(color.slice(1, 3), 16);
+        const g = parseInt(color.slice(3, 5), 16);
+        const b = parseInt(color.slice(5, 7), 16);
+        return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    };
+
     return (
         <>
         <div className="row g-3 mt-5" onClick={() => {}}>
@@ -15,7 +22,7 @@ const BudgetList = ({ categories, deleteCategory }: BudgetListProps) => {
                     return (
                         <div className="col-md-3 col-sm-5">
                             <div className="card h-md-100">
-                                <div className="card-header pb-0 d-flex align-items-center justify-content-between" style={{backgroundColor: category.background}}>
+                                <div className="card-header pb-0 d-flex align-items-center justify-content-between" style={{backgroundColor: rgba(category.color, 0.5)}}>
                                     <h6 className="mb-2 mt-2">
                                         {category.name}
                                     </h6>

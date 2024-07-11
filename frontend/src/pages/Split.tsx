@@ -4,12 +4,14 @@ import * as ExpensesApi from "../network/expenses_api";
 import SplitBill from "../components/split/SplitBill";
 import "../components/split/Split.css";
 import Loader from "../components/loader/Loader";
+import { Category } from "../models/category";
 
 const Split = () => {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
   const [showSplitBill, setShowSplitBill] = useState(false);
   const [friendDetails, setFriendDetails] = useState<User[]>([]);
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   // Function to fetch logged-in user
   const fetchLoggedInUser = async () => {
@@ -37,10 +39,19 @@ const Split = () => {
   };
 
   useEffect(() => {
+    async function loadCategories() {
+      try {
+          const categories = await ExpensesApi.fetchCategory();
+          setCategories(categories);
+      } catch (error) {
+          console.error(error);
+      }
+    }
+
     if (loggedInUser) {
       fetchFriendDetails();
-
       const interval = setInterval(fetchLoggedInUser, 5000);
+      loadCategories();
       return () => clearInterval(interval);
     } else {
       fetchLoggedInUser();
@@ -126,6 +137,7 @@ const Split = () => {
         onDismiss={() => setShowSplitBill(false)}
         loggedInUser={loggedInUser!}
         userToSplit={selectedUsers} // Pass selectedUsers here
+        categories={categories}
       />
     )}
     </>

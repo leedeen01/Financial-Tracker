@@ -1,0 +1,75 @@
+.color-button-active {
+    z-index: 999;
+    border: 3px dotted;
+    border-color: var(--grey) !important;
+}
+
+.budget-button {
+    padding: 5px 10px 5px 10px;
+    margin: 20px auto;
+    background-color: transparent;
+    border-radius: .3em;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: .5s;
+    font-weight: 400;
+    font-size: 17px;
+    border: 1px solid;
+    width: 100px;
+    font-family: inherit;
+    text-transform: uppercase;
+    color: var(--blue);
+    z-index: 1;
+}
+
+.budget-button::before, .budget-button::after {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 50px;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    border-radius: 50%;
+    z-index: -1;
+    background-color: var(--blue);
+    transition: 1s ease;
+}
+
+.budget-button::before {
+    top: -1em;
+    left: -1em;
+}
+
+.budget-button::after {
+    left: calc(100% + 1em);
+    top: calc(100% + 1em);
+}
+
+.budget-button:hover::before, .budget-button:hover::after {
+    height: 410px;
+    width: 410px;
+}
+
+.budget-button:hover {
+    color: white;
+}
+
+.budget-button:active {
+    filter: brightness(.8);
+}
+
+.budget-button:disabled {
+    cursor: not-allowed;
+    color: var(--light-grey);
+}
+
+.budget-button:disabled:hover {
+    color: var(--light-grey);
+}
+
+.budget-button:disabled:hover::before, .budget-button:disabled:hover::after {
+    cursor: not-allowed;
+    height: 0px;
+    width: 0px;
+}

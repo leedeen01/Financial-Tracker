@@ -1,10 +1,12 @@
 import { Button, Form, Modal } from "react-bootstrap";
-import TextInputField from "../components/form/TextInputField";
-import * as ExpensesApi from "../network/expenses_api";
-import { Category } from "../models/category";
-import Loader from "../components/loader/Loader";
-import { useContext } from "react";
-import { Context } from "../App";
+import TextInputField from "../form/TextInputField";
+import SelectInputField from "../form/SelectInputField";
+import ColorInputField from "../form/ColorInputField";
+import * as ExpensesApi from "../../network/expenses_api";
+import { Category, colors } from "../../models/category";
+import Loader from "../loader/Loader";
+import { useContext, useState } from "react";
+import { Context } from "../../App";
 import { useForm } from "react-hook-form";
 
 interface BudgetProps {
@@ -34,6 +36,10 @@ const BudgetForm = ({ onDismiss, onCategorySuccess }: BudgetProps) => {
     }
   }
 
+  const defaultColor = colors[0];
+
+  const [selectedType, setSelectedType] = useState<string>("Expense");
+
   return (
     <>
     {loading ? (
@@ -54,40 +60,41 @@ const BudgetForm = ({ onDismiss, onCategorySuccess }: BudgetProps) => {
                 name="name"
                 label="Category Name"
                 type="text"
-                placeholder="Category Name"
                 register={register}
                 registerOptions={{ required: "Required" }}
                 error={errors.name}
               />
 
-              <TextInputField
-                name="background"
-                label="Background"
-                type="text"
-                placeholder="Background"
+              <ColorInputField
+                name="color"
+                label="Color"
+                options={colors}
                 register={register}
                 registerOptions={{ required: "Required" }}
-                error={errors.background}
+                defaultValue={defaultColor}
+                error={errors.color}
               />
 
-              <TextInputField
-                name="border"
-                label="Border"
-                type="text"
-                placeholder="Border"
+              <SelectInputField
+                name="type"
+                label="Type"
+                options={["Expense", "Income"]}
                 register={register}
                 registerOptions={{ required: "Required" }}
-                error={errors.border}
+                onChange={(value) => setSelectedType(value)}
+                error={errors.type}
               />
 
-              <TextInputField
-                name="budget"
-                label="Budget"
-                type="number"
-                placeholder="Budget"
-                register={register}
-                error={errors.budget}
-              />
+              {selectedType === "Expense" && (
+                <TextInputField
+                  name="budget"
+                  label="Budget"
+                  type="number"
+                  placeholder="Optional"
+                  register={register}
+                  error={errors.budget}
+                />
+              )}
 
               <Button
                 type="submit"

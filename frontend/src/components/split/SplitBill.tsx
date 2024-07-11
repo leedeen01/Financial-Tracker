@@ -3,7 +3,8 @@ import { Button, Form, Modal } from "react-bootstrap";
 import { useForm, Controller } from "react-hook-form";
 import TextInputField from "../form/TextInputField";
 import { User } from "../../models/user";
-import { FriendsExpenseRequestBody, categories } from "../../models/expense";
+import { FriendsExpenseRequestBody } from "../../models/expense";
+import { Category } from "../../models/category";
 import * as ExpensesApi from "../../network/expenses_api";
 import DatePicker from "react-datepicker";
 
@@ -18,12 +19,14 @@ interface SplitBillProps {
   onDismiss: () => void;
   loggedInUser: User;
   userToSplit: User[];
+  categories: Category[];
 }
 
 const SplitBill = ({
   onDismiss,
   loggedInUser,
   userToSplit,
+  categories,
 }: SplitBillProps) => {
   const {
     control,

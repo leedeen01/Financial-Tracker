@@ -39,14 +39,14 @@ function Home() {
 
   useEffect(() => {
       async function loadCategories() {
-      try {
-          setLoading(true);
-          const categories = await expensesApi.fetchCategory();
-          setLoading(false);
-          setCategories(categories);
-      } catch (error) {
-          console.error(error);
-      }
+        try {
+            setLoading(true);
+            const categories = await expensesApi.fetchCategory();
+            setLoading(false);
+            setCategories(categories);
+        } catch (error) {
+            console.error(error);
+        }
       }
       loadCategories();
   }, []);
@@ -75,7 +75,7 @@ function Home() {
       console.error(error);
     }
   }
-  
+
   return (
     <>
       {loading ? (
@@ -104,6 +104,7 @@ function Home() {
                 setSelectedExpense("");
               }}
               updateExpenses={setExpenses}
+              categories={categories}
             />
           )}
 

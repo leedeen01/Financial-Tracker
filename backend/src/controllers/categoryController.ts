@@ -47,8 +47,8 @@ export const getCategory: RequestHandler = async (req, res, next) => {
 
 interface createCategoryBody {
   name: string;
-  background: string;
-  border: string;
+  color: string;
+  type: string;
   budget: number;
 }
 
@@ -59,22 +59,22 @@ export const createCategory: RequestHandler<
   unknown
 > = async (req, res, next) => {
   const name = req.body.name;
-  const background = req.body.background;
-  const border = req.body.border;
+  const color = req.body.color;
+  const type = req.body.type;
   const budget = req.body.budget;
   const authenticatedUserId = req.session.userId;
   try {
     assertIsDefined(authenticatedUserId);
 
-    if (!name || !background || !border) {
+    if (!name || !color) {
       throw createHttpError(400, "Please enter all input correctly");
     }
 
     const newCategory = await categoryModel.create({
       userId: authenticatedUserId,
       name: name,
-      background: background,
-      border: border,
+      color: color,
+      type: type,
       budget: budget,
     });
 

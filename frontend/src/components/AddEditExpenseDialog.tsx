@@ -1,6 +1,7 @@
 import { Modal } from "react-bootstrap";
 import Form from "./Form";
-import { Expense, categories } from "../models/expense";
+import { Expense } from "../models/expense";
+import { Category } from "../models/category";
 import {
   createExpense,
   updateExpense,
@@ -12,12 +13,14 @@ interface AddEditExpenseDialogProps {
   expenses: Expense[];
   onDismiss: () => void;
   updateExpenses: (expenses: Expense[]) => void; // Define updateExpenses prop
+  categories: Category[];
 }
 const AddEditExpenseDialog = ({
   expenseToEdit,
   expenses,
   updateExpenses,
   onDismiss,
+  categories,
 }: AddEditExpenseDialogProps) => {
   return (
     <Modal show onHide={onDismiss}>

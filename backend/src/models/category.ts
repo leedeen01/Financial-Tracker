@@ -5,8 +5,8 @@ const categorySchema = new Schema(
   {
     userId: { type: Schema.Types.ObjectId, required: true },
     name: { type: String, required: true },
-    background: { type: String, required: true },
-    border: { type: String, required: true },
+    color: { type: String, required: true },
+    type: { type: String, required: true },
     budget: { type: Number, required: false },
   },
   { timestamps: true }

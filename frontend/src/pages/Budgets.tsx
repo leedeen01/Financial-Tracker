@@ -2,9 +2,9 @@ import * as ExpensesApi from "../network/expenses_api";
 import { useState, useEffect } from "react";
 import Loader from "../components/loader/Loader";
 import { User } from "../models/user";
-import BudgetList from "../budgets/BudgetList";
-import BudgetForm from "../budgets/BudgetForm";
-import "../budgets/Budget.css";
+import BudgetList from "../components/budgets/BudgetList";
+import BudgetForm from "../components/budgets/BudgetForm";
+import "../components/budgets/Budget.css";
 import { Category } from "../models/category";
 
 const Budgets = () => {
@@ -63,10 +63,12 @@ const Budgets = () => {
 
   return (
     <>
+    <div className="d-flex flex-column">
       <BudgetList categories={categories} deleteCategory={deleteCategory} />
-      <button onClick={() => setShowForm(true)}>
+      <button onClick={() => setShowForm(true)} className="budget-button mt-5">
         +
       </button>
+    </div>
       {showForm &&
         <BudgetForm onDismiss={() => setShowForm(false)} onCategorySuccess={onCategorySuccess} />
       }

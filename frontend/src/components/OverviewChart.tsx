@@ -9,12 +9,7 @@ import {
   Legend,
   Customized,
 } from "recharts";
-
-interface Category {
-  name: string;
-  background: string;
-  border: string;
-}
+import { Category } from "../models/category";
 
 interface Props {
   expenses: Expense[];
@@ -30,8 +25,7 @@ const OverviewChart = ({ expenses, categories }: Props) => {
     return {
       name: category.name,
       value: parseFloat(total.toFixed(2)),
-      backgroundColor: category.background,
-      borderColor: category.border,
+      color: category.color,
     };
   });
 
@@ -57,7 +51,7 @@ const OverviewChart = ({ expenses, categories }: Props) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const legendFormatter = (value: string, entry: any) => {
     const { payload } = entry;
-    return <span style={{ color: payload.borderColor }}>{value}</span>;
+    return <span style={{ color: payload.color }}>{value}</span>;
   };
 
   const [radius, setRadius] = useState({ outerRadius: 180, innerRadius: 100 });
@@ -80,6 +74,13 @@ const OverviewChart = ({ expenses, categories }: Props) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const rgba = (color: string, alpha: number) => {
+    const r = parseInt(color.slice(1, 3), 16);
+    const g = parseInt(color.slice(3, 5), 16);
+    const b = parseInt(color.slice(5, 7), 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  };
+
   return (
     <ResponsiveContainer width="100%" height={450}>
       <PieChart>
@@ -97,8 +98,8 @@ const OverviewChart = ({ expenses, categories }: Props) => {
           {dataByCategory.map((entry, index) => (
             <Cell
               key={`cell-${index}`}
-              fill={entry.backgroundColor}
-              stroke={entry.borderColor}
+              fill={rgba(entry.color, 0.5)}
+              stroke={rgba(entry.color, 1)}
             />
           ))}
         </Pie>
