@@ -39,7 +39,7 @@ const Insights = () => {
         if (expenses.length > 0) {
           let prompt = "Here are my expenses, how can i save more money";
           prompt += expenses.map(e => `Description: ${e.description}, Amount: ${e.amount}, Category: ${e.category}, Date: ${e.date}`).join("\n");
-          prompt += "Make it in point form and send without any bold or newline"
+          prompt += "Make it in point form and replace without any bold and newline"
           await initialResponse(prompt);          
         } else {
           setValue("No expenses found."); 
@@ -70,10 +70,12 @@ const Insights = () => {
     }
     try {
       const response = await expensesApi.getGeminiResponse( [], value);
-      console.log(response);
-      console.log("hi2");
 
       setChatHistory([
+        {
+          role: "user",
+          parts: [{text: "Welcome!"}],
+        },
         {
           role: "model",
           parts: [{text: response}],
