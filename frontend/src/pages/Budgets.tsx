@@ -47,7 +47,15 @@ const Budgets = () => {
     async function loadExpenses() {
       try {
         const expenses = await ExpensesApi.fetchExpense();
-        setExpenses(expenses);
+        const currentDate = new Date();
+        const currentMonth = currentDate.getMonth(); // Note: January is 0, December is 11
+        const currentYear = currentDate.getFullYear();
+
+        const currentMonthExpenses = expenses.filter(expense => {
+          const expenseDate = new Date(expense.date);
+          return expenseDate.getMonth() === currentMonth && expenseDate.getFullYear() === currentYear;
+        });        
+        setExpenses(currentMonthExpenses);
       } catch (error) {
         console.error(error);
       }
