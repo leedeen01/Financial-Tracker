@@ -98,7 +98,7 @@ const AccountList = ({ accounts, deleteAccount }: AccountListProps) => {
                         <h6 className="mb-2 mt-2 d-flex align-items-center">
                             Investment Portfolio
                         </h6>
-                        <button onClick={handleRefreshPrices} className="expenselist-button expenselist-button-add">Refresh Prices</button>
+                        <button onClick={handleRefreshPrices} className="expenselist-button expenselist-button-add"><i className="fa fa-refresh"></i></button>
                     </div>
                 </div>
                 </div>
