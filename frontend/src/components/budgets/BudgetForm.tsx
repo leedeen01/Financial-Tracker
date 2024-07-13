@@ -36,10 +36,7 @@ const BudgetForm = ({ onDismiss, onCategorySuccess }: BudgetProps) => {
     }
   }
 
-  function random(min: number, max: number) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-  const defaultColor = colors[random(0, colors.length - 1)];
+  const [defaultColor] = useState(() => colors[Math.floor(Math.random() * colors.length)]);
 
   const [selectedType, setSelectedType] = useState<string>("Expense");
 
@@ -93,6 +90,7 @@ const BudgetForm = ({ onDismiss, onCategorySuccess }: BudgetProps) => {
                   name="budget"
                   label="Budget"
                   type="number"
+                  step="any"
                   placeholder="Optional"
                   register={register}
                   error={errors.budget}

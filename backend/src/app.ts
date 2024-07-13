@@ -4,6 +4,7 @@ import expenseRoutes from "./routes/expenseRoutes";
 import userRoutes from "./routes/userRoutes";
 import geminiRoutes from "./routes/geminiRoutes"
 import categoryRoutes from "./routes/categoryRoutes";
+import accountRoutes from "./routes/accountRoutes";
 import morgan from "morgan";
 import createHttpError, { isHttpError } from "http-errors";
 import cors from "cors";
@@ -49,6 +50,7 @@ app.use("/api/gemini", geminiRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/expenses", requiresAuth, expenseRoutes);
 app.use("/api/categories", categoryRoutes);
+app.use("/api/accounts", accountRoutes);
 
 
 app.use((req, res, next) => {

@@ -2,6 +2,7 @@ import { Expense, FriendsExpenseRequestBody } from "../models/expense";
 import { history } from "../models/gemini";
 import { User } from "../models/user";
 import { Category } from "../models/category";
+import { Account } from "../models/account";
 
 // const website = "http://localhost:6969";
 const website = "https://financial-tracker-mtpk.onrender.com";
@@ -161,7 +162,7 @@ export async function searchUsersById(Id: string): Promise<User> {
   return response.json();
 }
 
-//category related
+//categories related
 export async function fetchCategory(): Promise<Category[]> {
   const response = await fetchData(`${website}/api/categories`, {
     method: "GET",
@@ -196,6 +197,106 @@ export async function deleteCategory(categoryId: string) {
     method: "DELETE",
     credentials: "include",
   });
+}
+
+//accounts related
+export async function fetchAccount(): Promise<Account[]> {
+  const response = await fetchData(`${website}/api/accounts`, {
+    method: "GET",
+    credentials: "include",
+  });
+  const accounts: Account[] = await response.json();
+
+  return accounts;
+}
+
+export async function createAccount(account: Account): Promise<Account[]> {
+  await fetchData(`${website}/api/accounts`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(account),
+    credentials: "include",
+  });
+  const response = await fetchData(`${website}/api/accounts`, {
+    method: "GET",
+    credentials: "include",
+  });
+
+  const accounts: Account[] = await response.json();
+
+  return accounts;
+}
+
+export async function deleteAccount(accountId: string) {
+  return await fetchData(`${website}/api/accounts/` + accountId, {
+    method: "DELETE",
+    credentials: "include",
+  });
+}
+
+export async function fetchStockPrice(accounts: Account[]) {
+  const stockPrices = [];
+
+  for (const account of accounts) {
+    if (account.type === 'Stock') {
+      const stock = account.name;
+      //const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${stock}&apikey=PGYVSQORM4OGVXKI`;
+      const url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=IBM&apikey=demo";
+
+      try {
+        const response = await fetch(url);
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data['Meta Data'] && data['Time Series (Daily)']) {
+            const lastRefreshedDate = data['Meta Data']['3. Last Refreshed'];
+            const latestPrice = parseFloat(data['Time Series (Daily)'][lastRefreshedDate]['4. close']);
+
+            stockPrices.push({
+              stockName: stock,
+              latestPrice: latestPrice
+            });
+          } else {
+            console.error(`Invalid response data for stock: ${stock}`);
+          }
+        } else {
+          console.error(`Failed to fetch data for stock: ${stock}`);
+        }
+      } catch (error) {
+        console.error(`Error fetching data for stock: ${stock}`, error);
+      }
+    }
+  }
+  return stockPrices;
+}
+
+export async function fetchStockName(keyword: string) {
+  const stockNames = [];
+  //const url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${keyword}&apikey=PGYVSQORM4OGVXKI`;
+  const url = "https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=tesco&apikey=demo";
+
+  try {
+    const response = await fetch(url);
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data);
+      for (const d of data.bestMatches) {
+        stockNames.push({
+          symbol: d['1. symbol'],
+          name: d['2. name'],
+          region: d['4. region'],
+        });
+      }
+    } else {
+      console.error(`Failed to fetch stocks for keyword: ${keyword}`);
+    }
+  } catch (error) {
+    console.error(`Error fetching stocks for keyword: ${keyword}`, error);
+  }
+  return stockNames;
 }
 
 //expenses related

@@ -2,14 +2,9 @@ import { FieldValues, useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod/dist/zod.js";
 import { Expense } from "../models/expense";
+import { Category } from "../models/category";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
-interface Category {
-  name: string;
-  background: string;
-  border: string;
-}
 
 const schema = z.object({
   description: z.string().min(1, { message: "Please fill in the description" }),

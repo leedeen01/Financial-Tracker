@@ -21,8 +21,6 @@ const BudgetList = ({ expenses, categories, deleteCategory }: BudgetListProps) =
         const totalExpenses = expenses
                                 .filter((expense) => category.name === expense.category)
                                 .reduce((acc, expense) => acc + expense.amount, 0);
-        console.log(expenses
-            .filter((expense) => category.name === expense.category));
         if (category.budget) {
             return (totalExpenses / category.budget) * 100;
         } else {
@@ -36,7 +34,7 @@ const BudgetList = ({ expenses, categories, deleteCategory }: BudgetListProps) =
             <div className="row mx-auto col-md-12 gap-3 d-flex align-items-center justify-content-center">
                 {categories.map((category) => {
                     return (
-                        <div className="col-md-3 col-sm-5">
+                        <div key={category._id} className="col-md-3 col-sm-5">
                             <div className="card h-md-100">
                                 <div className="card-header pb-0 d-flex align-items-center justify-content-between" style={{backgroundColor: rgba(category.color, 0.5)}}>
                                     <h6 className="mb-2 mt-2">

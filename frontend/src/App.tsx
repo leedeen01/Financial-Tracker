@@ -12,6 +12,7 @@ import Friends from "./pages/Friends.tsx";
 import { Route, Routes, useNavigate, Navigate } from "react-router-dom";
 import Insights from "./pages/Insights.tsx";
 import Budgets from "./pages/Budgets.tsx";
+import Accounts from "./pages/Accounts.tsx";
 
 export const Context = createContext<
   [boolean, React.Dispatch<React.SetStateAction<boolean>>]
@@ -97,6 +98,10 @@ function App() {
           <Route
             path="/budgets"
             element={loggedInUser ? <Budgets /> : <HomeLoggedOut />}
+          ></Route>
+          <Route
+            path="/accounts"
+            element={loggedInUser ? <Accounts /> : <HomeLoggedOut />}
           ></Route>
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

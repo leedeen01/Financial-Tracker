@@ -33,11 +33,11 @@ export const getCategory: RequestHandler = async (req, res, next) => {
 
     //if categoryID given is invalid
     if (!category) {
-      throw createHttpError(404, "Expense not found");
+      throw createHttpError(404, "Category not found");
     }
 
     if (!category.userId.equals(authenticatedUserId)) {
-      throw createHttpError(401, "You cannot access this note");
+      throw createHttpError(401, "No access");
     }
     res.status(200).json(category);
   } catch (error) {
@@ -93,13 +93,13 @@ export const deleteCategory: RequestHandler = async (req, res, next) => {
     if (!mongoose.isValidObjectId(categoryId)) {
       throw createHttpError(400, "Invalid categoryID");
     }
-    const expense = await categoryModel.findById(categoryId).exec();
+    const category = await categoryModel.findById(categoryId).exec();
 
-    if (!expense) {
+    if (!category) {
       throw createHttpError(404, "Category not found");
     }
 
-    if (!expense.userId.equals(authenticatedUserId)) {
+    if (!category.userId.equals(authenticatedUserId)) {
       throw createHttpError(401, "No access");
     }
 
