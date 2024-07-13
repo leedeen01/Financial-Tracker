@@ -64,7 +64,7 @@ const Investments = () => {
         <>
         <div className="d-flex flex-column">
             <AccountList accounts={accounts} deleteAccount={deleteAccount}></AccountList>
-            <button onClick={() => setShowForm(true)} className="mt-5">
+            <button onClick={() => setShowForm(true)} className="budget-button mt-5">
                 +
             </button>
         </div>

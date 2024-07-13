@@ -51,55 +51,88 @@ const AccountList = ({ accounts, deleteAccount }: AccountListProps) => {
 
     return (
         <>
-        <div className="container content">
-            <h1>Net Worth: ${netWorth.toFixed(2)}</h1>
-            <h2>Bank Accounts</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Account</th>
-                        <th>Amount</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {bankAccounts.map((account) => {
-                        return (
-                            <tr key={account._id}>
-                                <td>{account.name}</td>
-                                <td>${account.amount}</td>
-                                <td><MdDelete onClick={() => deleteAccount(account)} className="expenselist-editdel"></MdDelete></td>
+        <div className="container content d-flex flex-column gap-5">
+            <h1 className="mx-auto mt-5">Net Worth: ${netWorth.toFixed(2)}</h1>
+            <div className="col-md-12">
+                <div className="card h-md-100">
+                <div className="card-header pb-0">
+                <div className="row align-items-center">
+                    <div className="col">
+                    <h6 className="mb-2 mt-2 d-flex align-items-center">
+                        Bank Accounts
+                    </h6>
+                    </div>
+                </div>
+                </div>
+
+                <div className="card-body p-0">
+                    <div className="d-flex justify-content-center table-responsive">
+                    <table className="table table-bordered table-striped text-center">
+                        <thead>
+                            <tr>
+                                <th>Account</th>
+                                <th>Balance</th>
+                                <th>Actions</th>
                             </tr>
-                        );
-                    })}
-                </tbody>
-            </table>
-            <h2>Investments</h2>
-            <button onClick={handleRefreshPrices}>Refresh Prices</button>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Stock</th>
-                        <th>Shares Held</th>
-                        <th>Average Cost</th>
-                        <th>Current Price</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {stockAccounts.map((account) => {
-                        return (
-                            <tr key={account._id}>
-                                <td>{account.name}</td>
-                                <td>{account.count}</td>
-                                <td>${(account.amount).toFixed(2)}</td>
-                                <td>${findPrice(account).toFixed(2)}</td>
-                                <td><MdDelete onClick={() => deleteAccount(account)} className="expenselist-editdel"></MdDelete></td>
+                        </thead>
+                        <tbody>
+                            {bankAccounts.map((account) => {
+                                return (
+                                    <tr key={account._id}>
+                                        <td>{account.name}</td>
+                                        <td>${account.amount}</td>
+                                        <td><MdDelete onClick={() => deleteAccount(account)} className="expenselist-editdel"></MdDelete></td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+                </div>
+
+                <div className="card h-md-100 mt-4">
+                <div className="card-header pb-0">
+                <div className="row align-items-center">
+                    <div className="card-header pb-0 d-flex align-items-center justify-content-between">
+                        <h6 className="mb-2 mt-2 d-flex align-items-center">
+                            Investment Portfolio
+                        </h6>
+                        <button onClick={handleRefreshPrices} className="expenselist-button expenselist-button-add">Refresh Prices</button>
+                    </div>
+                </div>
+                </div>
+
+                <div className="card-body p-0">
+                    <div className="d-flex justify-content-center table-responsive">
+                    <table className="table table-bordered table-striped text-center">
+                        <thead>
+                            <tr>
+                                <th>Stock</th>
+                                <th>Shares Held</th>
+                                <th>Average Cost</th>
+                                <th>Current Price</th>
+                                <th>Actions</th>
                             </tr>
-                        );
-                    })}
-                </tbody>
-            </table>
+                        </thead>
+                        <tbody>
+                            {stockAccounts.map((account) => {
+                                return (
+                                    <tr key={account._id}>
+                                        <td>{account.name}</td>
+                                        <td>{account.count}</td>
+                                        <td>${(account.amount).toFixed(2)}</td>
+                                        <td>${findPrice(account).toFixed(2)}</td>
+                                        <td><MdDelete onClick={() => deleteAccount(account)} className="expenselist-editdel"></MdDelete></td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+                </div>
+            </div>
         </div>
         </>
     );
