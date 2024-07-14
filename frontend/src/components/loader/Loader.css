@@ -7,8 +7,8 @@
 }
 
 .loader {
-    --path: var(--grey);
-    --dot: var(--dark-blue);
+    --path: var(--light-grey);
+    --dot: var(--gold);
     --duration: 3s;
     width: 44px;
     height: 44px;
@@ -76,17 +76,17 @@
 @keyframes dotTriangle {
     33% {
       transform: translate(0, 0);
-      --dot: var(--red);
+      --dot: var(--lighter-red);
     }
   
     66% {
       transform: translate(10px, -18px);
-      --dot: var(--green);
+      --dot: var(--lighter-green);
     }
   
     100% {
       transform: translate(-10px, -18px);
-      --dot: var(--dark-blue);
+      --dot: var(--gold);
     }
 }
 

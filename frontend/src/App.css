@@ -1,19 +1,53 @@
 :root {
-  --blue: #8BAFFF;
-  --dark-blue: #1628FA;
-  --darker-blue: #1323d1;
-  --black: #08090A;
-  --grey: #3B4555;
-  --light-grey: #a5bbd0;
-  --red: #DA396A;
-  --light-red: #f796b3;
-  --green: #04A85A;
-  --light-green: #51d997;
+  --lighter-blue: #4665B1;
+  --light-blue: #2E509D;
+  --blue: #1F3A93;
+  --dark-blue: #162970;
+  --darker-blue: #0F1D4D;
   --yellow: #d5c619;
+  --lighter-gold: #ffffe7;
+  --light-gold: #ffffc6;
+  --gold: #cec284;
+  --dark-gold: #9b9263;
+  --darker-gold: #676142;
+  --white: #ffffff;
+  --dark-white: #fffaf2;
+  --darker-white: #f2e8d5;
+  --lighter-green: #96b596;
+  --light-green: #75a175;
+  --green: #547254;
+  --dark-green: #3b523b;
+  --darker-green: #253224;
+  --lighter-red: #ffa6a6;
+  --light-red: #d75e5e;
+  --red: #a52a2a;
+  --dark-red: #731e1e;
+  --darker-red: #461212;
+  --black: #121212;
+  --grey: #333333;
+  --light-grey: #666666;
 }
 
 .width100 {
   width: 100%;
+}
+.width95 {
+  width: 95%;
+}
+.width90 {
+  width: 90%;
+}
+.width80 {
+  width: 80%;
+}
+.mw-90 {
+  max-width: 90%;
+}
+.mw-80 {
+  max-width: 80%;
+}
+.mw-50 {
+  max-width: 50%;
 }
 
 .vh-80 {
@@ -21,7 +55,7 @@
 }
 
 .card {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 8px var(--darker-gold);
 }
 
 .navbar-logo-container {
@@ -47,11 +81,118 @@
 }
 
 .btn-primary {
-  --bs-btn-color: white !important;
+  --bs-btn-color: var(--white) !important;
   --bs-btn-bg: var(--dark-blue) !important;
   --bs-btn-border-color: var(--dark-blue) !important;
   --bs-btn-hover-bg: var(--darker-blue) !important;
   --bs-btn-hover-border-color: var(--darker-blue) !important;
+}
+
+/* Home Page Logged Out View */
+.home-title-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 30px;
+}
+
+.home-title {
+  color: var(--white);
+  font-size: 70px;
+  font-weight: bolder;
+  text-align: center;
+}
+
+.home-subtitle {
+  color: var(--dark-white);
+  max-width: 600px;
+  margin-top: 30px;
+  text-align: center;
+  padding: 10px 30px;
+  font-size: 20px;
+  font-weight: lighter;
+}
+
+.home-text-gold {
+  color: var(--gold);
+}
+
+#home1-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transform: translate(-50%, -50%);
+  opacity: 0.4;
+  z-index: -1;
+}
+
+.home-section2 {
+  min-height: 100vh;
+}
+
+#home2-img {
+  height: 300px;
+}
+
+.home-section3 {
+  background-image: url('./assets/img/home3.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.home-section4 {
+  width: 95%;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.home4-left {
+  height: 80vh;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
+}
+
+.home4-right {
+  height: 80vh;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
+  background-color: var(--dark-white);
+  border-radius: 40px 0px 40px 0px;
+}
+
+.home4-right .home-title {
+  color: var(--black);
+}
+
+.home4-right .home-subtitle {
+  color: var(--grey);
+}
+
+.home-4-img {
+  max-width: 220px;
+  max-height: 220px;
+}
+
+.home-section6 {
+  background-image: url('./assets/img/home6.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.home-text-green {
+  color: var(--light-green);
+  font-size: 100px;
+  text-decoration: underline;
 }
 
 .expenselist-heading {
@@ -65,8 +206,8 @@
 
 .expenselist-heading-button-container {
   display: flex;
-  justify-content: space-between; /* This will make items start and end */
-  align-items: center; /* Align items vertically */
+  justify-content: space-between;
+  align-items: center;
   margin: 10px;
 }
 
@@ -123,13 +264,18 @@
 }
 
 .sectionone-positive {
-  color: green !important;
-  background-color: lightgreen;
+  color: var(--green) !important;
+  background-color: var(--lighter-green);
 }
 
 .sectionone-negative {
-  color: red !important;
-  background-color: pink;
+  color: var(--red) !important;
+  background-color: var(--lighter-red);
+}
+
+.sectionone-neutral {
+  color: var(--white) !important;
+  background-color: var(--light-grey);
 }
 
 .sectionone-tooltip-container {
@@ -171,3 +317,18 @@
   opacity: 1;
 }
 
+@media (max-width: 481px) {
+  .home-title {
+    font-size: 50px;
+    padding: 10px;
+  }
+
+  .home-subtitle {
+    font-size: 17px;
+  }
+
+  .home-4-img {
+    max-width: 150px;
+    max-height: 150px;
+  }
+}
