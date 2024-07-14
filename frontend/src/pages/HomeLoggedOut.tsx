@@ -40,7 +40,7 @@ const HomeLoggedOut = () => {
                 </div>
             </div>
             <div className="home-section d-flex flex-column vh-100 justify-content-center align-items-center overflow-hidden">
-                <div className="home-title" data-aos="fade-up" data-aos-easing="ease" data-aos-delay="0" data-aos-duration="1000">And one more thing...</div>
+                <div className="home-title" data-aos="fade-up" data-aos-easing="ease" data-aos-delay="0" data-aos-duration="1000" data-aos-mirror="true">And one more thing...</div>
             </div>
             <div className="home-section6 d-flex flex-column vh-80 justify-content-center align-items-center overflow-hidden">
                 <div className="home-title" data-aos="fade-down" data-aos-easing="ease" data-aos-delay="0" data-aos-once="true">It's <span className="home-text-green" data-aos="zoom-in" data-aos-easing="ease" data-aos-delay="200">FREE</span></div>
