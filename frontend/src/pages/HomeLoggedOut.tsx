@@ -25,7 +25,7 @@ const HomeLoggedOut = () => {
             </div>
             <div className="home-section3 d-flex flex-column vh-80 justify-content-center align-items-center overflow-hidden">
                 <div className="home-title" data-aos="fade-up" data-aos-easing="ease-in-out" data-aos-delay="0" data-aos-once="true">Works on all your devices.</div>
-                <div className="home-subtitle" data-aos="fade-up" data-aos-easing="ease-in-out" data-aos-delay="50" data-aos-once="true">As a web app, they work seamlessly across all smart devices. Well, maybe not your watch — yet. But give it a try and tell us how it goes!</div>
+                <div className="home-subtitle" data-aos="fade-up" data-aos-easing="ease-in-out" data-aos-delay="50" data-aos-once="true">As a web app, Trackspence work seamlessly across all smart devices. Well, maybe not your watch — yet. But give it a try and tell us how it goes!</div>
             </div>
             <div className="home-section4 row mx-auto">
                 <div className="home4-left col-md-6" data-aos="flip-right" data-aos-easing="ease" data-aos-delay="0" data-aos-once="true">
