@@ -74,7 +74,7 @@ const Insights = () => {
       setChatHistory([
         {
           role: "user",
-          parts: [{text: "Welcome!"}],
+          parts: [{text: "Heres how you can cut down on your spending!"}],
         },
         {
           role: "model",
@@ -132,7 +132,7 @@ const Insights = () => {
 
   return (
     <div className="container content">
-      <div className="row gap-5 mt-5">
+      <div className="row mt-5">
         <p className="insights-text">
           How can I help you
           <button className="surprise" onClick={surprise} disabled={!chatHistory}>
