@@ -242,8 +242,8 @@ export async function fetchStockPrice(accounts: Account[]) {
   for (const account of accounts) {
     if (account.type === 'Stock') {
       const stock = account.name;
-      //const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${stock}&apikey=PGYVSQORM4OGVXKI`;
-      const url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=IBM&apikey=demo";
+      const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${stock}&apikey=PGYVSQORM4OGVXKI`;
+      // const url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=IBM&apikey=demo";
 
       try {
         const response = await fetch(url);
@@ -274,8 +274,8 @@ export async function fetchStockPrice(accounts: Account[]) {
 
 export async function fetchStockName(keyword: string) {
   const stockNames = [];
-  //const url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${keyword}&apikey=PGYVSQORM4OGVXKI`;
-  const url = "https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=tesco&apikey=demo";
+  const url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${keyword}&apikey=PGYVSQORM4OGVXKI`;
+  // const url = "https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=tesco&apikey=demo";
 
   try {
     const response = await fetch(url);

@@ -21,7 +21,7 @@ const AccountList = ({ accounts, deleteAccount }: AccountListProps) => {
     }
 
     useEffect(() => {
-        async function stockPrice(accounts: Account[]) {
+        async function stockPrice(accounts: Account[]) {                        
             try {
                 const p = await ExpensesApi.fetchStockPrice(accounts);
                 setStockPrices(p);
@@ -34,6 +34,7 @@ const AccountList = ({ accounts, deleteAccount }: AccountListProps) => {
             stockPrice(accounts);
         }
     }, [accounts, refresh]);
+
 
     const handleRefreshPrices = async () => {
         setRefresh(true);
