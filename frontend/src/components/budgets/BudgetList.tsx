@@ -21,6 +21,12 @@ const BudgetList = ({
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
   };
 
+  function totalExpensesPerCategory(category: Category) {
+    return expenses
+    .filter((expense) => category.name === expense.category)
+    .reduce((acc, expense) => acc + expense.amount, 0);
+  }
+
   function budgetPercentage(category: Category) {
     const totalExpenses = expenses
       .filter((expense) => category.name === expense.category)
@@ -86,7 +92,7 @@ const BudgetList = ({
                     </div>
                     <div className="mx-auto mt-3">
                       {budgetPercentage(category) != -1 ? (
-                        `Spent: $${budgetPercentage(category).toFixed(2)}`
+                        `Spent: $${totalExpensesPerCategory(category).toFixed(2)}`
                       ) : (
                         <div className="mt-3">___________________</div>
                       )}
