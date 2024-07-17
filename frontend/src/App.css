@@ -112,7 +112,7 @@
   object-fit: cover;
   object-position: center;
   transform: translate(-50%, -50%);
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
 .home-section2 {

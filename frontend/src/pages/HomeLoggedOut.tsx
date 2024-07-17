@@ -19,7 +19,7 @@ const HomeLoggedOut = () => {
               data-aos-delay="0"
               data-aos-once="true"
             >
-              Clean.
+              Simple.
             </div>
             <div
               className="home-title"
@@ -28,7 +28,7 @@ const HomeLoggedOut = () => {
               data-aos-delay="50"
               data-aos-once="true"
             >
-              Simple.
+              Clean.
             </div>
             <div
               className="home-title"
