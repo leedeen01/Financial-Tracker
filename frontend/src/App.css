@@ -37,7 +37,7 @@
 }
 
 .mh {
-  min-height: 94vh;
+  min-height: 92vh;
 }
 
 .card {
@@ -181,6 +181,7 @@
   text-decoration: underline;
 }
 
+/* Expense List Section */
 .expenselist-heading {
   cursor: pointer;
   transition: background-color 0.3s ease;
@@ -295,7 +296,7 @@
   margin-left: -5px;
   border-width: 5px;
   border-style: solid;
-  border-color: black transparent transparent transparent;
+  border-color: var(--black) transparent transparent transparent;
 }
 
 .sectionone-tooltip-container:hover .sectionone-tooltip-text {

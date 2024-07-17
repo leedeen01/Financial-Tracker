@@ -5,7 +5,7 @@ const Footer = () => {
     <>
       <div className="footer-container d-flex flex-wrap justify-content-between align-items-center">
         <div className="footer-name column col-sm-6 col-12">
-          Made with love & Milo pengs.
+          Made with <i className="fa fa-heart"></i> & milo pengs.
         </div>
         <div className="footer-copyright column col-sm-6 col-12">
           <span style={{ color: "var(--dark-gold)", fontWeight: "normal" }}>
