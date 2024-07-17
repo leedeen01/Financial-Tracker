@@ -26,7 +26,7 @@ const AddEditExpenseDialog = ({
     <Modal show onHide={onDismiss}>
       <Modal.Header closeButton>
         <Modal.Title>
-          {expenseToEdit ? "Edit Expense" : "Add Expense"}
+          {expenseToEdit ? "Edit Transaction" : "Add Transaction"}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>

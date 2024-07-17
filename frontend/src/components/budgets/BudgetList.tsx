@@ -32,6 +32,16 @@ const BudgetList = ({
     }
   }
 
+  function getProgressBarVariant(percentage: number) {
+    if (percentage < 50) {
+      return "success";
+    } else if (percentage < 100) {
+      return "warning";
+    } else {
+      return "danger";
+    }
+  }
+
   return (
     <>
       <div className="row g-3 mt-5" onClick={() => {}}>
@@ -66,6 +76,9 @@ const BudgetList = ({
                         <ProgressBar
                           now={budgetPercentage(category)}
                           label={`${budgetPercentage(category).toFixed(2)}%`}
+                          variant={getProgressBarVariant(
+                            budgetPercentage(category)
+                          )}
                         ></ProgressBar>
                       ) : (
                         ""

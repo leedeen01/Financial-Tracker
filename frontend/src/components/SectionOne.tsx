@@ -102,6 +102,7 @@ const SectionOne = ({ expenses, categories }: Props) => {
     ];
     return days[dayIndex];
   };
+
   const expensesByDay = dates.map((date) => {
     const expensesOnDate = expenses
       .filter((expense) => {
@@ -118,23 +119,74 @@ const SectionOne = ({ expenses, categories }: Props) => {
     };
   });
 
-  const incomeByDay = dates.map((date) => {
-    const incomeOnDate = expenses
-      .filter((expense) => {
-        const expenseDate = new Date(expense.date).toISOString().split("T")[0];
-        return expenseDate === date && isIncomeCategory(expense.category);
-      })
-      .reduce((sum, expense) => sum + expense.amount, 0);
+  const months: { month: number; year: number }[] = [];
+  for (let i = 4; i >= 0; i--) {
+    const date = new Date(today);
+    date.setMonth(today.getMonth() - i);
+    months.push({ month: date.getMonth(), year: date.getFullYear() });
+  }
 
-    const dayName = getDayName(new Date(date).getDay());
+  const getMonthName = (month: number, year: number) => {
+    const monthNames = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    return `${monthNames[month]} ${year}`;
+  };
 
+  const expensesByMonth = months.map(({ month, year }) => {
+    const expensesInMonth = getTransactions("E", month, year);
+    const monthName = getMonthName(month, year);
     return {
-      name: dayName,
-      income: incomeOnDate.toFixed(2),
+      name: monthName,
+      expense: expensesInMonth.toFixed(2),
+    };
+  });
+
+  const incomeByMonth = months.map(({ month, year }) => {
+    const incomeInMonth = getTransactions("I", month, year);
+    const monthName = getMonthName(month, year);
+    return {
+      name: monthName,
+      income: incomeInMonth.toFixed(2),
     };
   });
 
   const calculatePercentageChangeExpense = (
+    todayExpense: number,
+    yesterdayExpense: number
+  ) => {
+    if (yesterdayExpense === 0) {
+      return {
+        percentage: todayExpense > 0 ? "+∞%" : "0%",
+        className:
+          todayExpense > 0 ? "sectionone-negative" : "sectionone-neutral",
+      };
+    }
+    const percentageChange =
+      ((todayExpense - yesterdayExpense) / yesterdayExpense) * 100;
+    const formattedPercentage = percentageChange.toFixed(1) + "%";
+    return {
+      percentage:
+        percentageChange >= 0
+          ? `+${formattedPercentage}`
+          : `${formattedPercentage}`,
+      className:
+        percentageChange >= 0 ? "sectionone-negative" : "sectionone-positive",
+    };
+  };
+
+  const calculatePercentageChangeIncome = (
     todayExpense: number,
     yesterdayExpense: number
   ) => {
@@ -154,9 +206,62 @@ const SectionOne = ({ expenses, categories }: Props) => {
           ? `+${formattedPercentage}`
           : `${formattedPercentage}`,
       className:
-        percentageChange >= 0 ? "sectionone-negative" : "sectionone-positive",
+        percentageChange >= 0 ? "sectionone-positive" : "sectionone-negative",
     };
   };
+
+  const calculateTotalSavings = (
+    incomeByMonth: { name: string; income: string }[],
+    expensesByMonth: { name: string; expense: string }[],
+    monthIndex: number
+  ) => {
+    const income = parseFloat(incomeByMonth[monthIndex].income);
+    const expenses = parseFloat(expensesByMonth[monthIndex].expense);
+    return income - expenses;
+  };
+
+  const calculatePercentageChangeSavings = (
+    currentMonthSavings: number,
+    previousMonthSavings: number
+  ) => {
+    if (previousMonthSavings === 0) {
+      return {
+        percentage: currentMonthSavings > 0 ? "+∞%" : "0%",
+        className:
+          currentMonthSavings > 0
+            ? "sectionone-positive"
+            : "sectionone-neutral",
+      };
+    }
+    const percentageChange =
+      ((currentMonthSavings - previousMonthSavings) / previousMonthSavings) *
+      100;
+    const formattedPercentage = percentageChange.toFixed(1) + "%";
+    return {
+      percentage:
+        percentageChange >= 0
+          ? `+${formattedPercentage}`
+          : `${formattedPercentage}`,
+      className:
+        percentageChange >= 0 ? "sectionone-positive" : "sectionone-negative",
+    };
+  };
+
+  const currentMonthSavings = calculateTotalSavings(
+    incomeByMonth,
+    expensesByMonth,
+    4
+  );
+  const previousMonthSavings = calculateTotalSavings(
+    incomeByMonth,
+    expensesByMonth,
+    3
+  );
+
+  const savingsPercentageChange = calculatePercentageChangeSavings(
+    currentMonthSavings,
+    previousMonthSavings
+  );
 
   const todayExpense = parseFloat(
     expensesByDay[expensesByDay.length - 1].expense
@@ -182,12 +287,20 @@ const SectionOne = ({ expenses, categories }: Props) => {
 
   const percentageChangeResultMonthExpense = calculatePercentageChangeExpense(
     totalExpenses,
-    getTransactions("E", currentDate.getMonth() - 1, currentDate.getFullYear())
+    getTransactions(
+      "E",
+      (currentDate.getMonth() - 1) % 12,
+      currentDate.getFullYear()
+    )
   );
 
-  const percentageChangeResultMonthIncome = calculatePercentageChangeExpense(
+  const percentageChangeResultMonthIncome = calculatePercentageChangeIncome(
     totalIncome,
-    getTransactions("I", currentDate.getMonth() - 1, currentDate.getFullYear())
+    getTransactions(
+      "I",
+      (currentDate.getMonth() - 1) % 12,
+      currentDate.getFullYear()
+    )
   );
 
   const savingsData = [
@@ -286,7 +399,7 @@ const SectionOne = ({ expenses, categories }: Props) => {
                 {currentDate.toLocaleString("default", { month: "long" })}'s
                 Savings
                 <span className="sectionone-tooltip-container ms-1">
-                  <i>?</i>
+                  <i className="fa fa-question"></i>
                   <span className="sectionone-tooltip-text">
                     Calculated by taking Income - Expenses
                   </span>
@@ -298,12 +411,12 @@ const SectionOne = ({ expenses, categories }: Props) => {
               <div className="row justify-content-between">
                 <div className="col-auto align-self-end">
                   <div className="fs-5 mb-1 lh-1">
-                    ${(totalIncome - totalExpenses).toFixed(2)}
+                    ${currentMonthSavings.toFixed(2)}
                   </div>
                   <span
-                    className={`badge rounded-pill fs-11 ${percentageChangeResultExpense.className}`}
+                    className={`badge rounded-pill fs-11 ${savingsPercentageChange.className}`}
                   >
-                    {percentageChangeResultExpense.percentage}
+                    {savingsPercentageChange.percentage}
                   </span>
                 </div>
                 <div className="col-auto ps-0">
@@ -351,13 +464,13 @@ const SectionOne = ({ expenses, categories }: Props) => {
                     ).toFixed(2)}
                   </div>
                   <span
-                    className={`badge rounded-pill fs-11 ${percentageChangeResultExpense.className}`}
+                    className={`badge rounded-pill fs-11 ${percentageChangeResultMonthExpense.className}`}
                   >
                     {percentageChangeResultMonthExpense.percentage}
                   </span>
                 </div>
                 <div className="col-auto ps-0">
-                  <AreaChart width={200} height={100} data={expensesByDay}>
+                  <AreaChart width={200} height={100} data={expensesByMonth}>
                     <defs>
                       <linearGradient
                         id="expenseColor"
@@ -426,13 +539,13 @@ const SectionOne = ({ expenses, categories }: Props) => {
                     ).toFixed(2)}
                   </div>
                   <span
-                    className={`badge rounded-pill fs-11 ${percentageChangeResultExpense.className}`}
+                    className={`badge rounded-pill fs-11 ${percentageChangeResultMonthIncome.className}`}
                   >
                     {percentageChangeResultMonthIncome.percentage}
                   </span>
                 </div>
                 <div className="col-auto ps-0">
-                  <AreaChart width={200} height={100} data={incomeByDay}>
+                  <AreaChart width={200} height={100} data={incomeByMonth}>
                     <defs>
                       <linearGradient
                         id="incomeColor"
