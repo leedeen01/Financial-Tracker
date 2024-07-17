@@ -476,12 +476,12 @@ const SectionOne = ({ expenses, categories }: Props) => {
                       >
                         <stop
                           offset="5%"
-                          stopColor="#DA396A"
+                          stopColor="var(--light-red)"
                           stopOpacity={0.8}
                         />
                         <stop
                           offset="95%"
-                          stopColor="#DA396A"
+                          stopColor="var(--light-red)"
                           stopOpacity={0}
                         />
                       </linearGradient>
@@ -501,7 +501,7 @@ const SectionOne = ({ expenses, categories }: Props) => {
                     <Tooltip />
                     <Area
                       dataKey="expense"
-                      stroke="#DA396A"
+                      stroke="var(--light-red)"
                       fillOpacity={1}
                       fill="url(#expenseColor)"
                     />
@@ -551,12 +551,12 @@ const SectionOne = ({ expenses, categories }: Props) => {
                       >
                         <stop
                           offset="5%"
-                          stopColor="#04A85A"
+                          stopColor="var(--light-green)"
                           stopOpacity={0.8}
                         />
                         <stop
                           offset="95%"
-                          stopColor="#04A85A"
+                          stopColor="var(--light-green)"
                           stopOpacity={0}
                         />
                       </linearGradient>
@@ -576,7 +576,7 @@ const SectionOne = ({ expenses, categories }: Props) => {
                     <Tooltip />
                     <Area
                       dataKey="income"
-                      stroke="#04A85A"
+                      stroke="var(--light-green)"
                       fillOpacity={1}
                       fill="url(#incomeColor)"
                     />
