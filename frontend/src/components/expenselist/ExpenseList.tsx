@@ -125,7 +125,7 @@ const ExpenseList = ({ expenses, onDelete, onAddEdit, onEdit, categories }: Prop
                   }}
                 >
                   <td>{expense.description}</td>
-                  <td>{expense.amount.toFixed(2)}</td>
+                  <td>${expense.amount.toFixed(2)}</td>
                   <td className="hide-cell">{expense.category}</td>
                   <td className="hide-header">{formattedDate}</td>
                   <td>

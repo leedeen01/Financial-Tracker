@@ -115,7 +115,7 @@ const SectionOne = ({ expenses, categories }: Props) => {
 
     return {
       name: dayName,
-      expense: expensesOnDate.toFixed(2),
+      expense: expensesOnDate,
     };
   });
 
@@ -149,7 +149,7 @@ const SectionOne = ({ expenses, categories }: Props) => {
     const monthName = getMonthName(month, year);
     return {
       name: monthName,
-      expense: expensesInMonth.toFixed(2),
+      expense: expensesInMonth,
     };
   });
 
@@ -158,7 +158,7 @@ const SectionOne = ({ expenses, categories }: Props) => {
     const monthName = getMonthName(month, year);
     return {
       name: monthName,
-      income: incomeInMonth.toFixed(2),
+      income: incomeInMonth,
     };
   });
 
@@ -211,12 +211,12 @@ const SectionOne = ({ expenses, categories }: Props) => {
   };
 
   const calculateTotalSavings = (
-    incomeByMonth: { name: string; income: string }[],
-    expensesByMonth: { name: string; expense: string }[],
+    incomeByMonth: { name: string; income: number }[],
+    expensesByMonth: { name: string; expense: number }[],
     monthIndex: number
   ) => {
-    const income = parseFloat(incomeByMonth[monthIndex].income);
-    const expenses = parseFloat(expensesByMonth[monthIndex].expense);
+    const income = incomeByMonth[monthIndex].income;
+    const expenses = expensesByMonth[monthIndex].expense;
     return income - expenses;
   };
 
@@ -263,12 +263,8 @@ const SectionOne = ({ expenses, categories }: Props) => {
     previousMonthSavings
   );
 
-  const todayExpense = parseFloat(
-    expensesByDay[expensesByDay.length - 1].expense
-  );
-  const yesterdayExpense = parseFloat(
-    expensesByDay[expensesByDay.length - 2].expense
-  );
+  const todayExpense = expensesByDay[expensesByDay.length - 1].expense;
+  const yesterdayExpense = expensesByDay[expensesByDay.length - 2].expense;
 
   const totalIncome = expenses
     .filter((expense) => {
@@ -372,7 +368,6 @@ const SectionOne = ({ expenses, categories }: Props) => {
                   <BarChart width={200} height={100} data={expensesByDay}>
                     <XAxis
                       dataKey="name"
-                      axisLine={false}
                       tickLine={false}
                       tick={false}
                     />
@@ -380,10 +375,10 @@ const SectionOne = ({ expenses, categories }: Props) => {
                       axisLine={false}
                       tickLine={false}
                       tick={false}
-                      domain={[0, "auto"]}
+                      domain={["auto", "auto"]}
                     />
                     <Tooltip />
-                    <Bar dataKey="expense" fill="#8BAFFF" />
+                    <Bar dataKey="expense" fill="var(--light-red)" />
                   </BarChart>
                 </div>
               </div>
@@ -501,7 +496,7 @@ const SectionOne = ({ expenses, categories }: Props) => {
                       axisLine={false}
                       tickLine={false}
                       tick={false}
-                      domain={[0, "auto"]}
+                      domain={["auto", "auto"]}
                     />
                     <Tooltip />
                     <Area
@@ -544,7 +539,7 @@ const SectionOne = ({ expenses, categories }: Props) => {
                     {percentageChangeResultMonthIncome.percentage}
                   </span>
                 </div>
-                <div className="col-auto ps-0">
+                <div className="col-auto ps-0 responsiveContainer">
                   <AreaChart width={200} height={100} data={incomeByMonth}>
                     <defs>
                       <linearGradient
@@ -576,7 +571,7 @@ const SectionOne = ({ expenses, categories }: Props) => {
                       axisLine={false}
                       tickLine={false}
                       tick={false}
-                      domain={[0, "auto"]}
+                      domain={["auto", "auto"]}
                     />
                     <Tooltip />
                     <Area
