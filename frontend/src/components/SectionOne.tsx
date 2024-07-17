@@ -426,8 +426,8 @@ const SectionOne = ({ expenses, categories }: Props) => {
                       innerRadius={30}
                       isAnimationActive={true}
                     >
-                      <Cell key={`Expenses`} fill="#DA396A" />
-                      <Cell key={`Income`} fill="#04A85A" />
+                      <Cell key={`Expenses`} fill="var(--light-red)" />
+                      <Cell key={`Income`} fill="var(--light-green)" />
                     </Pie>
                     <Tooltip content={<CustomTooltip />} />
                   </PieChart>
