@@ -6,8 +6,8 @@ import home4img2 from "../assets/img/home4-img2.png";
 const HomeLoggedOut = () => {
     return (
         <>
-        <div className="d-flex justify-content-center gap-3 flex-column">
-            <div className="home-section d-flex flex-column vh-80 justify-content-center align-items-center overflow-hidden">
+        <div className="d-flex justify-content-center gap-3 flex-column background-black">
+            <div className="home-section d-flex flex-column vh-80 justify-content-center align-items-center overflow-hidden" >
                 <video src={home1} autoPlay loop muted id="home1-video">Your browser does not support the video tag.</video>
                 <div className="home-title-container">
                     <div className="home-title" data-aos="flip-down" data-aos-easing="ease-out" data-aos-delay="0" data-aos-once="true">Clean.</div>

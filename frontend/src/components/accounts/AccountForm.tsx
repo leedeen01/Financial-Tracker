@@ -4,7 +4,7 @@ import SelectInputField from "../form/SelectInputField";
 import * as ExpensesApi from "../../network/expenses_api";
 import { Account } from "../../models/account";
 import Loader from "../loader/Loader";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { Context } from "../../App";
 import { useForm } from "react-hook-form";
 
