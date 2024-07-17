@@ -110,7 +110,6 @@
   object-position: center;
   transform: translate(-50%, -50%);
   opacity: 0.6;
-  z-index: -1;
 }
 
 .home-section2 {
@@ -298,6 +297,10 @@
 .sectionone-tooltip-container:hover .sectionone-tooltip-text {
   visibility: visible;
   opacity: 1;
+}
+
+.background-black {
+  background-color: var(--black);
 }
 
 @media (max-width: 481px) {
