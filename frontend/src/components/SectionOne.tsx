@@ -380,7 +380,7 @@ const SectionOne = ({ expenses, categories }: Props) => {
                       axisLine={false}
                       tickLine={false}
                       tick={false}
-                      domain={["auto", "auto"]}
+                      domain={[0, "auto"]}
                     />
                     <Tooltip />
                     <Bar dataKey="expense" fill="#8BAFFF" />
@@ -501,7 +501,7 @@ const SectionOne = ({ expenses, categories }: Props) => {
                       axisLine={false}
                       tickLine={false}
                       tick={false}
-                      domain={["auto", "auto"]}
+                      domain={[0, "auto"]}
                     />
                     <Tooltip />
                     <Area
