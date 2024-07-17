@@ -31,7 +31,7 @@ const SectionTwo = ({
           <div className="card h-md-100">
             <div className="card-header pb-0">
               <h6 className="mb-2 mt-2 d-flex align-items-center">
-                Expenses Chart
+                Overview Chart
               </h6>
             </div>
 
@@ -74,6 +74,7 @@ const SectionTwo = ({
                 onDelete={(id) => onDelete(id)}
                 onAddEdit={() => onAddEdit()}
                 onEdit={(id) => onEdit(id)}
+                categories={categories}
               />
             </div>
           </div>

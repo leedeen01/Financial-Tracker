@@ -18,7 +18,6 @@ interface Props {
 
 const OverviewChart = ({ expenses, categories }: Props) => {
   const dataByCategory = categories
-    .filter(category => category.type !== "Income")
     .map(category => {
       const total = expenses
         .filter(expense => expense.category === category.name)
@@ -39,6 +38,14 @@ const OverviewChart = ({ expenses, categories }: Props) => {
     return sum;
   }, 0);
 
+  const totalIncome = expenses.reduce((sum, expense) => {
+    const category = categories.find(cat => cat.name === expense.category);
+    if (category && category.type !== "Expense") {
+      return sum + expense.amount;
+    }
+    return sum;
+  }, 0);
+
   const expensesCenterText = () => {
     return (
       <text
@@ -48,7 +55,7 @@ const OverviewChart = ({ expenses, categories }: Props) => {
         dominantBaseline="middle"
         fontSize={20}
       >
-        Total: ${totalExpenses.toFixed(2)}
+        Total: ${(totalIncome - totalExpenses).toFixed(2)}
       </text>
     );
   };

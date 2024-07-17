@@ -1,4 +1,5 @@
 import { Expense } from "../../models/expense";
+import { Category } from "../../models/category";
 import { MdDelete, MdEdit } from "react-icons/md";
 
 import "./ExpenseList.css";
@@ -8,9 +9,10 @@ interface Props {
   onDelete: (expense: Expense) => void;
   onAddEdit: () => void;
   onEdit: (id: string) => void;
+  categories: Category[];
 }
 
-const ExpenseList = ({ expenses, onDelete, onAddEdit, onEdit }: Props) => {
+const ExpenseList = ({ expenses, onDelete, onAddEdit, onEdit, categories }: Props) => {
   const [sortConfig, setSortConfig] = useState<{
     key: keyof Expense | null;
     direction: string;
@@ -45,6 +47,22 @@ const ExpenseList = ({ expenses, onDelete, onAddEdit, onEdit }: Props) => {
     }
     setSortConfig({ key, direction });
   };
+
+  const totalExpenses = expenses.reduce((sum, expense) => {
+    const category = categories.find(cat => cat.name === expense.category);
+    if (category && category.type !== "Income") {
+      return sum + expense.amount;
+    }
+    return sum;
+  }, 0);
+
+  const totalIncome = expenses.reduce((sum, expense) => {
+    const category = categories.find(cat => cat.name === expense.category);
+    if (category && category.type !== "Expense") {
+      return sum + expense.amount;
+    }
+    return sum;
+  }, 0);
 
   return (
     <>
@@ -137,10 +155,7 @@ const ExpenseList = ({ expenses, onDelete, onAddEdit, onEdit }: Props) => {
             <tr>
               <td>Total</td>
               <td>
-                $
-                {expenses
-                  .reduce((accu, expense) => expense.amount + accu, 0)
-                  .toFixed(2)}
+                ${(totalIncome - totalExpenses).toFixed(2)}
               </td>
               <td></td>
             </tr>
