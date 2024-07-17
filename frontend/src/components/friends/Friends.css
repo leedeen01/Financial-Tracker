@@ -192,12 +192,12 @@
 }
 
 .they-owe {
-    color: var(--green);
+    color: var(--light-green);
     text-align: center;
 }
 
 .you-owe {
-    color: var(--red);
+    color: var(--light-red);
     text-align: center;
 }
 
@@ -284,7 +284,7 @@
 }
 
 .pending-btn::after {
-    content: 'PENDING PAYMENTS';
+    content: 'SEE ALL PAYMENTS';
     position: absolute;
     top: -130%;
     left: 50%;

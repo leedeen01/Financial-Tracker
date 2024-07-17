@@ -13,6 +13,7 @@ import { Route, Routes, useNavigate, Navigate } from "react-router-dom";
 import Insights from "./pages/Insights.tsx";
 import Budgets from "./pages/Budgets.tsx";
 import Accounts from "./pages/Accounts.tsx";
+import Footer from "./components/footer/footer.tsx";
 
 export const Context = createContext<
   [boolean, React.Dispatch<React.SetStateAction<boolean>>]
@@ -36,7 +37,6 @@ function App() {
 
   useEffect(() => {
     fetchLoggedInUser();
-    
   }, []);
 
   function handleLogout() {
@@ -60,65 +60,68 @@ function App() {
 
   return (
     <div>
-      <Context.Provider value={[loading, setLoading]}>
-        <NavBar
-          loggedInUser={loggedInUser}
-          onLoginClicked={() => {
-            setLoading(false);
-            setShowLogin(true);
-          }}
-          onSignUpClicked={() => {
-            setLoading(false);
-            setShowSignUp(true);
-          }}
-          onLogoutSuccessful={handleLogout}
-        />
-
-        <Routes>
-          <Route
-            index
-            element={loggedInUser ? <Home /> : <HomeLoggedOut />}
-          ></Route>
-          <Route
-            path="/home"
-            element={loggedInUser ? <Home /> : <HomeLoggedOut />}
-          ></Route>
-          <Route
-            path="/split"
-            element={loggedInUser ? <Split /> : <HomeLoggedOut />}
-          ></Route>
-          <Route
-            path="/friends"
-            element={loggedInUser ? <Friends /> : <HomeLoggedOut />}
-          ></Route>
-          <Route
-            path="/insights"
-            element={loggedInUser ? <Insights /> : <HomeLoggedOut />}
-          ></Route>
-          <Route
-            path="/budgets"
-            element={loggedInUser ? <Budgets /> : <HomeLoggedOut />}
-          ></Route>
-          <Route
-            path="/accounts"
-            element={loggedInUser ? <Accounts /> : <HomeLoggedOut />}
-          ></Route>
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
-
-        {showSignUp && (
-          <SignUp
-            onDismiss={() => setShowSignUp(false)}
-            onSignUpSuccessful={handleSignUp} // Pass handleSignUp function
+      <div className="mh">
+        <Context.Provider value={[loading, setLoading]}>
+          <NavBar
+            loggedInUser={loggedInUser}
+            onLoginClicked={() => {
+              setLoading(false);
+              setShowLogin(true);
+            }}
+            onSignUpClicked={() => {
+              setLoading(false);
+              setShowSignUp(true);
+            }}
+            onLogoutSuccessful={handleLogout}
           />
-        )}
-        {showLogin && (
-          <Login
-            onDismiss={() => setShowLogin(false)}
-            onLoginSuccessful={handleLogin} // Pass handleLogin function
-          />
-        )}
-      </Context.Provider>
+
+          <Routes>
+            <Route
+              index
+              element={loggedInUser ? <Home /> : <HomeLoggedOut />}
+            ></Route>
+            <Route
+              path="/home"
+              element={loggedInUser ? <Home /> : <HomeLoggedOut />}
+            ></Route>
+            <Route
+              path="/split"
+              element={loggedInUser ? <Split /> : <HomeLoggedOut />}
+            ></Route>
+            <Route
+              path="/friends"
+              element={loggedInUser ? <Friends /> : <HomeLoggedOut />}
+            ></Route>
+            <Route
+              path="/insights"
+              element={loggedInUser ? <Insights /> : <HomeLoggedOut />}
+            ></Route>
+            <Route
+              path="/budgets"
+              element={loggedInUser ? <Budgets /> : <HomeLoggedOut />}
+            ></Route>
+            <Route
+              path="/accounts"
+              element={loggedInUser ? <Accounts /> : <HomeLoggedOut />}
+            ></Route>
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+
+          {showSignUp && (
+            <SignUp
+              onDismiss={() => setShowSignUp(false)}
+              onSignUpSuccessful={handleSignUp} // Pass handleSignUp function
+            />
+          )}
+          {showLogin && (
+            <Login
+              onDismiss={() => setShowLogin(false)}
+              onLoginSuccessful={handleLogin} // Pass handleLogin function
+            />
+          )}
+        </Context.Provider>
+      </div>
+      <Footer />
     </div>
   );
 }

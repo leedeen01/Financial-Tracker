@@ -3,8 +3,6 @@ import { User } from "../models/user";
 import * as ExpensesApi from "../network/expenses_api";
 import FriendList from "../components/friends/FriendList";
 import SearchFriend from "../components/friends/SearchFriend";
-import AcceptedPayment from "../components/friends/AcceptedPayment";
-import DeclinedPayment from "../components/friends/DeclinedPayment";
 import "../components/friends/Friends.css";
 import Loader from "../components/loader/Loader";
 const Friends = () => {
@@ -30,9 +28,7 @@ const Friends = () => {
   }, [loggedInUser]);
 
   if (!loggedInUser) {
-    return (
-      <Loader />
-    );
+    return <Loader />;
   }
 
   return (
@@ -47,18 +43,6 @@ const Friends = () => {
               loggedInUser={loggedInUser}
               fetchLoggedInUser={fetchLoggedInUser}
             />
-          </div>
-          <div className="col-md-8 mx-auto">
-            <AcceptedPayment
-              expenseFromFriends={loggedInUser.topay}
-              loggedInUser={loggedInUser}
-            />
-            <br></br>
-            <DeclinedPayment
-              expenseFromFriends={loggedInUser.topay}
-              loggedInUser={loggedInUser}
-            />
-            <br></br>
           </div>
         </div>
       </div>

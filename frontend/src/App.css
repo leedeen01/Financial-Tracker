@@ -36,8 +36,12 @@
   height: 80vh;
 }
 
+.mh {
+  min-height: 94vh;
+}
+
 .card {
-  box-shadow: 0 4px 8px var(--darker-gold);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .navbar-logo-container {

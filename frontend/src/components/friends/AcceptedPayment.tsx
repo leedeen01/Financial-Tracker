@@ -54,14 +54,9 @@ const AcceptedPayment: React.FC<AcceptedPaymentProps> = ({
 
   return (
     <>
-      <div className="col-md-12">
-        <div className="card h-md-100">
-          <div className="card-header pb-0 pending-receive">
-            <h6 className="mb-2 mt-2 d-flex align-items-center">
-              Accepted Payments
-            </h6>
-          </div>
-          <div className="card-body d-flex flex-column justify-content-end">
+      <div className="col-md-12 mt-3">
+        <div className="h-md-100">
+          <div className="d-flex flex-column justify-content-end">
             <table className="table table-bordered table-striped text-center">
               <thead>
                 <tr>
@@ -73,25 +68,37 @@ const AcceptedPayment: React.FC<AcceptedPaymentProps> = ({
               </thead>
 
               <tbody>
-                {friendExpenseRequest.map((expense, index) => (
-                  <tr key={index}>
-                    {expense.sendMoneyName === loggedInUser.username ? (
-                      <>
-                        <td>{expense.receiveMoneyName}</td>
-                        <td>{expense.description}</td>
-                        <td className="hide-cell">{expense.date.toString()}</td>
-                        <td>${parseFloat(expense.amount).toFixed(2)}</td>
-                      </>
-                    ) : (
-                      <>
-                        <td>{expense.sendMoneyName}</td>
-                        <td>{expense.description}</td>
-                        <td className="hide-cell">{expense.date.toString()}</td>
-                        <td>${parseFloat(expense.amount).toFixed(2)}</td>
-                      </>
-                    )}
-                  </tr>
-                ))}
+                {friendExpenseRequest.map((expense, index) => {
+                  const date = new Date(expense.date);
+                  const formattedDate = `${date
+                    .getDate()
+                    .toString()
+                    .padStart(2, "0")}-${(date.getMonth() + 1)
+                    .toString()
+                    .padStart(2, "0")}-${date
+                    .getFullYear()
+                    .toString()
+                    .slice(2)}`;
+                  return (
+                    <tr key={index}>
+                      {expense.sendMoneyName === loggedInUser.username ? (
+                        <>
+                          <td>{expense.receiveMoneyName}</td>
+                          <td>{expense.description}</td>
+                          <td className="hide-cell">{formattedDate}</td>
+                          <td>${parseFloat(expense.amount).toFixed(2)}</td>
+                        </>
+                      ) : (
+                        <>
+                          <td>{expense.sendMoneyName}</td>
+                          <td>{expense.description}</td>
+                          <td className="hide-cell">{formattedDate}</td>
+                          <td>${parseFloat(expense.amount).toFixed(2)}</td>
+                        </>
+                      )}
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

@@ -47,8 +47,6 @@ const SplitBill = ({
         payer: loggedInUser._id, // Example: Assuming loggedInUser has an _id property
       };
 
-      console.log("Submitting bill split data:", billSplitData);
-      console.log(amounts);
       alert("Successfully sent a bill split request.");
 
       // Example: Sending each user's share as an expense

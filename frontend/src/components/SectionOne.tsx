@@ -8,6 +8,7 @@ import {
   PieChart,
   Tooltip,
   XAxis,
+  YAxis,
 } from "recharts";
 import { Expense } from "../models/expense";
 import { Category } from "../models/category";
@@ -18,16 +19,60 @@ interface Props {
 }
 
 const SectionOne = ({ expenses, categories }: Props) => {
+  const getCurrentMonthYear = () => {
+    const now = new Date();
+    const month = now.getMonth();
+    const year = now.getFullYear();
+    return { month, year };
+  };
+
+  const { month, year } = getCurrentMonthYear();
+
+  const currentDate = new Date();
+
+  function getTransactions(type: string, month: number, year: number) {
+    if (type === "E") {
+      return expenses
+        .filter((expense) => {
+          const expenseDate = new Date(expense.date);
+          const category = categories.find(
+            (cat) => cat.name === expense.category
+          );
+          const isCurrentMonth =
+            expenseDate.getMonth() === month &&
+            expenseDate.getFullYear() === year;
+          return isCurrentMonth && category && category.type === "Expense";
+        })
+        .reduce((acc, expense) => acc + expense.amount, 0);
+    } else {
+      return expenses
+        .filter((expense) => {
+          const expenseDate = new Date(expense.date);
+          const category = categories.find(
+            (cat) => cat.name === expense.category
+          );
+          const isCurrentMonth =
+            expenseDate.getMonth() === month &&
+            expenseDate.getFullYear() === year;
+          return isCurrentMonth && category && category.type === "Income";
+        })
+        .reduce((acc, expense) => acc + expense.amount, 0);
+    }
+  }
+
   const totalExpenses = expenses.reduce((sum, expense) => {
-    const category = categories.find(cat => cat.name === expense.category);
-    if (category && category.type !== "Income") {
+    const expenseDate = new Date(expense.date);
+    const category = categories.find((cat) => cat.name === expense.category);
+    const isCurrentMonth =
+      expenseDate.getMonth() === month && expenseDate.getFullYear() === year;
+    if (isCurrentMonth && category && category.type !== "Income") {
       return sum + expense.amount;
     }
     return sum;
   }, 0);
 
   function isIncomeCategory(categoryName: string) {
-    const category = categories.find(cat => cat.name === categoryName);
+    const category = categories.find((cat) => cat.name === categoryName);
     return category && category.type === "Income";
   }
 
@@ -39,11 +84,12 @@ const SectionOne = ({ expenses, categories }: Props) => {
     dates.push(date.toISOString().split("T")[0]);
   }
   const todayExpenses = expenses
-    .filter(expense => {
+    .filter((expense) => {
       const expenseDate = new Date(expense.date).toISOString().split("T")[0];
       return expenseDate === dates[4] && !isIncomeCategory(expense.category);
     })
     .reduce((sum, expense) => sum + expense.amount, 0);
+
   const getDayName = (dayIndex: number) => {
     const days = [
       "Sunday",
@@ -63,9 +109,9 @@ const SectionOne = ({ expenses, categories }: Props) => {
         return expenseDate === date && !isIncomeCategory(expense.category);
       })
       .reduce((sum, expense) => sum + expense.amount, 0);
-  
+
     const dayName = getDayName(new Date(date).getDay());
-  
+
     return {
       name: dayName,
       expense: expensesOnDate.toFixed(2),
@@ -79,9 +125,9 @@ const SectionOne = ({ expenses, categories }: Props) => {
         return expenseDate === date && isIncomeCategory(expense.category);
       })
       .reduce((sum, expense) => sum + expense.amount, 0);
-  
+
     const dayName = getDayName(new Date(date).getDay());
-  
+
     return {
       name: dayName,
       income: incomeOnDate.toFixed(2),
@@ -119,17 +165,31 @@ const SectionOne = ({ expenses, categories }: Props) => {
     expensesByDay[expensesByDay.length - 2].expense
   );
 
+  const totalIncome = expenses
+    .filter((expense) => {
+      const expenseDate = new Date(expense.date);
+      const category = categories.find((cat) => cat.name === expense.category);
+      const isCurrentMonth =
+        expenseDate.getMonth() === month && expenseDate.getFullYear() === year;
+      return isCurrentMonth && category && category.type === "Income";
+    })
+    .reduce((acc, expense) => acc + expense.amount, 0);
+
   const percentageChangeResultExpense = calculatePercentageChangeExpense(
     todayExpense,
     yesterdayExpense
   );
 
-  const totalIncome = expenses
-    .filter(expense => {
-      const category = categories.find(cat => cat.name === expense.category);
-      return category && category.type === "Income";
-    })
-    .reduce((acc, expense) => acc + expense.amount, 0);
+  const percentageChangeResultMonthExpense = calculatePercentageChangeExpense(
+    totalExpenses,
+    getTransactions("E", currentDate.getMonth() - 1, currentDate.getFullYear())
+  );
+
+  const percentageChangeResultMonthIncome = calculatePercentageChangeExpense(
+    totalIncome,
+    getTransactions("I", currentDate.getMonth() - 1, currentDate.getFullYear())
+  );
+
   const savingsData = [
     {
       type: "Expenses",
@@ -196,17 +256,18 @@ const SectionOne = ({ expenses, categories }: Props) => {
                   </span>
                 </div>
                 <div className="col-auto ps-0">
-                  <BarChart
-                    width={200}
-                    height={100}
-                    data={expensesByDay}
-                    margin={{ top: 50, right: 0, bottom: -50, left: 0 }}
-                  >
+                  <BarChart width={200} height={100} data={expensesByDay}>
                     <XAxis
                       dataKey="name"
                       axisLine={false}
                       tickLine={false}
                       tick={false}
+                    />
+                    <YAxis
+                      axisLine={false}
+                      tickLine={false}
+                      tick={false}
+                      domain={["auto", "auto"]}
                     />
                     <Tooltip />
                     <Bar dataKey="expense" fill="#8BAFFF" />
@@ -222,7 +283,8 @@ const SectionOne = ({ expenses, categories }: Props) => {
           <div className="card h-md-100">
             <div className="card-header pb-0">
               <h6 className="mb-2 mt-2 d-flex align-items-center">
-                Total Savings
+                {currentDate.toLocaleString("default", { month: "long" })}'s
+                Savings
                 <span className="sectionone-tooltip-container ms-1">
                   <i>?</i>
                   <span className="sectionone-tooltip-text">
@@ -239,10 +301,9 @@ const SectionOne = ({ expenses, categories }: Props) => {
                     ${(totalIncome - totalExpenses).toFixed(2)}
                   </div>
                   <span
-                    className="badge rounded-pill fs-11"
-                    style={{ color: "green", backgroundColor: "lightgreen" }}
+                    className={`badge rounded-pill fs-11 ${percentageChangeResultExpense.className}`}
                   >
-                    ---
+                    {percentageChangeResultExpense.percentage}
                   </span>
                 </div>
                 <div className="col-auto ps-0">
@@ -273,7 +334,8 @@ const SectionOne = ({ expenses, categories }: Props) => {
           <div className="card h-md-100">
             <div className="card-header pb-0">
               <h6 className="mb-2 mt-2 d-flex align-items-center">
-                Total Expenses
+                {currentDate.toLocaleString("default", { month: "long" })}'s
+                Expenses
               </h6>
             </div>
 
@@ -281,21 +343,21 @@ const SectionOne = ({ expenses, categories }: Props) => {
               <div className="row justify-content-between">
                 <div className="col-auto align-self-end">
                   <div className="fs-5 mb-1 lh-1">
-                    ${totalExpenses.toFixed(2)}
+                    $
+                    {getTransactions(
+                      "E",
+                      currentDate.getMonth(),
+                      currentDate.getFullYear()
+                    ).toFixed(2)}
                   </div>
                   <span
                     className={`badge rounded-pill fs-11 ${percentageChangeResultExpense.className}`}
                   >
-                    {percentageChangeResultExpense.percentage}
+                    {percentageChangeResultMonthExpense.percentage}
                   </span>
                 </div>
                 <div className="col-auto ps-0">
-                  <AreaChart
-                    width={200}
-                    height={100}
-                    data={expensesByDay}
-                    margin={{ top: 60, right: 0, bottom: -20, left: 0 }}
-                  >
+                  <AreaChart width={200} height={100} data={expensesByDay}>
                     <defs>
                       <linearGradient
                         id="expenseColor"
@@ -322,6 +384,12 @@ const SectionOne = ({ expenses, categories }: Props) => {
                       tickLine={false}
                       tick={false}
                     />
+                    <YAxis
+                      axisLine={false}
+                      tickLine={false}
+                      tick={false}
+                      domain={["auto", "auto"]}
+                    />
                     <Tooltip />
                     <Area
                       dataKey="expense"
@@ -341,7 +409,8 @@ const SectionOne = ({ expenses, categories }: Props) => {
           <div className="card h-md-100">
             <div className="card-header pb-0">
               <h6 className="mb-2 mt-2 d-flex align-items-center">
-                Total Income
+                {currentDate.toLocaleString("default", { month: "long" })}'s
+                Income
               </h6>
             </div>
 
@@ -349,22 +418,21 @@ const SectionOne = ({ expenses, categories }: Props) => {
               <div className="row justify-content-between">
                 <div className="col-auto align-self-end">
                   <div className="fs-5 mb-1 lh-1">
-                    ${totalIncome.toFixed(2)}
+                    $
+                    {getTransactions(
+                      "I",
+                      currentDate.getMonth(),
+                      currentDate.getFullYear()
+                    ).toFixed(2)}
                   </div>
                   <span
-                    className="badge rounded-pill fs-11"
-                    style={{ color: "red", backgroundColor: "pink" }}
+                    className={`badge rounded-pill fs-11 ${percentageChangeResultExpense.className}`}
                   >
-                    ---
+                    {percentageChangeResultMonthIncome.percentage}
                   </span>
                 </div>
                 <div className="col-auto ps-0">
-                  <AreaChart
-                    width={200}
-                    height={100}
-                    data={incomeByDay}
-                    margin={{ top: 60, bottom: -20, left: 0, right: 0 }}
-                  >
+                  <AreaChart width={200} height={100} data={incomeByDay}>
                     <defs>
                       <linearGradient
                         id="incomeColor"
@@ -390,6 +458,12 @@ const SectionOne = ({ expenses, categories }: Props) => {
                       axisLine={false}
                       tickLine={false}
                       tick={false}
+                    />
+                    <YAxis
+                      axisLine={false}
+                      tickLine={false}
+                      tick={false}
+                      domain={[0, "auto"]}
                     />
                     <Tooltip />
                     <Area

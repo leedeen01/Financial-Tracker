@@ -1,0 +1,27 @@
+.footer-container {
+    max-width: 100vw;
+    min-height: 6vh;
+    border-top: 1px groove var(--darker-white);
+    color: var(--light-grey);
+    padding: 0 40px;
+    font-size: 15px;
+    font-weight: lighter;
+}
+
+.footer-name {
+    text-align: start;
+}
+
+.footer-copyright {
+    text-align: end;
+}
+
+@media (max-width: 576px) {
+    .footer-name {
+        text-align: center;
+    }
+    
+    .footer-copyright {
+        text-align: center;
+    }
+}
