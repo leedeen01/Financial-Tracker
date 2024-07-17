@@ -121,7 +121,6 @@ function App() {
           )}
         </Context.Provider>
       </div>
-      <br />
       <Footer />
     </div>
   );

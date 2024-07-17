@@ -33,7 +33,7 @@ const Friends = () => {
 
   return (
     <>
-      <div className="container content">
+      <div className="container content mb-5">
         <div className="row gap-5 mt-5">
           <div className="col-md-8 mx-auto">
             <SearchFriend loggedInUser={loggedInUser} />

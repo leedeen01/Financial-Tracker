@@ -81,7 +81,7 @@ function Home() {
       {loading ? (
         <Loader />
       ) : (
-        <div className="container content">
+        <div className="container content mb-5">
           <div className="row">
             <SectionOne expenses={expenses} categories={categories} />
             <SectionTwo

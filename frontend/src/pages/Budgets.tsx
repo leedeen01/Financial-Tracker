@@ -85,11 +85,13 @@ const Budgets = () => {
 
   return (
     <>
-    <div className="d-flex flex-column">
-      <BudgetList expenses={expenses} categories={categories} deleteCategory={deleteCategory} />
-      <button onClick={() => setShowForm(true)} className="budget-button mt-5">
-        +
-      </button>
+    <div className="container content mb-5">
+      <div className="d-flex flex-column">
+        <BudgetList expenses={expenses} categories={categories} deleteCategory={deleteCategory} />
+        <button onClick={() => setShowForm(true)} className="budget-button mt-5">
+          +
+        </button>
+      </div>
     </div>
       {showForm &&
         <BudgetForm onDismiss={() => setShowForm(false)} onCategorySuccess={onCategorySuccess} />

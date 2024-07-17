@@ -95,7 +95,7 @@ const Split = () => {
 
   return (
     <>
-    <div className="container content">
+    <div className="container content mb-5">
       <div className="row mt-5">
         <div className="col-md-8 d-flex flex-column align-items-center justify-content-center mx-auto gap-2">
           <h1>Split Bills</h1>

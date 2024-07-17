@@ -62,11 +62,13 @@ const Investments = () => {
 
     return (
         <>
-        <div className="d-flex flex-column">
-            <AccountList accounts={accounts} deleteAccount={deleteAccount}></AccountList>
-            <button onClick={() => setShowForm(true)} className="budget-button mt-5">
-                +
-            </button>
+        <div className="container content mb-5">
+            <div className="d-flex flex-column">
+                <AccountList accounts={accounts} deleteAccount={deleteAccount}></AccountList>
+                <button onClick={() => setShowForm(true)} className="budget-button mt-5">
+                    +
+                </button>
+            </div>
         </div>
         {showForm &&
             <AccountForm onDismiss={() => setShowForm(false)} onAccountSuccess={onAccountSuccess} />

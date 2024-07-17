@@ -131,7 +131,7 @@ const Insights = () => {
   };
 
   return (
-    <div className="container content">
+    <div className="container content mb-5">
       <div className="row mt-5">
         <p className="insights-text">
           How can I help you
