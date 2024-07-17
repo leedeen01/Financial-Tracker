@@ -4,24 +4,29 @@ import { useForm } from "react-hook-form";
 import { SignUpCredentials } from "../../network/expenses_api";
 import FilterCategory from "./FilterCategory";
 import FilterMonth from "./FilterMonth";
+import FilterType from "./FilterType";
 import { Category } from "../../models/category";
 
 interface FilterProps {
   onDismiss: () => void;
   onSelectMonth: (month: string) => void;
   onSelectCategory: (category: string) => void;
+  onSelectType: (type: string) => void;
   categories: Category[];
   month: string;
   category: string;
+  type: string;
 }
 
 const Filter = ({
   onDismiss,
   onSelectMonth,
   onSelectCategory,
+  onSelectType,
   categories,
   month,
   category,
+  type,
 }: FilterProps) => {
   const {
     handleSubmit,
@@ -40,6 +45,7 @@ const Filter = ({
             categories={categories}
             category={category}
           />
+          <FilterType onSelectType={onSelectType} categories={categories} type={type} /> 
           <Button type="submit" disabled={isSubmitting} className="width100">
             Close
           </Button>

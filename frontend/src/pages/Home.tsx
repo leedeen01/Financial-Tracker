@@ -19,6 +19,7 @@ function Home() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("");
+  const [selectedType, setSelectedType] = useState("");
   const [showFilter, setShowFilter] = useState(false);
   const [loading, setLoading] = useContext(Context);
 
@@ -36,6 +37,13 @@ function Home() {
   const selectedExpenses = selectedCategory
     ? FilteredMonth.filter((e) => e.category === selectedCategory)
     : FilteredMonth;
+
+    const selectedExpenses2 = selectedType
+    ? selectedExpenses.filter((expense) => {
+        const category = categories.find((cat) => cat.name === expense.category);
+        return category && category.type === selectedType;
+      })
+    : selectedExpenses;
 
   useEffect(() => {
       async function loadCategories() {
@@ -87,7 +95,7 @@ function Home() {
             <SectionTwo
               expenses={FilteredMonth}
               categories={categories}
-              selectedExpenses={selectedExpenses}
+              selectedExpenses={selectedExpenses2}
               onDelete={(id) => deleteExpense(id)}
               onAddEdit={() => setShowAddDialog(true)}
               onEdit={(id) => setSelectedExpense(id)}
@@ -113,9 +121,11 @@ function Home() {
               onDismiss={() => setShowFilter(false)}
               onSelectMonth={(month) => setSelectedMonth(month)}
               onSelectCategory={(category) => setSelectedCategory(category)}
+              onSelectType={(type) => setSelectedType(type)}
               categories={categories}
               month={selectedMonth}
               category={selectedCategory}
+              type={selectedType}
             />
           )}
         </div>

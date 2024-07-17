@@ -12,9 +12,9 @@ const FilterMonth = ({ onSelectMonth, month }: Props) => {
         onChange={(event) => onSelectMonth(event.target.value)}
         className="form-control w-100 text-center"
         id="month"
-        value={month || "All Month"}
+        value={month || "All Months"}
       >
-        <option value="">{"All Month"}</option>
+        <option value="">{"All Months"}</option>
         {months.map((month) => (
           <option key={month} value={month}>
             {month}
