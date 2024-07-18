@@ -35,7 +35,7 @@ const Form = ({ onInclude, onUpdate, categories, expenseToEdit }: Props) => {
     defaultValues: {
       description: expenseToEdit?.description || "",
       amount: expenseToEdit?.amount || 0,
-      date: expenseToEdit?.date || new Date(),
+      date: new Date(expenseToEdit!.date) || new Date(),
       category: expenseToEdit?.category || "",
     },
   });

@@ -133,16 +133,17 @@ const ExpenseList = ({ expenses, onDelete, onAddEdit, onEdit, categories }: Prop
                       <MdDelete
                         className="text-muted expenselist-editdel"
                         onClick={(e) => {
-                          onDelete(expense);
                           e.stopPropagation();
+                          e.preventDefault();
+                          onDelete(expense);
                         }}
                       />
                       <MdEdit
                         className="text-muted expenselist-editdel"
                         onClick={(e) => {
+                          e.stopPropagation();
                           onAddEdit();
                           onEdit(expense._id);
-                          e.stopPropagation();
                         }}
                       />
                     </div>

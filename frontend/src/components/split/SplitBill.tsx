@@ -39,13 +39,7 @@ const SplitBill = ({
     try {
       const { description, category, date, amounts } = formData;
       onDismiss();
-      const billSplitData = {
-        description,
-        category,
-        date,
-        amounts,
-        payer: loggedInUser._id, // Example: Assuming loggedInUser has an _id property
-      };
+
 
       alert("Successfully sent a bill split request.");
 
