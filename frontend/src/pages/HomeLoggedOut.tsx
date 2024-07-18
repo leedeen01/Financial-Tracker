@@ -134,7 +134,7 @@ const HomeLoggedOut = () => {
               className="home-subtitle"
               data-aos="fade-right"
               data-aos-easing="ease"
-              data-aos-delay="150"
+              data-aos-delay="100"
               data-aos-once="true"
             >
               Unlock powerful features like budgeting, bill-splitting, and
@@ -170,7 +170,7 @@ const HomeLoggedOut = () => {
               className="home-subtitle"
               data-aos="fade-left"
               data-aos-easing="ease"
-              data-aos-delay="150"
+              data-aos-delay="100"
               data-aos-once="true"
             >
               Optimize your savings effortlessly with our cutting-edge Gemini

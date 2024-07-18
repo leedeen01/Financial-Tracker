@@ -115,7 +115,7 @@ const SectionOne = ({ expenses, categories }: Props) => {
 
     return {
       name: dayName,
-      expense: expensesOnDate,
+      expense: parseFloat(expensesOnDate.toFixed(2)),
     };
   });
 
@@ -149,7 +149,7 @@ const SectionOne = ({ expenses, categories }: Props) => {
     const monthName = getMonthName(month, year);
     return {
       name: monthName,
-      expense: expensesInMonth,
+      expense: parseFloat(expensesInMonth.toFixed(2)),
     };
   });
 
@@ -158,7 +158,7 @@ const SectionOne = ({ expenses, categories }: Props) => {
     const monthName = getMonthName(month, year);
     return {
       name: monthName,
-      income: incomeInMonth,
+      income: parseFloat(incomeInMonth.toFixed(2)),
     };
   });
 
@@ -217,7 +217,7 @@ const SectionOne = ({ expenses, categories }: Props) => {
   ) => {
     const income = incomeByMonth[monthIndex].income;
     const expenses = expensesByMonth[monthIndex].expense;
-    return income - expenses;
+    return parseFloat((income - expenses).toFixed(2));
   };
 
   const calculatePercentageChangeSavings = (
