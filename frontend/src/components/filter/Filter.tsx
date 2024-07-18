@@ -6,7 +6,6 @@ import FilterCategory from "./FilterCategory";
 import FilterMonth from "./FilterMonth";
 import FilterType from "./FilterType";
 import { Category } from "../../models/category";
-import { SetStateAction, useState } from "react";
 
 interface FilterProps {
   onDismiss: () => void;
