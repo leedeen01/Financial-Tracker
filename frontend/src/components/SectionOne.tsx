@@ -357,7 +357,9 @@ const SectionOne = ({ expenses, categories }: Props) => {
             <div className="card-body d-flex flex-column justify-content-end">
               <div className="row justify-content-between">
                 <div className="col align-self-end">
-                  <p className="fs-5 mb-1 lh-1">${todayExpenses.toFixed(2)}</p>
+                  <p className="fs-5 mb-1 lh-1">
+                    ${(todayExpenses).toFixed(2)}
+                  </p>
                   <span
                     className={`badge rounded-pill fs-11 ${percentageChangeResultExpense.className}`}
                   >
@@ -406,7 +408,9 @@ const SectionOne = ({ expenses, categories }: Props) => {
               <div className="row justify-content-between">
                 <div className="col-auto align-self-end">
                   <div className="fs-5 mb-1 lh-1">
-                    ${currentMonthSavings.toFixed(2)}
+                    {(currentMonthSavings) < 0 
+                    ? `-$${Math.abs(currentMonthSavings).toFixed(2)}`
+                    : `$${(currentMonthSavings).toFixed(2)}`}
                   </div>
                   <span
                     className={`badge rounded-pill fs-11 ${savingsPercentageChange.className}`}

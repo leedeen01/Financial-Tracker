@@ -6,6 +6,7 @@ import FilterCategory from "./FilterCategory";
 import FilterMonth from "./FilterMonth";
 import FilterType from "./FilterType";
 import { Category } from "../../models/category";
+import { SetStateAction, useState } from "react";
 
 interface FilterProps {
   onDismiss: () => void;
@@ -40,11 +41,25 @@ const Filter = ({
       <Modal.Body>
         <Form onSubmit={handleSubmit(onDismiss)}>
           <FilterMonth onSelectMonth={onSelectMonth} month={month} />
-          <FilterCategory
-            onSelectCategory={onSelectCategory}
-            categories={categories}
-            category={category}
-          />
+          {type === "Expense" ? (
+              <FilterCategory
+                  onSelectCategory={onSelectCategory}
+                  categories={categories.filter((c) => c.type === "Expense")}
+                  category={category}
+              />
+          ) : type === "Income" ? (
+              <FilterCategory
+                  onSelectCategory={onSelectCategory}
+                  categories={categories.filter((c) => c.type === "Income")}
+                  category={category}
+              />
+          ) : (
+            <FilterCategory
+                onSelectCategory={onSelectCategory}
+                categories={categories}
+                category={category}
+            />
+          )}
           <FilterType onSelectType={onSelectType} categories={categories} type={type} /> 
           <Button type="submit" disabled={isSubmitting} className="width100">
             Close

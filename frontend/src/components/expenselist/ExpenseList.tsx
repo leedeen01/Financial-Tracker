@@ -125,7 +125,14 @@ const ExpenseList = ({ expenses, onDelete, onAddEdit, onEdit, categories }: Prop
                   }}
                 >
                   <td>{expense.description}</td>
-                  <td>${expense.amount.toFixed(2)}</td>
+                  
+                    {(() => {
+                      const expenseCategory = categories.find(cat => cat.name === expense.category);
+                      return expenseCategory && expenseCategory.type === "Income" 
+                        ? <td style={{color: "var(--light-green)"}}>+${expense.amount.toFixed(2)}</td>
+                        : <td style={{color: "var(--light-red)"}}>-${expense.amount.toFixed(2)}</td>
+                    })()}
+                  
                   <td className="hide-cell">{expense.category}</td>
                   <td className="hide-header">{formattedDate}</td>
                   <td>
@@ -156,9 +163,10 @@ const ExpenseList = ({ expenses, onDelete, onAddEdit, onEdit, categories }: Prop
             <tr>
               <td>Total</td>
               <td>
-                ${(totalIncome - totalExpenses).toFixed(2)}
+                {(totalIncome - totalExpenses) < 0 
+                  ? `-$${Math.abs(totalIncome - totalExpenses).toFixed(2)}`
+                  : `$${(totalIncome - totalExpenses).toFixed(2)}`}
               </td>
-              <td></td>
             </tr>
           </tfoot>
         </table>
