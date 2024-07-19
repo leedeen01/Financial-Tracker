@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { FriendsExpenseRequestBody } from "../../models/expense";
 import * as ExpensesApi from "../../network/expenses_api";
-import { User } from "../../models/user";
+import { User, currencies } from "../../models/user";
+import { BaseCurrency } from "../../App";
 
 interface DeclinedPaymentProps {
   expenseFromFriends: FriendsExpenseRequestBody[];
@@ -12,6 +13,8 @@ const DeclinedPayment: React.FC<DeclinedPaymentProps> = ({
   expenseFromFriends,
   loggedInUser,
 }: DeclinedPaymentProps) => {
+  const [baseC] = useContext(BaseCurrency);
+
   const [friendExpenseRequest, setFriendExpenseRequest] = useState<
     FriendsExpenseRequestBody[]
   >([]);
@@ -86,14 +89,14 @@ const DeclinedPayment: React.FC<DeclinedPaymentProps> = ({
                           <td>{expense.receiveMoneyName}</td>
                           <td>{expense.description}</td>
                           <td className="hide-cell">{formattedDate}</td>
-                          <td>${parseFloat(expense.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                          <td>{currencies.symbol[baseC as keyof typeof currencies.symbol] || "$"}{parseFloat(expense.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                         </>
                       ) : (
                         <>
                           <td>{expense.sendMoneyName}</td>
                           <td>{expense.description}</td>
                           <td className="hide-cell">{formattedDate}</td>
-                          <td>${parseFloat(expense.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                          <td>{currencies.symbol[baseC as keyof typeof currencies.symbol] || "$"}{parseFloat(expense.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                         </>
                       )}
                     </tr>

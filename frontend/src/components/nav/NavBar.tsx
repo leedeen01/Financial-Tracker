@@ -2,10 +2,12 @@ import "../../App.css";
 import Logo from "../../assets/logo.png";
 
 import { Container, Navbar, Nav } from "react-bootstrap";
-import { User } from "../../models/user";
+import { User, currencies } from "../../models/user";
 import NavBarLoggedInView from "./NavBarLoggedInView";
 import NavBarLoggedOutView from "./NavBarLoggedOutView";
 import { Link } from "react-router-dom";
+import { BaseCurrency } from "../../App";
+import { useContext } from "react";
 
 interface NavBarProps {
   loggedInUser: User | null;
@@ -20,14 +22,17 @@ const NavBar = ({
   onLoginClicked,
   onLogoutSuccessful,
 }: NavBarProps) => {
+  const [baseC] = useContext(BaseCurrency);
+
   return (
     <Navbar variant="dark" expand="lg" sticky="top" className="navbar-custom">
       <Container>
-        <Navbar.Brand as={Link} to={loggedInUser ? "/home" : "/"}>
+        <Navbar.Brand as={Link} to={loggedInUser ? "/home" : "/"} className="d-flex gap-3">
           <div className="navbar-logo-container">
             <img src={Logo} alt="Trackspence Logo" className="navbar-logo" />
             <h2 className="navbar-text-logo">Trackspence</h2>
           </div>
+          <div className="ml-3">{currencies.emoji[baseC as keyof typeof currencies.emoji] || ""}</div>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="main-navbar" />
         <Navbar.Collapse id="main-navbar">

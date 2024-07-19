@@ -41,6 +41,10 @@ const Investments = () => {
     }, [loggedInUser]);
 
     async function deleteAccount(account: Account) {
+        const isConfirmed = window.confirm("Are you sure you want to delete the account?");
+        if (!isConfirmed) {
+            return;
+        }
         try {
           await ExpensesApi.deleteAccount(account._id);
           setAccounts(accounts.filter((a) => a._id !== account._id));

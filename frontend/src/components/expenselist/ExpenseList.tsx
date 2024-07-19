@@ -1,9 +1,11 @@
 import { Expense } from "../../models/expense";
 import { Category } from "../../models/category";
 import { MdDelete, MdEdit } from "react-icons/md";
+import { BaseCurrency } from "../../App";
 
 import "./ExpenseList.css";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { currencies } from "../../models/user";
 interface Props {
   expenses: Expense[];
   onDelete: (expense: Expense) => void;
@@ -13,6 +15,8 @@ interface Props {
 }
 
 const ExpenseList = ({ expenses, onDelete, onAddEdit, onEdit, categories }: Props) => {
+  const [baseC] = useContext(BaseCurrency);
+
   const [sortConfig, setSortConfig] = useState<{
     key: keyof Expense | null;
     direction: string;
@@ -129,8 +133,8 @@ const ExpenseList = ({ expenses, onDelete, onAddEdit, onEdit, categories }: Prop
                     {(() => {
                       const expenseCategory = categories.find(cat => cat.name === expense.category);
                       return expenseCategory && expenseCategory.type === "Income" 
-                        ? <td style={{color: "var(--light-green)"}}>+${expense.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                        : <td style={{color: "var(--light-red)"}}>-${expense.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                        ? <td style={{color: "var(--light-green)"}}>+{currencies.symbol[baseC as keyof typeof currencies.symbol] || "$"}{expense.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                        : <td style={{color: "var(--light-red)"}}>-{currencies.symbol[baseC as keyof typeof currencies.symbol] || "$"}{expense.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                     })()}
                   
                   <td className="hide-cell">{expense.category}</td>
@@ -164,8 +168,8 @@ const ExpenseList = ({ expenses, onDelete, onAddEdit, onEdit, categories }: Prop
               <td>Total</td>
               <td>
                 {(totalIncome - totalExpenses) < 0 
-                  ? `-$${Math.abs(totalIncome - totalExpenses).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-                  : `$${(totalIncome - totalExpenses).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                  ? `-${currencies.symbol[baseC as keyof typeof currencies.symbol] || "$"}${Math.abs(totalIncome - totalExpenses).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                  : `${currencies.symbol[baseC as keyof typeof currencies.symbol] || "$"}${(totalIncome - totalExpenses).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
               </td>
             </tr>
           </tfoot>

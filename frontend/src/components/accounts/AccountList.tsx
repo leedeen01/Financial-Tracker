@@ -1,7 +1,9 @@
 import { MdDelete } from "react-icons/md";
 import { Account } from "../../models/account";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import * as ExpensesApi from "../../network/expenses_api";
+import { currencies } from "../../models/user";
+import { BaseCurrency } from "../../App";
 
 interface AccountListProps {
     accounts: Account[];
@@ -9,6 +11,7 @@ interface AccountListProps {
 }
 
 const AccountList = ({ accounts, deleteAccount }: AccountListProps) => {
+    const [baseC] = useContext(BaseCurrency);
     const [stockPrices, setStockPrices] = useState<any[]>([]);
     const [refresh, setRefresh] = useState<boolean>(true);
 
@@ -53,7 +56,7 @@ const AccountList = ({ accounts, deleteAccount }: AccountListProps) => {
     return (
         <>
         <div className="container content d-flex flex-column gap-5">
-            <h1 className="mx-auto mt-5">Net Worth: ${netWorth.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h1>
+            <h1 className="mx-auto mt-5">Net Worth: {currencies.symbol[baseC as keyof typeof currencies.symbol] || "$"}{netWorth.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h1>
             <div className="col-md-12">
                 <div className="card h-md-100">
                 <div className="card-header pb-0">
@@ -81,7 +84,7 @@ const AccountList = ({ accounts, deleteAccount }: AccountListProps) => {
                                 return (
                                     <tr key={account._id}>
                                         <td>{account.name}</td>
-                                        <td>${account.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                                        <td>{currencies.symbol[baseC as keyof typeof currencies.symbol] || "$"}{account.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                                         <td><MdDelete onClick={() => deleteAccount(account)} className="expenselist-editdel"></MdDelete></td>
                                     </tr>
                                 );
@@ -123,11 +126,11 @@ const AccountList = ({ accounts, deleteAccount }: AccountListProps) => {
                                     <tr key={account._id}>
                                         <td>{account.name}</td>
                                         <td>{account.count}</td>
-                                        <td className="hide-cell">${(account.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                                        <td className="hide-cell">${findPrice(account).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                                        <td className="hide-cell">{currencies.symbol[baseC as keyof typeof currencies.symbol] || "$"}{(account.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                                        <td className="hide-cell">{currencies.symbol[baseC as keyof typeof currencies.symbol] || "$"}{findPrice(account).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                                         <td>
                                             <div className="d-flex flex-column justify-content-center align-items-center">
-                                                <div>${account.count ? (findPrice(account) * account.count).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 0.00}</div>
+                                                <div>{currencies.symbol[baseC as keyof typeof currencies.symbol] || "$"}{account.count ? (findPrice(account) * account.count).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 0.00}</div>
                                                 <div style={{color: (findPrice(account) - account.amount) >= 0 ? 'var(--light-green)' : 'var(--light-red)', fontSize: "12px"}}>
                                                 {((findPrice(account) - account.amount) / account.amount) * 100 >= 0
                                                     ? `+${(((findPrice(account) - account.amount) / account.amount) * 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%`

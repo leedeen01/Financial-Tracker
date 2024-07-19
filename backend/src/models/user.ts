@@ -8,6 +8,8 @@ const userSchema = new Schema({
   friendlist: { type: [String], required: true },
   friendRequest: { type: [String], required: true },
   topay: { type: [], required: true },
+  picture: { type: String, required: false },
+  currency: { type: String, required: true },
 });
 
 type User = InferSchemaType<typeof userSchema>;

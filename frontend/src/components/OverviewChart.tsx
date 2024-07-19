@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Expense } from "../models/expense";
 import {
   PieChart,
@@ -10,6 +10,8 @@ import {
   Customized,
 } from "recharts";
 import { Category } from "../models/category";
+import { currencies } from "../models/user";
+import { BaseCurrency } from "../App";
 
 interface Props {
   expenses: Expense[];
@@ -17,6 +19,8 @@ interface Props {
 }
 
 const OverviewChart = ({ expenses, categories }: Props) => {
+  const [baseC] = useContext(BaseCurrency);
+
   const dataByCategory = categories
     .map(category => {
       const total = expenses
@@ -56,8 +60,8 @@ const OverviewChart = ({ expenses, categories }: Props) => {
         fontSize={20}
       >
         Total: {(totalIncome - totalExpenses) < 0 
-            ? `-$${Math.abs(totalIncome - totalExpenses).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-            : `$${(totalIncome - totalExpenses).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+            ? `-${currencies.symbol[baseC as keyof typeof currencies.symbol] || "$"}${Math.abs(totalIncome - totalExpenses).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+            : `${currencies.symbol[baseC as keyof typeof currencies.symbol] || "$"}${(totalIncome - totalExpenses).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
       </text>
     );
   };

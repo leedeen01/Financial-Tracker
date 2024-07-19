@@ -1,4 +1,5 @@
 export interface Category {
+    userId: string | undefined;
     _id: string;
     name: string;
     color: string;

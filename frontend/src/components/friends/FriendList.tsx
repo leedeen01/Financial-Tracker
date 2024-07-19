@@ -1,14 +1,16 @@
 import { FriendsExpenseRequestBody } from "../../models/expense";
-import { User } from "../../models/user";
+import { User, currencies } from "../../models/user";
 import * as ExpensesApi from "../../network/expenses_api";
-import { SetStateAction, useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState, useContext } from "react";
 import PendingPayment from "../../components/friends/PendingPayment";
+import { BaseCurrency } from "../../App";
 
 interface FriendListProps {
   loggedInUser: User;
   fetchLoggedInUser: () => void;
 }
 const FriendList = ({ loggedInUser, fetchLoggedInUser }: FriendListProps) => {
+  const [baseC] = useContext(BaseCurrency);
   const [friendDetails, setFriendDetails] = useState<User[]>([]); // Ensure friendDetails is typed as User[]
   const [friendRequestDetails, setFriendRequestDetails] = useState<User[]>([]); // Ensure friendDetails is typed as User[]
   // Function to handle search
@@ -167,7 +169,7 @@ const FriendList = ({ loggedInUser, fetchLoggedInUser }: FriendListProps) => {
                           calculateBalance(friend) >= 0 ? "they-owe" : "you-owe"
                         }`}
                       >
-                        ${Math.abs(calculateBalance(friend)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        {currencies.symbol[baseC as keyof typeof currencies.symbol] || "$"}{Math.abs(calculateBalance(friend)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </p>
                     </div>
 

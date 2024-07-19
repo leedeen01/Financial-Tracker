@@ -12,6 +12,9 @@ import {
 } from "recharts";
 import { Expense } from "../models/expense";
 import { Category } from "../models/category";
+import { currencies } from "../models/user";
+import { BaseCurrency } from "../App";
+import { useContext } from "react";
 
 interface Props {
   expenses: Expense[];
@@ -19,6 +22,8 @@ interface Props {
 }
 
 const SectionOne = ({ expenses, categories }: Props) => {
+  const [baseC] = useContext(BaseCurrency);
+
   const getCurrentMonthYear = () => {
     const now = new Date();
     const month = now.getMonth();
@@ -334,7 +339,7 @@ const SectionOne = ({ expenses, categories }: Props) => {
             borderRadius: "10px",
           }}
         >
-          <p>{`${payload[0].name}: $${payload[0].value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}</p>
+          <p>{`${payload[0].name}: ${currencies.symbol[baseC as keyof typeof currencies.symbol] || "$"}${payload[0].value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}</p>
         </div>
       );
     }
@@ -358,7 +363,7 @@ const SectionOne = ({ expenses, categories }: Props) => {
               <div className="row justify-content-between">
                 <div className="col align-self-end">
                   <p className="fs-5 mb-1 lh-1">
-                    ${(todayExpenses).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  {currencies.symbol[baseC as keyof typeof currencies.symbol] || "$"}{(todayExpenses).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </p>
                   <span
                     className={`badge rounded-pill fs-11 ${percentageChangeResultExpense.className}`}
@@ -409,8 +414,8 @@ const SectionOne = ({ expenses, categories }: Props) => {
                 <div className="col-auto align-self-end">
                   <div className="fs-5 mb-1 lh-1">
                     {(currentMonthSavings) < 0 
-                    ? `-$${Math.abs(currentMonthSavings).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-                    : `$${(currentMonthSavings).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                    ? `-${currencies.symbol[baseC as keyof typeof currencies.symbol] || "$"}${Math.abs(currentMonthSavings).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                    : `${currencies.symbol[baseC as keyof typeof currencies.symbol] || "$"}${(currentMonthSavings).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                   </div>
                   <span
                     className={`badge rounded-pill fs-11 ${savingsPercentageChange.className}`}
@@ -448,6 +453,12 @@ const SectionOne = ({ expenses, categories }: Props) => {
               <h6 className="mb-2 mt-2 d-flex align-items-center">
                 {currentDate.toLocaleString("default", { month: "long" })}'s
                 Expenses
+                <span className="sectionone-tooltip-container ms-1">
+                  <i className="fa fa-question"></i>
+                  <span className="sectionone-tooltip-text">
+                    Expenses of the month
+                  </span>
+                </span>
               </h6>
             </div>
 
@@ -455,7 +466,7 @@ const SectionOne = ({ expenses, categories }: Props) => {
               <div className="row justify-content-between">
                 <div className="col-auto align-self-end">
                   <div className="fs-5 mb-1 lh-1">
-                    $
+                    {currencies.symbol[baseC as keyof typeof currencies.symbol] || "$"}
                     {getTransactions(
                       "E",
                       currentDate.getMonth(),
@@ -523,6 +534,12 @@ const SectionOne = ({ expenses, categories }: Props) => {
               <h6 className="mb-2 mt-2 d-flex align-items-center">
                 {currentDate.toLocaleString("default", { month: "long" })}'s
                 Income
+                <span className="sectionone-tooltip-container ms-1">
+                  <i className="fa fa-question"></i>
+                  <span className="sectionone-tooltip-text">
+                    Income of the month
+                  </span>
+                </span>
               </h6>
             </div>
 
@@ -530,7 +547,7 @@ const SectionOne = ({ expenses, categories }: Props) => {
               <div className="row justify-content-between">
                 <div className="col-auto align-self-end">
                   <div className="fs-5 mb-1 lh-1">
-                    $
+                    {currencies.symbol[baseC as keyof typeof currencies.symbol] || "$"}
                     {getTransactions(
                       "I",
                       currentDate.getMonth(),

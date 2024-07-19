@@ -40,4 +40,8 @@ router.put("/declineExpenseRequest/:_id", UserController.declineExpenseRequest);
 
 router.put("/settleExpenseRequest/:_id", UserController.settleExpenseRequest);
 
+router.put("/updateUser/:_id", UserController.updateUser);
+
+router.delete("/:_id", UserController.deleteUser);
+
 export default router;

@@ -88,6 +88,10 @@ function Home() {
   }, []);
 
   async function deleteExpense(expense: Expense) {
+    const isConfirmed = window.confirm("Are you sure you want to delete the transaction?");
+    if (!isConfirmed) {
+      return;
+    }
     try {
       setLoading(true);
       await expensesApi.deleteExpense(expense._id);

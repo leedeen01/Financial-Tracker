@@ -307,6 +307,24 @@
   background-color: var(--black);
 }
 
+/* Profile Section */
+.profile-pic {
+  overflow: hidden;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+  width: 100px;
+  height: 100px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.profile-title {
+  font-size: 20px;
+  margin: 25px 0;
+  border-bottom: 5px groove var(--gold);
+  width: fit-content;
+}
+
 @media (max-width: 481px) {
   .home-title {
     font-size: 50px;

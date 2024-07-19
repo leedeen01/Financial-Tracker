@@ -31,6 +31,8 @@ export interface SignUpCredentials {
   username: string;
   email: string;
   password: string;
+  picture: string;
+  currency: string;
 }
 
 export async function signUp(credentials: SignUpCredentials): Promise<User> {
@@ -66,6 +68,41 @@ export async function login(credentials: LoginCredentials): Promise<User> {
 export async function logout() {
   await fetchData(`${website}/api/users/logout`, {
     method: "POST",
+    credentials: "include",
+  });
+}
+
+export interface userInput {
+  username: string;
+  email: string;
+  currency: string;
+}
+
+export async function updateUser(
+  userId: string,
+  user: userInput,
+): Promise<User> {
+  const response = await fetchData(`${website}/api/users/updateUser/` + userId, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(user),
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    const error = await response.text();
+    console.error("API Error:", error);
+    throw new Error(error);
+  }
+
+  return response.json();
+}
+
+export async function deleteUser(userId: string) {
+  return await fetchData(`${website}/api/users/` + userId, {
+    method: "DELETE",
     credentials: "include",
   });
 }

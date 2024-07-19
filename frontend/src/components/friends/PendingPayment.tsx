@@ -1,11 +1,12 @@
 import "bootstrap/dist/css/bootstrap.css";
-import { SetStateAction, useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState, useContext } from "react";
 import { FriendsExpenseRequestBody } from "../../models/expense";
 import * as ExpensesApi from "../../network/expenses_api";
-import { User } from "../../models/user";
+import { User, currencies } from "../../models/user";
 import { Modal, Button } from "react-bootstrap";
 import AcceptedPayment from "./AcceptedPayment";
 import DeclinedPayment from "./DeclinedPayment";
+import { BaseCurrency } from "../../App";
 
 interface PendingPaymentProps {
   expenseFromFriends: FriendsExpenseRequestBody[];
@@ -18,6 +19,8 @@ const PendingPayment = ({
   loggedInUser,
   userToPay,
 }: PendingPaymentProps) => {
+  const [baseC] = useContext(BaseCurrency);
+
   const [friendExpenseRequest, setFriendExpenseRequest] = useState<
     FriendsExpenseRequestBody[]
   >([]);
@@ -169,7 +172,7 @@ const PendingPayment = ({
                               </div>
                               <div className="card-body d-flex flex-row justify-content-between align-items-center">
                                 <p>
-                                  To Pay: $
+                                  To Pay: {currencies.symbol[baseC as keyof typeof currencies.symbol] || "$"}
                                   {parseFloat(expense.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                 </p>
                                 <div>
@@ -233,7 +236,7 @@ const PendingPayment = ({
                               </div>
                               <div className="card-body d-flex flex-row justify-content-between align-items-center">
                                 <p>
-                                  To Receive: $
+                                  To Receive: {currencies.symbol[baseC as keyof typeof currencies.symbol] || "$"}
                                   {parseFloat(expense.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                 </p>
                                 <h6>Request Sent</h6>

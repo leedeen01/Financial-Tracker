@@ -22,6 +22,8 @@ interface SignUpBody {
   username?: string;
   email?: string;
   password?: string;
+  picture?: string;
+  currency?: string;
 }
 
 export const signUp: RequestHandler<
@@ -33,6 +35,8 @@ export const signUp: RequestHandler<
   const username = req.body.username;
   const email = req.body.email;
   const passwordRaw = req.body.password;
+  const picture = req.body.picture;
+  const currency = req.body.currency;
 
   try {
     if (!username || !email || !passwordRaw) {
@@ -64,11 +68,80 @@ export const signUp: RequestHandler<
       email: email,
       password: passwordHashed,
       friendlist: [],
+      picture: picture,
+      currency: currency,
     });
 
     req.session.userId = newUser._id;
 
     res.status(201).json(newUser);
+  } catch (error) {
+    next(error);
+  }
+};
+
+interface updateUserParams {
+  userId: string;
+}
+
+interface updateUserBody {
+  username?: string;
+  email?: string;
+  currency?: string;
+}
+
+export const updateUser: RequestHandler<
+  updateUserParams,
+  unknown,
+  updateUserBody,
+  unknown
+> = async (req, res, next) => {
+  const userId = req.session.userId;
+  const newUsername = req.body.username;
+  const newEmail = req.body.email;
+  const newCurrency = req.body.currency;
+
+  try {
+    if (!mongoose.isValidObjectId(userId)) {
+      throw createHttpError(400, "Invalid user ID");
+    }
+    if (!newUsername || !newEmail || !newCurrency) {
+      throw createHttpError(400, "Please enter all input correctly");
+    }
+
+    const user = await UserModel.findById(userId).exec();
+    if (!user) {
+      throw createHttpError(404, "User not found");
+    }
+
+    user.username = newUsername;
+    user.email = newEmail;
+    user.currency = newCurrency;
+
+    const updatedUser = await user.save();
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteUser: RequestHandler = async (req, res, next) => {
+  const userId = req.session.userId;
+  try {
+    assertIsDefined(userId);
+
+    if (!mongoose.isValidObjectId(userId)) {
+      throw createHttpError(400, "Invalid userID");
+    }
+    const user = await UserModel.findById(userId).exec();
+
+    if (!user) {
+      throw createHttpError(404, "User not found");
+    }
+
+    await UserModel.findByIdAndDelete(userId);
+
+    res.sendStatus(204);
   } catch (error) {
     next(error);
   }

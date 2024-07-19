@@ -2,6 +2,9 @@ import { MdDelete } from "react-icons/md";
 import { Category } from "../../models/category";
 import { Expense } from "../../models/expense";
 import { ProgressBar } from "react-bootstrap";
+import { currencies } from "../../models/user";
+import { BaseCurrency } from "../../App";
+import { useContext } from "react";
 
 interface BudgetListProps {
   expenses: Expense[];
@@ -14,6 +17,8 @@ const BudgetList = ({
   categories,
   deleteCategory,
 }: BudgetListProps) => {
+  const [baseC] = useContext(BaseCurrency);
+
   const rgba = (color: string, alpha: number) => {
     const r = parseInt(color.slice(1, 3), 16);
     const g = parseInt(color.slice(3, 5), 16);
@@ -69,12 +74,12 @@ const BudgetList = ({
 
                   <div className="card-body d-flex flex-column justify-content-center">
                     <div className="d-flex align-items-center justify-content-between mb-3">
-                      <div>
-                        Budget:{" "}
-                        {category.budget
-                          ? "$" + category.budget.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-                          : "NA"}
-                      </div>
+                    <div>
+                      Budget:{" "}
+                      {category.budget
+                        ? `${currencies.symbol[baseC as keyof typeof currencies.symbol] || "$"}${category.budget.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                        : "NA"}
+                    </div>
                       <div>Type: {category.type}</div>
                     </div>
                     <div>
@@ -92,7 +97,7 @@ const BudgetList = ({
                     </div>
                     <div className="mx-auto mt-3">
                       {budgetPercentage(category) != -1 ? (
-                        `Spent: $${totalExpensesPerCategory(category).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                        `Spent: ${currencies.symbol[baseC as keyof typeof currencies.symbol] || "$"}${totalExpensesPerCategory(category).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
                       ) : (
                         <div className="mt-3">___________________</div>
                       )}

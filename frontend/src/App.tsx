@@ -19,17 +19,23 @@ export const Context = createContext<
   [boolean, React.Dispatch<React.SetStateAction<boolean>>]
 >([false, () => {}]);
 
+export const BaseCurrency = createContext<
+  [string, React.Dispatch<React.SetStateAction<string>>]
+>(["", () => {}]);
+
 function App() {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
   const [showSignUp, setShowSignUp] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [baseCurrency, setBaseCurrency] = useState<string>("");
 
   const navigate = useNavigate();
   async function fetchLoggedInUser() {
     try {
       const user = await ExpensesApi.getLoggedInUser();
       setLoggedInUser(user);
+      setBaseCurrency(user.currency);
     } catch (error) {
       console.error(error);
     }
@@ -41,11 +47,13 @@ function App() {
 
   function handleLogout() {
     setLoggedInUser(null);
+    setBaseCurrency("");
     navigate("/");
   }
 
   function handleLogin(user: User) {
     setLoggedInUser(user);
+    setBaseCurrency(user.currency);
     navigate("/home");
     setLoading(false);
     setShowLogin(false);
@@ -53,6 +61,7 @@ function App() {
 
   function handleSignUp(user: User) {
     setLoggedInUser(user);
+    setBaseCurrency(user.currency);
     navigate("/home");
     setLoading(false);
     setShowSignUp(false);
@@ -61,65 +70,67 @@ function App() {
   return (
     <div>
       <div className="mh">
-        <Context.Provider value={[loading, setLoading]}>
-          <NavBar
-            loggedInUser={loggedInUser}
-            onLoginClicked={() => {
-              setLoading(false);
-              setShowLogin(true);
-            }}
-            onSignUpClicked={() => {
-              setLoading(false);
-              setShowSignUp(true);
-            }}
-            onLogoutSuccessful={handleLogout}
-          />
-
-          <Routes>
-            <Route
-              index
-              element={loggedInUser ? <Home /> : <HomeLoggedOut />}
-            ></Route>
-            <Route
-              path="/home"
-              element={loggedInUser ? <Home /> : <HomeLoggedOut />}
-            ></Route>
-            <Route
-              path="/profile"
-              element={loggedInUser ? <Profile /> : <HomeLoggedOut />}
-            ></Route>
-            <Route
-              path="/friends"
-              element={loggedInUser ? <Friends /> : <HomeLoggedOut />}
-            ></Route>
-            <Route
-              path="/insights"
-              element={loggedInUser ? <Insights /> : <HomeLoggedOut />}
-            ></Route>
-            <Route
-              path="/budgets"
-              element={loggedInUser ? <Budgets /> : <HomeLoggedOut />}
-            ></Route>
-            <Route
-              path="/accounts"
-              element={loggedInUser ? <Accounts /> : <HomeLoggedOut />}
-            ></Route>
-            <Route path="*" element={<Navigate to="/" />} />
-          </Routes>
-
-          {showSignUp && (
-            <SignUp
-              onDismiss={() => setShowSignUp(false)}
-              onSignUpSuccessful={handleSignUp} // Pass handleSignUp function
+      <BaseCurrency.Provider value={[baseCurrency, setBaseCurrency]}>
+          <Context.Provider value={[loading, setLoading]}>
+            <NavBar
+              loggedInUser={loggedInUser}
+              onLoginClicked={() => {
+                setLoading(false);
+                setShowLogin(true);
+              }}
+              onSignUpClicked={() => {
+                setLoading(false);
+                setShowSignUp(true);
+              }}
+              onLogoutSuccessful={handleLogout}
             />
-          )}
-          {showLogin && (
-            <Login
-              onDismiss={() => setShowLogin(false)}
-              onLoginSuccessful={handleLogin} // Pass handleLogin function
-            />
-          )}
-        </Context.Provider>
+
+            <Routes>
+              <Route
+                index
+                element={loggedInUser ? <Home /> : <HomeLoggedOut />}
+              ></Route>
+              <Route
+                path="/home"
+                element={loggedInUser ? <Home /> : <HomeLoggedOut />}
+              ></Route>
+              <Route
+                path="/profile"
+                element={loggedInUser ? <Profile /> : <HomeLoggedOut />}
+              ></Route>
+              <Route
+                path="/friends"
+                element={loggedInUser ? <Friends /> : <HomeLoggedOut />}
+              ></Route>
+              <Route
+                path="/insights"
+                element={loggedInUser ? <Insights /> : <HomeLoggedOut />}
+              ></Route>
+              <Route
+                path="/budgets"
+                element={loggedInUser ? <Budgets /> : <HomeLoggedOut />}
+              ></Route>
+              <Route
+                path="/accounts"
+                element={loggedInUser ? <Accounts /> : <HomeLoggedOut />}
+              ></Route>
+              <Route path="*" element={<Navigate to="/" />} />
+            </Routes>
+
+            {showSignUp && (
+              <SignUp
+                onDismiss={() => setShowSignUp(false)}
+                onSignUpSuccessful={handleSignUp} // Pass handleSignUp function
+              />
+            )}
+            {showLogin && (
+              <Login
+                onDismiss={() => setShowLogin(false)}
+                onLoginSuccessful={handleLogin} // Pass handleLogin function
+              />
+            )}
+          </Context.Provider>
+        </BaseCurrency.Provider>
       </div>
       <Footer />
     </div>
