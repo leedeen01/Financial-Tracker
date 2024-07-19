@@ -9,6 +9,7 @@ import SelectInputField from "../components/form/SelectInputField";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { BaseCurrency } from "../App";
 import { MdDelete } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const {
@@ -23,6 +24,7 @@ const Profile = () => {
   const [refresh, setRefresh] = useState<boolean>(true);
   const [baseC, setBaseC] = useContext(BaseCurrency);
   const hasSetDisplayC = useRef(false);
+  const navigate = useNavigate();
 
   // Function to fetch logged-in user
   const fetchLoggedInUser = async () => {
@@ -81,7 +83,7 @@ const Profile = () => {
       fetchLoggedInUser();
       setBaseC(data.currency);
       alert("User updated successfully!");
-      window.location.reload();
+      navigate('/profile');
     } catch (error) {
       alert("Username taken, try again.");
       console.error("Update user error:", error);
@@ -119,7 +121,7 @@ const Profile = () => {
 
     await ExpensesApi.deleteUser(loggedInUser._id);
     alert("Profile deleted successfully, redirecting to homepage...");
-    window.location.reload();
+    navigate('/');
   }
 
   if (!loggedInUser) {
