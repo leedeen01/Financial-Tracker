@@ -37,9 +37,9 @@ const Insights = () => {
         const expenses = await loadExpenses();
   
         if (expenses.length > 0) {
-          let prompt = "Here are my expenses, how can i save more money";
+          let prompt = "Please describe on my spending";
           prompt += expenses.map(e => `Description: ${e.description}, Amount: ${e.amount}, Category: ${e.category}, Date: ${e.date}`).join("\n");
-          prompt += "Make it in point form and replace without any bold and newline"
+          prompt += "Make it in point form and replace without any bold and newline"          
           await initialResponse(prompt);          
         } else {
           setValue("No expenses found."); 

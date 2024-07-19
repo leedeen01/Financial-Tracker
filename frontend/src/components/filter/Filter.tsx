@@ -3,17 +3,19 @@ import { Button, Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { SignUpCredentials } from "../../network/expenses_api";
 import FilterCategory from "./FilterCategory";
-import FilterMonth from "./FilterMonth";
+import FilterDate from "./FilterDate";
 import FilterType from "./FilterType";
 import { Category } from "../../models/category";
 
 interface FilterProps {
   onDismiss: () => void;
   onSelectMonth: (month: string) => void;
+  onSelectYear: (year: string) => void;
   onSelectCategory: (category: string) => void;
   onSelectType: (type: string) => void;
   categories: Category[];
   month: string;
+  year: string;
   category: string;
   type: string;
 }
@@ -21,10 +23,12 @@ interface FilterProps {
 const Filter = ({
   onDismiss,
   onSelectMonth,
+  onSelectYear,
   onSelectCategory,
   onSelectType,
   categories,
   month,
+  year,
   category,
   type,
 }: FilterProps) => {
@@ -39,7 +43,7 @@ const Filter = ({
 
       <Modal.Body>
         <Form onSubmit={handleSubmit(onDismiss)}>
-          <FilterMonth onSelectMonth={onSelectMonth} month={month} />
+          <FilterDate onSelectMonth={onSelectMonth} onSelectYear={onSelectYear} month={month} year={year}/>
           {type === "Expense" ? (
               <FilterCategory
                   onSelectCategory={onSelectCategory}

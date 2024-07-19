@@ -66,6 +66,11 @@ export const createAccount: RequestHandler<
   try {
     assertIsDefined(authenticatedUserId);
 
+    console.log(name);
+    console.log(amount);
+
+    console.log(type);
+
     if (!name || !amount || !type) {
       throw createHttpError(400, "Please enter all input correctly");
     }
