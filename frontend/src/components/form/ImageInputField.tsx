@@ -48,23 +48,25 @@ const ImageInputField = ({
   return (
     <Form.Group className="mb-3" controlId={name + "-input"}>
       <Form.Label>{label}</Form.Label>
-      <Form.Control
-        type="file"
-        accept="image/*"
-        {...props}
-        {...register(name, registerOptions)}
-        onChange={(e) => {
-            const event = e as React.ChangeEvent<HTMLInputElement>;
-            if (onChange) onChange(event);
-            convertToBase64(event);
-            registerOnChange(event);
-        }}
-        isInvalid={!!error}
-      />
-      <Form.Control.Feedback type="invalid">
-        {error?.message}
-      </Form.Control.Feedback>
-      {img && <img className="profile-pic mb-3 mt-3" src={img} alt="Selected" />}
+      <div className="d-flex flex-column justify-content-center align-items-center">
+        <Form.Control
+            type="file"
+            accept="image/*"
+            {...props}
+            {...register(name, registerOptions)}
+            onChange={(e) => {
+                const event = e as React.ChangeEvent<HTMLInputElement>;
+                if (onChange) onChange(event);
+                convertToBase64(event);
+                registerOnChange(event);
+            }}
+            isInvalid={!!error}
+        />
+        <Form.Control.Feedback type="invalid">
+            {error?.message}
+        </Form.Control.Feedback>
+        {img && <img className="profile-pic mb-3 mt-3" src={img} alt="Selected" />}
+      </div>
     </Form.Group>
   );
 };
