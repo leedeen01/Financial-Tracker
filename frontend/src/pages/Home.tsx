@@ -19,10 +19,13 @@ function Home() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("");
+  const [selectedYear, setSelectedYear] = useState("");
   const [selectedType, setSelectedType] = useState("");
   const [showFilter, setShowFilter] = useState(false);
   const [loading, setLoading] = useContext(Context);
 
+  console.log(selectedYear);
+  
   const FilteredMonth = selectedMonth
     ? expenses.filter((expense) => {
         // Parse the date string into a JavaScript Date object
@@ -34,9 +37,20 @@ function Home() {
       })
     : expenses;
 
-  const selectedExpenses = selectedCategory
-    ? FilteredMonth.filter((e) => e.category === selectedCategory)
+    const FilteredYear = selectedYear
+    ? FilteredMonth.filter((expense) => {
+        // Parse the date string into a JavaScript Date object
+        const expenseDate = new Date(expense.date);
+        // Get the month index (0-indexed) from the Date object
+        const expenseYear = expenseDate.getFullYear().toString();
+        // Compare the month abbreviation with the selected month
+        return expenseYear === selectedYear;
+      })
     : FilteredMonth;
+
+  const selectedExpenses = selectedCategory
+    ? FilteredYear.filter((e) => e.category === selectedCategory)
+    : FilteredYear;
 
     const selectedExpenses2 = selectedType
     ? selectedExpenses.filter((expense) => {
@@ -120,10 +134,12 @@ function Home() {
             <Filter
               onDismiss={() => setShowFilter(false)}
               onSelectMonth={(month) => setSelectedMonth(month)}
+              onSelectYear = {(year) => setSelectedYear(year)}
               onSelectCategory={(category) => setSelectedCategory(category)}
               onSelectType={(type) => setSelectedType(type)}
               categories={categories}
               month={selectedMonth}
+              year = {selectedYear}
               category={selectedCategory}
               type={selectedType}
             />

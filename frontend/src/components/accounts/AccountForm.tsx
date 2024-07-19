@@ -25,8 +25,9 @@ const BudgetForm = ({ onDismiss, onAccountSuccess }: BudgetProps) => {
   async function onSubmit(account: Account) {
     try {
       setLoading(true);
-      console.log(account);
-      account.name = selectedOption; // Assuming you want to save it as selectedStock
+      if (account.type === "Stock") {
+        account.name = selectedOption; // Assuming you want to save it as selectedStock
+      }
       const a = await ExpensesApi.createAccount(account);
       setLoading(false);
       onAccountSuccess(a);
