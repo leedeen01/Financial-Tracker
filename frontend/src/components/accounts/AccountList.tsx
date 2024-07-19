@@ -114,9 +114,9 @@ const AccountList = ({ accounts, deleteAccount }: AccountListProps) => {
                             <tr>
                                 <th>Stock</th>
                                 <th>Shares Held</th>
-                                <th>Average Cost</th>
+                                <th className="hide-header">Average Cost</th>
                                 <th className="hide-header">Current Price</th>
-                                <th className="hide-header">Total</th>
+                                <th>Total</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>

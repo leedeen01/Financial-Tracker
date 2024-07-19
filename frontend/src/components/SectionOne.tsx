@@ -537,7 +537,7 @@ const SectionOne = ({ expenses, categories }: Props) => {
                 <span className="sectionone-tooltip-container ms-1">
                   <i className="fa fa-question"></i>
                   <span className="sectionone-tooltip-text">
-                    Income of the month
+                    Incomes of the month
                   </span>
                 </span>
               </h6>
