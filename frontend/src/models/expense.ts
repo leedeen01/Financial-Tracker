@@ -14,7 +14,7 @@ export const months = [
 ];
 
 export interface Expense {
-  userId: string | undefined;
+  userId?: string | undefined;
   _id: string;
   description: string;
   amount: number;
