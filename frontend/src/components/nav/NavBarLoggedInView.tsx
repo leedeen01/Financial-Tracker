@@ -33,7 +33,7 @@ const NavBarLoggedInView = ({
           Accounts
         </Nav.Link>
         <Nav.Link className="mx-auto" as={Link} to="/budgets">
-          Budget
+          Categories
         </Nav.Link>
         <Nav.Link className="mx-auto" as={Link} to="/insights">
           Insights
