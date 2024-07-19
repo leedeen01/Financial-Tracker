@@ -5,6 +5,7 @@ import FriendList from "../components/friends/FriendList";
 import SearchFriend from "../components/friends/SearchFriend";
 import "../components/friends/Friends.css";
 import Loader from "../components/loader/Loader";
+import Split from "./Split";
 const Friends = () => {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 
@@ -45,6 +46,7 @@ const Friends = () => {
             />
           </div>
         </div>
+        <Split />
       </div>
     </>
   );

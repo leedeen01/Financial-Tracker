@@ -7,7 +7,7 @@ import SignUp from "./components/SignUp.tsx";
 import Home from "./pages/Home.tsx";
 import HomeLoggedOut from "./pages/HomeLoggedOut.tsx";
 
-import Split from "./pages/Split.tsx";
+import Profile from "./pages/Profile.tsx";
 import Friends from "./pages/Friends.tsx";
 import { Route, Routes, useNavigate, Navigate } from "react-router-dom";
 import Insights from "./pages/Insights.tsx";
@@ -85,8 +85,8 @@ function App() {
               element={loggedInUser ? <Home /> : <HomeLoggedOut />}
             ></Route>
             <Route
-              path="/split"
-              element={loggedInUser ? <Split /> : <HomeLoggedOut />}
+              path="/profile"
+              element={loggedInUser ? <Profile /> : <HomeLoggedOut />}
             ></Route>
             <Route
               path="/friends"

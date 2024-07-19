@@ -53,7 +53,7 @@ const AccountList = ({ accounts, deleteAccount }: AccountListProps) => {
     return (
         <>
         <div className="container content d-flex flex-column gap-5">
-            <h1 className="mx-auto mt-5">Net Worth: ${netWorth.toFixed(2)}</h1>
+            <h1 className="mx-auto mt-5">Net Worth: ${netWorth.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h1>
             <div className="col-md-12">
                 <div className="card h-md-100">
                 <div className="card-header pb-0">
@@ -81,7 +81,7 @@ const AccountList = ({ accounts, deleteAccount }: AccountListProps) => {
                                 return (
                                     <tr key={account._id}>
                                         <td>{account.name}</td>
-                                        <td>${account.amount}</td>
+                                        <td>${account.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                                         <td><MdDelete onClick={() => deleteAccount(account)} className="expenselist-editdel"></MdDelete></td>
                                     </tr>
                                 );
@@ -112,7 +112,8 @@ const AccountList = ({ accounts, deleteAccount }: AccountListProps) => {
                                 <th>Stock</th>
                                 <th>Shares Held</th>
                                 <th>Average Cost</th>
-                                <th>Current Price</th>
+                                <th className="hide-header">Current Price</th>
+                                <th className="hide-header">Total</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -122,8 +123,18 @@ const AccountList = ({ accounts, deleteAccount }: AccountListProps) => {
                                     <tr key={account._id}>
                                         <td>{account.name}</td>
                                         <td>{account.count}</td>
-                                        <td>${(account.amount).toFixed(2)}</td>
-                                        <td>${findPrice(account).toFixed(2)}</td>
+                                        <td className="hide-cell">${(account.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                                        <td className="hide-cell">${findPrice(account).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                                        <td>
+                                            <div className="d-flex flex-column justify-content-center align-items-center">
+                                                <div>${account.count ? (findPrice(account) * account.count).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 0.00}</div>
+                                                <div style={{color: (findPrice(account) - account.amount) >= 0 ? 'var(--light-green)' : 'var(--light-red)', fontSize: "12px"}}>
+                                                {((findPrice(account) - account.amount) / account.amount) * 100 >= 0
+                                                    ? `+${(((findPrice(account) - account.amount) / account.amount) * 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%`
+                                                    : `${(((findPrice(account) - account.amount) / account.amount) * 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%`}
+                                                </div>
+                                            </div>
+                                        </td>
                                         <td><MdDelete onClick={() => deleteAccount(account)} className="expenselist-editdel"></MdDelete></td>
                                     </tr>
                                 );

@@ -175,7 +175,7 @@ const SectionOne = ({ expenses, categories }: Props) => {
     }
     const percentageChange =
       ((todayExpense - yesterdayExpense) / yesterdayExpense) * 100;
-    const formattedPercentage = percentageChange.toFixed(1) + "%";
+    const formattedPercentage = percentageChange.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "%";
     return {
       percentage:
         percentageChange >= 0
@@ -199,7 +199,7 @@ const SectionOne = ({ expenses, categories }: Props) => {
     }
     const percentageChange =
       ((todayExpense - yesterdayExpense) / yesterdayExpense) * 100;
-    const formattedPercentage = percentageChange.toFixed(1) + "%";
+    const formattedPercentage = percentageChange.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "%";
     return {
       percentage:
         percentageChange >= 0
@@ -236,7 +236,7 @@ const SectionOne = ({ expenses, categories }: Props) => {
     const percentageChange =
       ((currentMonthSavings - previousMonthSavings) / previousMonthSavings) *
       100;
-    const formattedPercentage = percentageChange.toFixed(1) + "%";
+    const formattedPercentage = percentageChange.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "%";
     return {
       percentage:
         percentageChange >= 0
@@ -334,7 +334,7 @@ const SectionOne = ({ expenses, categories }: Props) => {
             borderRadius: "10px",
           }}
         >
-          <p>{`${payload[0].name}: $${payload[0].value.toFixed(2)}`}</p>
+          <p>{`${payload[0].name}: $${payload[0].value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}</p>
         </div>
       );
     }
@@ -358,7 +358,7 @@ const SectionOne = ({ expenses, categories }: Props) => {
               <div className="row justify-content-between">
                 <div className="col align-self-end">
                   <p className="fs-5 mb-1 lh-1">
-                    ${(todayExpenses).toFixed(2)}
+                    ${(todayExpenses).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </p>
                   <span
                     className={`badge rounded-pill fs-11 ${percentageChangeResultExpense.className}`}
@@ -409,8 +409,8 @@ const SectionOne = ({ expenses, categories }: Props) => {
                 <div className="col-auto align-self-end">
                   <div className="fs-5 mb-1 lh-1">
                     {(currentMonthSavings) < 0 
-                    ? `-$${Math.abs(currentMonthSavings).toFixed(2)}`
-                    : `$${(currentMonthSavings).toFixed(2)}`}
+                    ? `-$${Math.abs(currentMonthSavings).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                    : `$${(currentMonthSavings).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                   </div>
                   <span
                     className={`badge rounded-pill fs-11 ${savingsPercentageChange.className}`}
@@ -460,7 +460,7 @@ const SectionOne = ({ expenses, categories }: Props) => {
                       "E",
                       currentDate.getMonth(),
                       currentDate.getFullYear()
-                    ).toFixed(2)}
+                    ).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </div>
                   <span
                     className={`badge rounded-pill fs-11 ${percentageChangeResultMonthExpense.className}`}
@@ -535,7 +535,7 @@ const SectionOne = ({ expenses, categories }: Props) => {
                       "I",
                       currentDate.getMonth(),
                       currentDate.getFullYear()
-                    ).toFixed(2)}
+                    ).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </div>
                   <span
                     className={`badge rounded-pill fs-11 ${percentageChangeResultMonthIncome.className}`}

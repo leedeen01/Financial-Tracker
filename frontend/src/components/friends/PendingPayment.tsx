@@ -170,7 +170,7 @@ const PendingPayment = ({
                               <div className="card-body d-flex flex-row justify-content-between align-items-center">
                                 <p>
                                   To Pay: $
-                                  {parseFloat(expense.amount).toFixed(2)}
+                                  {parseFloat(expense.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                 </p>
                                 <div>
                                   <button
@@ -234,7 +234,7 @@ const PendingPayment = ({
                               <div className="card-body d-flex flex-row justify-content-between align-items-center">
                                 <p>
                                   To Receive: $
-                                  {parseFloat(expense.amount).toFixed(2)}
+                                  {parseFloat(expense.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                 </p>
                                 <h6>Request Sent</h6>
                               </div>
@@ -268,7 +268,7 @@ const PendingPayment = ({
         </Modal.Body>
         <Modal.Footer>
           <Button variant="primary" onClick={() => clearOwed(userToPay!._id!)}>
-            Settle Payment
+            Settle Payments
           </Button>
           <Button variant="secondary" onClick={handleClose}>
             Close

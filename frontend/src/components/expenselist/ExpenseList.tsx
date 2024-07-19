@@ -129,12 +129,12 @@ const ExpenseList = ({ expenses, onDelete, onAddEdit, onEdit, categories }: Prop
                     {(() => {
                       const expenseCategory = categories.find(cat => cat.name === expense.category);
                       return expenseCategory && expenseCategory.type === "Income" 
-                        ? <td style={{color: "var(--light-green)"}}>+${expense.amount.toFixed(2)}</td>
-                        : <td style={{color: "var(--light-red)"}}>-${expense.amount.toFixed(2)}</td>
+                        ? <td style={{color: "var(--light-green)"}}>+${expense.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                        : <td style={{color: "var(--light-red)"}}>-${expense.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                     })()}
                   
                   <td className="hide-cell">{expense.category}</td>
-                  <td className="hide-header">{formattedDate}</td>
+                  <td className="hide-cell">{formattedDate}</td>
                   <td>
                     <div className="expenselist-button-container gap-2">
                       <MdDelete
@@ -164,8 +164,8 @@ const ExpenseList = ({ expenses, onDelete, onAddEdit, onEdit, categories }: Prop
               <td>Total</td>
               <td>
                 {(totalIncome - totalExpenses) < 0 
-                  ? `-$${Math.abs(totalIncome - totalExpenses).toFixed(2)}`
-                  : `$${(totalIncome - totalExpenses).toFixed(2)}`}
+                  ? `-$${Math.abs(totalIncome - totalExpenses).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                  : `$${(totalIncome - totalExpenses).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
               </td>
             </tr>
           </tfoot>

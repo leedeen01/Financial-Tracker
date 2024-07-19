@@ -72,7 +72,7 @@ const BudgetList = ({
                       <div>
                         Budget:{" "}
                         {category.budget
-                          ? "$" + category.budget.toFixed(2)
+                          ? "$" + category.budget.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
                           : "NA"}
                       </div>
                       <div>Type: {category.type}</div>
@@ -81,7 +81,7 @@ const BudgetList = ({
                       {budgetPercentage(category) != -1 ? (
                         <ProgressBar
                           now={budgetPercentage(category)}
-                          label={`${budgetPercentage(category).toFixed(2)}%`}
+                          label={`${budgetPercentage(category).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%`}
                           variant={getProgressBarVariant(
                             budgetPercentage(category)
                           )}
@@ -92,7 +92,7 @@ const BudgetList = ({
                     </div>
                     <div className="mx-auto mt-3">
                       {budgetPercentage(category) != -1 ? (
-                        `Spent: $${totalExpensesPerCategory(category).toFixed(2)}`
+                        `Spent: $${totalExpensesPerCategory(category).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
                       ) : (
                         <div className="mt-3">___________________</div>
                       )}

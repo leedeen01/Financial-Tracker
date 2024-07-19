@@ -27,7 +27,7 @@ const NavBarLoggedInView = ({
     <>
       <Nav className="mx-auto">
         <Nav.Link className="mx-auto" as={Link} to="/home">
-          {user.username}'s Dashboard
+          Dashboard
         </Nav.Link>
         <Nav.Link className="mx-auto" as={Link} to="/accounts">
           Accounts
@@ -41,8 +41,8 @@ const NavBarLoggedInView = ({
         <Nav.Link className="mx-auto" as={Link} to="/friends">
           Friends
         </Nav.Link>
-        <Nav.Link className="mx-auto" as={Link} to="/split">
-          Split
+        <Nav.Link className="mx-auto" as={Link} to="/profile">
+          {user.username}'s Profile
         </Nav.Link>
       </Nav>
       <Button onClick={logout}>Log Out</Button>

@@ -167,7 +167,7 @@ const FriendList = ({ loggedInUser, fetchLoggedInUser }: FriendListProps) => {
                           calculateBalance(friend) >= 0 ? "they-owe" : "you-owe"
                         }`}
                       >
-                        ${Math.abs(calculateBalance(friend)).toFixed(2)}
+                        ${Math.abs(calculateBalance(friend)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </p>
                     </div>
 

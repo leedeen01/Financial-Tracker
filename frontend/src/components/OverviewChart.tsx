@@ -56,8 +56,8 @@ const OverviewChart = ({ expenses, categories }: Props) => {
         fontSize={20}
       >
         Total: {(totalIncome - totalExpenses) < 0 
-            ? `-$${Math.abs(totalIncome - totalExpenses).toFixed(2)}`
-            : `$${(totalIncome - totalExpenses).toFixed(2)}`}
+            ? `-$${Math.abs(totalIncome - totalExpenses).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+            : `$${(totalIncome - totalExpenses).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
       </text>
     );
   };

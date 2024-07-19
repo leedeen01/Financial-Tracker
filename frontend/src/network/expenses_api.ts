@@ -242,7 +242,7 @@ export async function fetchStockPrice(accounts: Account[]) {
   for (const account of accounts) {
     if (account.type === 'Stock') {
       const stock = account.name;
-      const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${stock}&apikey=PGYVSQORM4OGVXKI`;
+      const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${stock}&apikey=${JSON.stringify(import.meta.env.VITE_STOCK_API_KEY)}`;
       //const url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=IBM&apikey=demo";
 
       try {
@@ -274,7 +274,7 @@ export async function fetchStockPrice(accounts: Account[]) {
 
 export async function fetchStockName(keyword: string) {
   const stockNames = [];
-  const url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${keyword}&apikey=PGYVSQORM4OGVXKI`;
+  const url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${keyword}&apikey=${JSON.stringify(import.meta.env.VITE_STOCK_API_KEY)}`;
   //const url = "https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=tesco&apikey=demo";
 
   try {
@@ -282,7 +282,6 @@ export async function fetchStockName(keyword: string) {
 
     if (response.ok) {
       const data = await response.json();
-      console.log(data);
       for (const d of data.bestMatches) {
         stockNames.push({
           symbol: d['1. symbol'],
@@ -297,6 +296,26 @@ export async function fetchStockName(keyword: string) {
     console.error(`Error fetching stocks for keyword: ${keyword}`, error);
   }
   return stockNames;
+}
+
+export async function fetchCurrencies(currency: string) {
+  let currencyVal = 0;
+  const url = `https://api.fxratesapi.com/latest?api_key=${JSON.stringify(import.meta.env.VITE_CURRENCY_API_KEY)}&base=SGD&currencies=${currency}&resolution=1m&amount=1&places=6&format=json`;
+
+  try {
+    const response = await fetch(url);
+
+    if (response.ok) {
+      const data = await response.json();
+      currencyVal = data.rates[currency];
+      console.log(currencyVal);
+    } else {
+      console.error(`Failed to fetch currency value for ${currency}`);
+    }
+  } catch (error) {
+    console.error(`Error fetching currency value for ${currency}`, error);
+  }
+  return currencyVal;
 }
 
 //expenses related

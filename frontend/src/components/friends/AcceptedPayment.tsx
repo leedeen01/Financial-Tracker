@@ -86,14 +86,14 @@ const AcceptedPayment: React.FC<AcceptedPaymentProps> = ({
                           <td>{expense.receiveMoneyName}</td>
                           <td>{expense.description}</td>
                           <td className="hide-cell">{formattedDate}</td>
-                          <td>${parseFloat(expense.amount).toFixed(2)}</td>
+                          <td>${parseFloat(expense.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                         </>
                       ) : (
                         <>
                           <td>{expense.sendMoneyName}</td>
                           <td>{expense.description}</td>
                           <td className="hide-cell">{formattedDate}</td>
-                          <td>${parseFloat(expense.amount).toFixed(2)}</td>
+                          <td>${parseFloat(expense.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                         </>
                       )}
                     </tr>
