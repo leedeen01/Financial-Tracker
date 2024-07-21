@@ -88,6 +88,7 @@ interface updateUserBody {
   username?: string;
   email?: string;
   currency?: string;
+  profileImage?: string;
 }
 
 export const updateUser: RequestHandler<
@@ -100,6 +101,7 @@ export const updateUser: RequestHandler<
   const newUsername = req.body.username;
   const newEmail = req.body.email;
   const newCurrency = req.body.currency;
+  const profileImage = req.body.profileImage;
 
   try {
     if (!mongoose.isValidObjectId(userId)) {
@@ -132,6 +134,8 @@ export const updateUser: RequestHandler<
       ...u, 
       amount: u.amount * CurrencyVal 
     }));    user.currency = newCurrency;
+
+    user.picture = profileImage;
 
     const updatedUser = await user.save();
     res.status(200).json(updatedUser);

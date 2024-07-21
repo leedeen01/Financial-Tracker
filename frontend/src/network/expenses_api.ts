@@ -76,6 +76,7 @@ export interface userInput {
   username: string;
   email: string;
   currency: string;
+  profileImage: string;
 }
 
 export async function updateUser(

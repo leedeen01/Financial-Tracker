@@ -5,7 +5,7 @@ import { User, currencies } from "../models/user";
 import * as ExpensesApi from "../network/expenses_api";
 import { SignUpCredentials } from "../network/expenses_api";
 import TextInputField from "./form/TextInputField";
-import { useContext, useState } from "react";
+import { ChangeEvent, useContext, useState } from "react";
 import { Context } from "../App";
 import Loader from "./loader/Loader";
 //import ImageInputField from "./form/ImageInputField";
@@ -25,7 +25,9 @@ const SignUp = ({ onDismiss, onSignUpSuccessful }: SignUpModalProps) => {
   } = useForm<SignUpCredentials>();
 
   const [loading, setLoading] = useContext(Context);
-//  const [img, setImg] = useState<string>(import.meta.env.VITE_DEFAULT_PIC);
+  const [img, setImg] = useState<string>(import.meta.env.VITE_DEFAULT_PIC);
+
+  //  const [img, setImg] = useState<string>(import.meta.env.VITE_DEFAULT_PIC);
   const [, setBaseC] = useContext(BaseCurrency);
   const [displayC, setDisplayC] = useState<string>("");
 
@@ -48,7 +50,7 @@ const SignUp = ({ onDismiss, onSignUpSuccessful }: SignUpModalProps) => {
   async function onSubmit(credentials: SignUpCredentials) {
     try {
       setLoading(true);
-      // credentials.picture = img;
+      credentials.picture = img;
       const newUser = await ExpensesApi.signUp(credentials);
       setBaseC(credentials.currency);
       setLoading(false);
@@ -59,6 +61,24 @@ const SignUp = ({ onDismiss, onSignUpSuccessful }: SignUpModalProps) => {
       console.error(error);
     }
   }
+
+  const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    const file: File = e.target.files![0]; // Ensure it's a File object or null
+    if (file) {
+      convertToBase64(file).then((base64) => {
+        setImg(base64);
+      });
+    }
+  };
+
+  const convertToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
+  };
 
   return (
     <>
@@ -116,8 +136,32 @@ const SignUp = ({ onDismiss, onSignUpSuccessful }: SignUpModalProps) => {
                   registerOptions={{ required: "Required" }}
                   error={errors.currency}
                 />
-                <div style={{fontSize: "40px"}}>{currencies.emoji[displayC as keyof typeof currencies.emoji] || "🇸🇬"}</div>
+                <div style={{ fontSize: "40px" }}>
+                  {currencies.emoji[
+                    displayC as keyof typeof currencies.emoji
+                  ] || "🇸🇬"}
+                </div>
               </div>
+
+              <div>
+                <label htmlFor="file-upload">Profile Picture</label>
+                <input
+                  type="file"
+                  name="myFile"
+                  id="file-upload"
+                  accept="image/*"
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    handleFileUpload(e)
+                  }
+                />
+              </div>
+              {img && (
+                <img
+                  className="profile-pic mb-3 mt-3"
+                  src={img}
+                  alt="Selected"
+                />
+              )}
 
               {/* <ImageInputField
                 name="picture"
