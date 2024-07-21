@@ -10,6 +10,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { BaseCurrency } from "../App";
 import { MdDelete } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import { Expense } from "../models/expense";
 
 const Profile = () => {
   const {
@@ -20,9 +21,8 @@ const Profile = () => {
 
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
   const [displayC, setDisplayC] = useState<string>("");
-  const [, setCurrencyVal] = useState<number>(0);
-  const [refresh, setRefresh] = useState<boolean>(true);
-  const [baseC, setBaseC] = useContext(BaseCurrency);
+  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [, setBaseC] = useContext(BaseCurrency);
   const hasSetDisplayC = useRef(false);
   const navigate = useNavigate();
 
@@ -53,25 +53,46 @@ const Profile = () => {
   }, [loggedInUser]);
 
   useEffect(() => {
-    async function fetchCurrencyValue(currency: string) {                        
+    async function loadExpenses() {
+      try {
+        const expenses = await ExpensesApi.fetchExpense();
+        setExpenses(expenses);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    loadExpenses();
+  }, []);
+
+
+    async function fetchCurrencyValue(currency: string, prevCurrency: string) {                        
         try {
-            const val = await ExpensesApi.fetchCurrencies(currency);
-            setCurrencyVal(val);
-            setRefresh(false);
+            const val = await ExpensesApi.fetchCurrencies(currency, prevCurrency);
+            return val            
         } catch (error) {
             console.error("Error fetching currency value:", error);
         }
     }
-    if (!refresh) {
-        fetchCurrencyValue(baseC);
-    }
-  }, [refresh]);
+
 
   const onSubmit: SubmitHandler<User> = async (data) => {
     try {
       if (!loggedInUser?._id) {
         alert("User ID is not available.");
         return;
+      }
+
+      if (loggedInUser.currency !== data.currency) {
+        fetchCurrencyValue(data.currency, loggedInUser.currency)
+          .then(currencyValue => {
+            expenses.forEach(async e => {
+              const updatedAmount = e.amount * currencyValue!;
+              await ExpensesApi.updateExpense(e._id, { ...e, amount: updatedAmount });
+            });
+          })
+          .catch(error => {
+            console.error('Error fetching currency value or updating expenses:', error);
+          });
       }
 
       await ExpensesApi.updateUser(loggedInUser._id, {
@@ -144,7 +165,6 @@ const Profile = () => {
             label="Username"
             register={register}
             registerOptions={{ required: "Required" }}
-            onChange={() => {}}
             defaultValue={loggedInUser.username}
             error={errors.username}
         />
@@ -153,7 +173,6 @@ const Profile = () => {
             label="Email"
             register={register}
             registerOptions={{ required: "Required" }}
-            onChange={() => {}}
             defaultValue={loggedInUser.email}
             error={errors.username}
         />
@@ -174,7 +193,6 @@ const Profile = () => {
             name="picture"
             label="Profile Picture"
             register={register}
-            registerOptions={{}}
             error={errors.picture}
         />
         <Button

@@ -491,6 +491,8 @@ interface createExpenseBody {
   description?: string;
   date?: Date;
   amount?: number;
+  selfCurrency?: number;
+  toCurrency?: number;
   category?: string;
 }
 
@@ -506,6 +508,10 @@ export const sendExpenseRequest: RequestHandler<
   const date = req.body.date;
   const amount = req.body.amount;
   const category = req.body.category;
+  const selfCurrency = req.body.selfCurrency;
+  const toCurrency = req.body.toCurrency;
+
+
   /*const time = req.body.category;*/
   const authenticatedUserId = req.session.userId;
   try {
@@ -538,7 +544,7 @@ export const sendExpenseRequest: RequestHandler<
         userId: authenticatedUserId,
         date: date,
         description: description,
-        amount: amount,
+        amount: amount * selfCurrency!,
         category: category,
       });
     } else {
@@ -550,7 +556,7 @@ export const sendExpenseRequest: RequestHandler<
         receiveMoneyName: user.username,
         date: date,
         description: description,
-        amount: amount,
+        amount: amount * toCurrency!,
         category: category,
       });
 
@@ -562,7 +568,7 @@ export const sendExpenseRequest: RequestHandler<
         receiveMoneyName: user.username,
         date: date,
         description: description,
-        amount: amount,
+        amount: amount * selfCurrency!,
         category: category,
       });
     }
