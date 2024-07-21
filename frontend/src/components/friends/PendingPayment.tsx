@@ -59,8 +59,7 @@ const PendingPayment = ({
       date: expense.date,
       amount: expense.amount,
       category: expense.category,
-      selfCurrency: expense.selfCurrency,
-      toCurrency: expense.toCurrency,
+      currency: expense.currency
     });
   };
   const declineFriendExpenseRequest = async (
@@ -77,8 +76,7 @@ const PendingPayment = ({
       date: expense.date,
       amount: expense.amount,
       category: expense.category,
-      selfCurrency: expense.selfCurrency,
-      toCurrency: expense.toCurrency,
+      currency: expense.currency,
     });
   };
 
