@@ -114,9 +114,24 @@ export const updateUser: RequestHandler<
       throw createHttpError(404, "User not found");
     }
 
+    const CurrencyRes = `https://api.fxratesapi.com/latest?api_key=${JSON.stringify(
+      process.env.CURRENCY_API_KEY
+    )}&base=${user.currency}&currencies=${
+      newCurrency
+    }&resolution=1m&amount=1&places=6&format=json`;
+
+    const CurrencyResponse = await fetch(CurrencyRes);
+
+    const CurrencyData = await CurrencyResponse.json();
+
+    const CurrencyVal = CurrencyData.rates[newCurrency];
+
     user.username = newUsername;
     user.email = newEmail;
-    user.currency = newCurrency;
+    user.topay = user.topay.map(u => ({
+      ...u, 
+      amount: u.amount * CurrencyVal 
+    }));    user.currency = newCurrency;
 
     const updatedUser = await user.save();
     res.status(200).json(updatedUser);
@@ -491,8 +506,7 @@ interface createExpenseBody {
   description?: string;
   date?: Date;
   amount?: number;
-  selfCurrency?: number;
-  toCurrency?: number;
+  currency: string;
   category?: string;
 }
 
@@ -508,11 +522,8 @@ export const sendExpenseRequest: RequestHandler<
   const date = req.body.date;
   const amount = req.body.amount;
   const category = req.body.category;
-  const selfCurrency = req.body.selfCurrency;
-  const toCurrency = req.body.toCurrency;
+  const currency = req.body.currency;
 
-
-  /*const time = req.body.category;*/
   const authenticatedUserId = req.session.userId;
   try {
     assertIsDefined(authenticatedUserId);
@@ -539,12 +550,32 @@ export const sendExpenseRequest: RequestHandler<
       throw createHttpError(404, "User not found");
     }
 
+    const toCurrencyMulti = `https://api.fxratesapi.com/latest?api_key=${JSON.stringify(
+      process.env.CURRENCY_API_KEY
+    )}&base=${currency}&currencies=${
+      friendUser.currency
+    }&resolution=1m&amount=1&places=6&format=json`;
+    const fromCurrencyMulti = `https://api.fxratesapi.com/latest?api_key=${JSON.stringify(
+      process.env.CURRENCY_API_KEY
+    )}&base=${currency}&currencies=${
+      user.currency
+    }&resolution=1m&amount=1&places=6&format=json`;
+
+    const toCurrencyResponse = await fetch(toCurrencyMulti);
+    const fromCurrencyResponse = await fetch(fromCurrencyMulti);
+
+    const toCurrencyData = await toCurrencyResponse.json();
+    const fromCurrencyData = await fromCurrencyResponse.json();
+
+    const toCurrencyVal = toCurrencyData.rates[friendUser.currency];
+    const fromCurrencyVal = fromCurrencyData.rates[user.currency];
+
     if (_id === authenticatedUserId.toString()) {
       const newExpense = await expenseModel.create({
         userId: authenticatedUserId,
         date: date,
         description: description,
-        amount: amount * selfCurrency!,
+        amount: amount * fromCurrencyVal,
         category: category,
       });
     } else {
@@ -556,9 +587,7 @@ export const sendExpenseRequest: RequestHandler<
         receiveMoneyName: user.username,
         date: date,
         description: description,
-        amount: amount * toCurrency!,
-        selfCurrency: selfCurrency,
-        toCurrency: toCurrency,
+        amount: amount * toCurrencyVal,
         category: category,
       });
 
@@ -570,9 +599,7 @@ export const sendExpenseRequest: RequestHandler<
         receiveMoneyName: user.username,
         date: date,
         description: description,
-        amount: amount * selfCurrency!,
-        selfCurrency: selfCurrency,
-        toCurrency: toCurrency,
+        amount: amount * fromCurrencyVal,
         category: category,
       });
     }
@@ -595,8 +622,6 @@ interface acceptExpenseRequestBody {
   description: string;
   date: Date;
   amount: number;
-  selfCurrency: number,
-  toCurrency: number,
   category: string;
   [key: string]: string | Date | number; // Index signature
 }
@@ -609,8 +634,6 @@ export const acceptExpenseRequest: RequestHandler<
 > = async (req, res, next) => {
   const _id = req.params._id;
   const authenticatedUserId = req.session.userId;
-  const selfCurrency = req.body.selfCurrency;
-  const toCurrency = req.body.toCurrency;
   const { description, date, amount, category } =
     req.body as acceptExpenseRequestBody;
 
@@ -634,11 +657,6 @@ export const acceptExpenseRequest: RequestHandler<
 
     const reqBody = req.body as acceptExpenseRequestBody;
 
-    // Filter user.topay
-
-    console.log(reqBody);
-    console.log(user.topay);
-
     user.topay = user.topay.map((expense) => {
       if (Object.keys(reqBody).some((key) => reqBody[key] !== expense[key])) {
         return expense;
@@ -653,8 +671,6 @@ export const acceptExpenseRequest: RequestHandler<
           description: description,
           amount: amount,
           category: category,
-          selfCurrency: selfCurrency,
-          toCurrency: toCurrency,
         };
       }
     });
@@ -674,8 +690,6 @@ export const acceptExpenseRequest: RequestHandler<
           description: description,
           amount: amount,
           category: category,
-          selfCurrency: selfCurrency,
-          toCurrency: toCurrency,
         };
       }
     });
@@ -711,8 +725,6 @@ export const declineExpenseRequest: RequestHandler<
 > = async (req, res, next) => {
   const _id = req.params._id;
   const authenticatedUserId = req.session.userId;
-  const selfCurrency = req.body.selfCurrency;
-  const toCurrency = req.body.toCurrency;
   const { description, date, amount, category } =
     req.body as acceptExpenseRequestBody;
 
@@ -751,8 +763,6 @@ export const declineExpenseRequest: RequestHandler<
           description: description,
           amount: amount,
           category: category,
-          selfCurrency: selfCurrency,
-          toCurrency: toCurrency,
         };
       }
     });
@@ -772,8 +782,6 @@ export const declineExpenseRequest: RequestHandler<
           description: description,
           amount: amount,
           category: category,
-          selfCurrency: selfCurrency,
-          toCurrency: toCurrency,
         };
       }
     });
