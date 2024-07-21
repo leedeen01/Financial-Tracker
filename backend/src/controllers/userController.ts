@@ -557,6 +557,8 @@ export const sendExpenseRequest: RequestHandler<
         date: date,
         description: description,
         amount: amount * toCurrency!,
+        selfCurrency: selfCurrency,
+        toCurrency: toCurrency,
         category: category,
       });
 
@@ -569,6 +571,8 @@ export const sendExpenseRequest: RequestHandler<
         date: date,
         description: description,
         amount: amount * selfCurrency!,
+        selfCurrency: selfCurrency,
+        toCurrency: toCurrency,
         category: category,
       });
     }
@@ -591,6 +595,8 @@ interface acceptExpenseRequestBody {
   description: string;
   date: Date;
   amount: number;
+  selfCurrency: number,
+  toCurrency: number,
   category: string;
   [key: string]: string | Date | number; // Index signature
 }
@@ -603,6 +609,8 @@ export const acceptExpenseRequest: RequestHandler<
 > = async (req, res, next) => {
   const _id = req.params._id;
   const authenticatedUserId = req.session.userId;
+  const selfCurrency = req.body.selfCurrency;
+  const toCurrency = req.body.toCurrency;
   const { description, date, amount, category } =
     req.body as acceptExpenseRequestBody;
 
@@ -645,6 +653,8 @@ export const acceptExpenseRequest: RequestHandler<
           description: description,
           amount: amount,
           category: category,
+          selfCurrency: selfCurrency,
+          toCurrency: toCurrency,
         };
       }
     });
@@ -664,6 +674,8 @@ export const acceptExpenseRequest: RequestHandler<
           description: description,
           amount: amount,
           category: category,
+          selfCurrency: selfCurrency,
+          toCurrency: toCurrency,
         };
       }
     });
@@ -699,6 +711,8 @@ export const declineExpenseRequest: RequestHandler<
 > = async (req, res, next) => {
   const _id = req.params._id;
   const authenticatedUserId = req.session.userId;
+  const selfCurrency = req.body.selfCurrency;
+  const toCurrency = req.body.toCurrency;
   const { description, date, amount, category } =
     req.body as acceptExpenseRequestBody;
 
@@ -737,6 +751,8 @@ export const declineExpenseRequest: RequestHandler<
           description: description,
           amount: amount,
           category: category,
+          selfCurrency: selfCurrency,
+          toCurrency: toCurrency,
         };
       }
     });
@@ -756,6 +772,8 @@ export const declineExpenseRequest: RequestHandler<
           description: description,
           amount: amount,
           category: category,
+          selfCurrency: selfCurrency,
+          toCurrency: toCurrency,
         };
       }
     });
