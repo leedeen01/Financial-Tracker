@@ -33,7 +33,7 @@ export interface FriendsExpenseRequestBody {
   description: string;
   date: Date;
   amount: string;
-  selfCurrency: string;
-  toCurrency: string;
+  selfCurrency: number;
+  toCurrency: number;
   category: string;
 }
