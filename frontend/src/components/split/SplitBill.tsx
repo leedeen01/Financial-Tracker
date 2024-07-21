@@ -42,7 +42,6 @@ const SplitBill = ({
       const { description, category, date, amounts, currency } = formData;
       onDismiss();
 
-
       alert("Successfully sent a bill split request.");
 
       // Example: Sending each user's share as an expense
@@ -91,13 +90,15 @@ const SplitBill = ({
             type="text"
             placeholder="Enter description"
             register={register}
+            registerOptions={{ required: "Required" }}
+
           />
           <div className="mb-3">
             <label htmlFor="category" className="form-label">
               Category
             </label>
             <select
-              {...register("category")}
+              {...register("category", { required: "Required" })}
               id="category"
               className="form-control"
             >
@@ -109,10 +110,14 @@ const SplitBill = ({
               ))}
             </select>
           </div>
+          <label htmlFor="date" className="form-label">
+            Date
+          </label>
           <div className="mb-3">
             <Controller
               control={control}
               name="date"
+              defaultValue={new Date()}
               render={({ field }) => (
                 <DatePicker
                   placeholderText="Select date"
@@ -124,13 +129,13 @@ const SplitBill = ({
             />
           </div>
           <SelectInputField
-                name="currency"
-                label="Base Currency"
-                options={["SGD", "USD", "EUR", "GBP", "JPY", "CNY", "KRW"]}
-                register={register}
-                registerOptions={{ required: "Required" }}
-                defaultValue={loggedInUser.currency}
-            />
+            name="currency"
+            label="Base Currency"
+            options={["SGD", "USD", "EUR", "GBP", "JPY", "CNY", "KRW"]}
+            register={register}
+            registerOptions={{ required: "Required" }}
+            defaultValue={loggedInUser.currency}
+          />
           {userToSplit.map((user) => (
             <TextInputField
               key={user._id}
@@ -140,6 +145,7 @@ const SplitBill = ({
               step="0.01"
               placeholder={`Enter ${loggedInUser.currency} amount for ${user.username}`}
               register={register}
+              registerOptions={{ required: "Required" }}
             />
           ))}
           <Button type="submit" disabled={isSubmitting} className="width100">
