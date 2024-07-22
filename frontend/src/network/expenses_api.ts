@@ -211,6 +211,13 @@ export async function fetchCategory(): Promise<Category[]> {
   return categories;
 }
 
+export interface categoryInput {
+  name: string;
+  color: string;
+  type: string;
+  budget?: number;
+}
+
 export async function createCategory(category: Category): Promise<Category[]> {
   await fetchData(`${website}/api/categories`, {
     method: "POST",
@@ -228,6 +235,21 @@ export async function createCategory(category: Category): Promise<Category[]> {
   const categories: Category[] = await response.json();
 
   return categories;
+}
+
+export async function updateCategory(
+  categoryId: string,
+  category: categoryInput
+): Promise<Category> {
+  const response = await fetchData(`${website}/api/categories/` + categoryId, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(category),
+    credentials: "include",
+  });
+  return response.json();
 }
 
 export async function deleteCategory(categoryId: string) {

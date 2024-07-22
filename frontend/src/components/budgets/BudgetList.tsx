@@ -1,10 +1,11 @@
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdEdit } from "react-icons/md";
 import { Category } from "../../models/category";
 import { Expense } from "../../models/expense";
 import { ProgressBar } from "react-bootstrap";
 import { currencies } from "../../models/user";
 import { BaseCurrency } from "../../App";
-import { useContext } from "react";
+import { useContext, useState } from "react";
+import BudgetEditForm from "./BudgetEditForm";
 
 interface BudgetListProps {
   expenses: Expense[];
@@ -18,6 +19,8 @@ const BudgetList = ({
   deleteCategory,
 }: BudgetListProps) => {
   const [baseC] = useContext(BaseCurrency);
+  const [showForm, setShowForm] = useState(false);
+  const [editCategory, setEditCategory] = useState<Category>();
 
   const rgba = (color: string, alpha: number) => {
     const r = parseInt(color.slice(1, 3), 16);
@@ -53,6 +56,11 @@ const BudgetList = ({
     }
   }
 
+  function onEdit(category: Category) {
+    setEditCategory(category);
+    setShowForm(true);
+}
+
   return (
     <>
       <div className="row g-3 mt-5" onClick={() => {}}>
@@ -66,10 +74,19 @@ const BudgetList = ({
                     style={{ backgroundColor: rgba(category.color, 0.5) }}
                   >
                     <h6 className="mb-2 mt-2">{category.name}</h6>
-                    <MdDelete
-                      onClick={() => deleteCategory(category)}
-                      className="expenselist-editdel"
-                    ></MdDelete>
+                    <div className="expenselist-button-container gap-2">
+                      <MdEdit
+                          className="text-muted expenselist-editdel"
+                          onClick={(e) => {
+                              e.stopPropagation();
+                              onEdit(category);
+                          }}
+                      />
+                      <MdDelete
+                        onClick={() => deleteCategory(category)}
+                        className="expenselist-editdel"
+                      />
+                    </div>
                   </div>
 
                   <div className="card-body d-flex flex-column justify-content-center">
@@ -109,6 +126,9 @@ const BudgetList = ({
           })}
         </div>
       </div>
+      {editCategory && showForm &&
+        <BudgetEditForm category={editCategory} onDismiss={() => setShowForm(false)} onCategoryEditSuccess={() => setShowForm(false)} />
+      }
     </>
   );
 };

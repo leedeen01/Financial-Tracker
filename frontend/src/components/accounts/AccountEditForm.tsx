@@ -37,7 +37,7 @@ const AccountEditForm = ({ account, onDismiss, onAccountEditSuccess }: AccountEd
         console.error("Update account error:", error);
         setLoading(false);
         }
-    };
+  };
 
   return (
     <>

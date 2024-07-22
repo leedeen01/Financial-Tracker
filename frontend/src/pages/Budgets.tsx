@@ -70,6 +70,12 @@ const Budgets = () => {
   }
 
   async function deleteCategory(category: Category) {
+    const isConfirmed = window.confirm(
+      "Are you sure you want to delete this category?"
+    );
+    if (!isConfirmed) {
+      return;
+    }
     try {
       await ExpensesApi.deleteCategory(category._id);
       setCategories(categories.filter((c) => c._id !== category._id));
