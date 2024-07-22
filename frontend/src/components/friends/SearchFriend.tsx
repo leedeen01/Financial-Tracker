@@ -51,16 +51,18 @@ const SearchFriend = ({ loggedInUser }: SearchFriendProps) => {
     </div>
 
     <div className="row g-3 mb-3">
-      {searchResult
+      {searchResult.length > 0 ?
+      searchResult
         .filter(
           (user) =>
             user.username !== loggedInUser?.username &&
             !user.friendlist.includes(loggedInUser!._id!)
         )
         .map((user) => (
-          <div className="col-md-12">
+          <div className="col-md-12" key={user._id}>
             <div className="card h-md-100">
-              <div className="card-header pb-0">
+              <div className="card-header pb-0 d-flex">
+                <img src={user.picture ? user.picture : import.meta.env.VITE_DEFAULT_PIC} alt="" className="profile-pic-friend mt-3 mb-3" style={{marginRight: "10px"}} />
                 <h6 className="mb-2 mt-2 d-flex align-items-center">{user.username}</h6>
               </div>
     
@@ -78,10 +80,18 @@ const SearchFriend = ({ loggedInUser }: SearchFriendProps) => {
               </div>
             </div>
           </div>
-        ))}
+        ))
+        :
+        <div className="col-md-12">
+          <div className="card h-md-100">    
+            <div className="card-body d-flex flex-row justify-content-between align-items-center">
+              <p className="mb-0 text-center mx-auto">No search results. Try searching for a different name.</p>
+            </div>
+          </div>
+        </div>
+        }
     </div>
     </>
-    
   );
 };
 

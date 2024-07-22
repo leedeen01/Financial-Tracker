@@ -21,9 +21,10 @@ const Profile = () => {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
   const [displayC, setDisplayC] = useState<string>("");
   const [expenses, setExpenses] = useState<Expense[]>([]);
-  const [img, setImg] = useState<string>(loggedInUser?.picture || import.meta.env.VITE_DEFAULT_PIC);
+  const [img, setImg] = useState<string>(import.meta.env.VITE_DEFAULT_PIC);
   const [, setBaseC] = useContext(BaseCurrency);
   const hasSetDisplayC = useRef(false);
+  const hasSetImg = useRef(false);
   const navigate = useNavigate();
 
   // Function to fetch logged-in user
@@ -38,7 +39,6 @@ const Profile = () => {
 
   useEffect(() => {
     if (loggedInUser) {
-      setImg(loggedInUser.picture)
       const interval = setInterval(fetchLoggedInUser, 5000);
       return () => clearInterval(interval);
     } else {
@@ -49,7 +49,9 @@ const Profile = () => {
   useEffect(() => {
     if (loggedInUser && !hasSetDisplayC.current) {
       setDisplayC(loggedInUser.currency);
+      setImg(loggedInUser.picture);
       hasSetDisplayC.current = true;
+      hasSetImg.current = true;
     }
   }, [loggedInUser]);
 
@@ -238,9 +240,7 @@ const Profile = () => {
                 handleFileUpload(e)
               }
             />
-            {img && (
-              <img className="profile-pic mb-3 mt-3 mx-auto" src={img} alt="Selected" />
-            )}
+            <img className="profile-pic mb-3 mt-3 mx-auto" src={img} alt="Selected" />
           </div>
 
           <Button type="submit" disabled={isSubmitting} className="width100">

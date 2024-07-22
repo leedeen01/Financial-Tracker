@@ -65,7 +65,8 @@ const BudgetList = ({
     <>
       <div className="row g-3 mt-5" onClick={() => {}}>
         <div className="row mx-auto col-md-12 gap-3 d-flex align-items-center justify-content-center">
-          {categories.map((category) => {
+          {categories.length > 0 ?
+          categories.map((category) => {
             return (
               <div key={category._id} className="col-md-3 col-sm-5">
                 <div className="card h-md-100">
@@ -123,7 +124,16 @@ const BudgetList = ({
                 </div>
               </div>
             );
-          })}
+          })
+          :
+          <div className="col-md-12">
+            <div className="card h-md-100">    
+              <div className="card-body d-flex flex-row justify-content-between align-items-center">
+                <p className="mb-0 text-center mx-auto">No categories. Try adding a new category by clicking on the "+" icon below.</p>
+              </div>
+            </div>
+          </div>
+          }
         </div>
       </div>
       {editCategory && showForm &&

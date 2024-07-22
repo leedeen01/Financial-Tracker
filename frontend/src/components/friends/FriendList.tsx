@@ -139,8 +139,9 @@ const FriendList = ({ loggedInUser, fetchLoggedInUser }: FriendListProps) => {
       <div>
         {activeTab === "f-list" && (
           <div id="f-list">
-            {friendDetails.map((friend) => (
-              <div className="col-md-12">
+            {friendDetails.length > 0 ?
+            friendDetails.map((friend) => (
+              <div className="col-md-12" key={friend._id}>
                 <div className="card h-md-100">
                   <div className="card-body d-flex flex-row justify-content-between align-items-center">
                     <h6 className="overflow-text mb-0">
@@ -188,13 +189,23 @@ const FriendList = ({ loggedInUser, fetchLoggedInUser }: FriendListProps) => {
                   </div>
                 </div>
               </div>
-            ))}
+            ))
+            :
+            <div className="col-md-12">
+              <div className="card h-md-100">    
+                <div className="card-body d-flex flex-row justify-content-between align-items-center">
+                  <p className="mb-0 text-center mx-auto">No friends. Try adding some friends!</p>
+                </div>
+              </div>
+            </div>
+            }
           </div>
         )}
 
         {activeTab === "f-req" && (
           <div id="f-req">
-            {friendRequestDetails.map((request) => (
+            {friendRequestDetails.length > 0 ?
+            friendRequestDetails.map((request) => (
               <div className="col-md-12">
                 <div className="card h-md-100">
                   <div className="card-body d-flex flex-row justify-content-between align-items-center">
@@ -236,7 +247,16 @@ const FriendList = ({ loggedInUser, fetchLoggedInUser }: FriendListProps) => {
                   </div>
                 </div>
               </div>
-            ))}
+            ))
+            :
+            <div className="col-md-12">
+              <div className="card h-md-100">    
+                <div className="card-body d-flex flex-row justify-content-between align-items-center">
+                  <p className="mb-0 text-center mx-auto">No friend requests.</p>
+                </div>
+              </div>
+            </div>
+            }
           </div>
         )}
       </div>
