@@ -38,6 +38,10 @@ const FriendList = ({ loggedInUser, fetchLoggedInUser }: FriendListProps) => {
   };
 
   const handleDeleteFriend = async (friendId: string) => {
+    const isConfirmed = window.confirm("Are you sure you want to remove friend?");
+    if (!isConfirmed) {
+        return;
+    }
     try {
       await ExpensesApi.deleteFriend(loggedInUser!._id!, friendId);
       console.log("Friend deleted successfully!");

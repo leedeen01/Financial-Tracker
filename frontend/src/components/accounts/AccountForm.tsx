@@ -8,12 +8,12 @@ import { useContext, useState } from "react";
 import { Context } from "../../App";
 import { useForm } from "react-hook-form";
 
-interface BudgetProps {
+interface AccountProps {
   onDismiss: () => void;
   onAccountSuccess: (accounts: Account[]) => void;
 }
 
-const BudgetForm = ({ onDismiss, onAccountSuccess }: BudgetProps) => {
+const AccountForm = ({ onDismiss, onAccountSuccess }: AccountProps) => {
   const {
     register,
     handleSubmit,
@@ -180,4 +180,4 @@ const BudgetForm = ({ onDismiss, onAccountSuccess }: BudgetProps) => {
   );
 };
 
-export default BudgetForm;
+export default AccountForm;

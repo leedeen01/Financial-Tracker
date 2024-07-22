@@ -62,7 +62,7 @@ const Investments = () => {
     function onAccountSuccess(accounts: Account[]) {
         setAccounts(accounts);
         setShowForm(false);
-      }
+    }
 
     return (
         <>

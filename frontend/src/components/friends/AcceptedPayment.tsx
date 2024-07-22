@@ -7,11 +7,13 @@ import { BaseCurrency } from "../../App";
 interface AcceptedPaymentProps {
   expenseFromFriends: FriendsExpenseRequestBody[];
   loggedInUser: User;
+  userToPay: string;
 }
 
 const AcceptedPayment: React.FC<AcceptedPaymentProps> = ({
   expenseFromFriends,
   loggedInUser,
+  userToPay,
 }: AcceptedPaymentProps) => {
   const [baseC] = useContext(BaseCurrency);
 
@@ -23,6 +25,7 @@ const AcceptedPayment: React.FC<AcceptedPaymentProps> = ({
     try {
       const promises = expenseFromFriends
         .filter((item) => item.status === "accepted")
+        .filter((item) => item.sendMoneyName === userToPay || item.receiveMoneyName === userToPay)
         .map(async (expense: FriendsExpenseRequestBody) => {
           try {
             const receive = await ExpensesApi.searchUsersById(

@@ -1,9 +1,10 @@
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdEdit } from "react-icons/md";
 import { Account } from "../../models/account";
 import { useEffect, useState, useContext } from "react";
 import * as ExpensesApi from "../../network/expenses_api";
 import { currencies } from "../../models/user";
 import { BaseCurrency } from "../../App";
+import AccountEditForm from "./AccountEditForm";
 
 interface AccountListProps {
     accounts: Account[];
@@ -14,6 +15,8 @@ const AccountList = ({ accounts, deleteAccount }: AccountListProps) => {
     const [baseC] = useContext(BaseCurrency);
     const [stockPrices, setStockPrices] = useState<any[]>([]);
     const [refresh, setRefresh] = useState<boolean>(true);
+    const [showForm, setShowForm] = useState(false);
+    const [editAccount, setEditAccount] = useState<Account>();
 
     function findPrice(account: Account) {
         if (stockPrices.find(stock => stock.stockName === account.name)?.latestPrice) {
@@ -21,6 +24,11 @@ const AccountList = ({ accounts, deleteAccount }: AccountListProps) => {
         } else {
             return 0;
         }
+    }
+
+    function onEdit(account: Account) {
+        setEditAccount(account);
+        setShowForm(true);
     }
 
     useEffect(() => {
@@ -85,7 +93,25 @@ const AccountList = ({ accounts, deleteAccount }: AccountListProps) => {
                                     <tr key={account._id}>
                                         <td>{account.name}</td>
                                         <td>{currencies.symbol[baseC as keyof typeof currencies.symbol] || "$"}{account.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                                        <td><MdDelete onClick={() => deleteAccount(account)} className="expenselist-editdel"></MdDelete></td>
+                                        <td>
+                                            <div className="expenselist-button-container gap-2">
+                                                <MdEdit
+                                                    className="text-muted expenselist-editdel"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        onEdit(account);
+                                                    }}
+                                                />
+                                                <MdDelete 
+                                                    className="text-muted expenselist-editdel"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        e.preventDefault();
+                                                        deleteAccount(account);
+                                                    }}
+                                                />
+                                            </div>
+                                        </td>
                                     </tr>
                                 );
                             })}
@@ -138,7 +164,25 @@ const AccountList = ({ accounts, deleteAccount }: AccountListProps) => {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td><MdDelete onClick={() => deleteAccount(account)} className="expenselist-editdel"></MdDelete></td>
+                                        <td>
+                                            <div className="expenselist-button-container gap-2">
+                                                <MdEdit
+                                                    className="text-muted expenselist-editdel"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        onEdit(account);
+                                                    }}
+                                                />
+                                                <MdDelete 
+                                                    className="text-muted expenselist-editdel"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        e.preventDefault();
+                                                        deleteAccount(account);
+                                                    }}
+                                                />
+                                            </div>
+                                        </td>
                                     </tr>
                                 );
                             })}
@@ -149,6 +193,9 @@ const AccountList = ({ accounts, deleteAccount }: AccountListProps) => {
                 </div>
             </div>
         </div>
+        {editAccount && showForm &&
+            <AccountEditForm account={editAccount} onDismiss={() => setShowForm(false)} onAccountEditSuccess={() => setShowForm(false)} />
+        }
         </>
     );
 }

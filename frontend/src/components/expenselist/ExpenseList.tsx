@@ -141,20 +141,20 @@ const ExpenseList = ({ expenses, onDelete, onAddEdit, onEdit, categories }: Prop
                   <td className="hide-cell">{formattedDate}</td>
                   <td>
                     <div className="expenselist-button-container gap-2">
-                      <MdDelete
-                        className="text-muted expenselist-editdel"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          e.preventDefault();
-                          onDelete(expense);
-                        }}
-                      />
                       <MdEdit
                         className="text-muted expenselist-editdel"
                         onClick={(e) => {
                           e.stopPropagation();
                           onAddEdit();
                           onEdit(expense._id);
+                        }}
+                      />
+                      <MdDelete
+                        className="text-muted expenselist-editdel"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                          onDelete(expense);
                         }}
                       />
                     </div>

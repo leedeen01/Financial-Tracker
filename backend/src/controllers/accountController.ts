@@ -89,6 +89,58 @@ export const createAccount: RequestHandler<
   }
 };
 
+interface updateAccountParams {
+  accountId: string;
+}
+
+interface updateAccountBody {
+  name?: string;
+  amount?: number;
+  count?: number;
+}
+
+export const updateAccount: RequestHandler<
+  updateAccountParams,
+  unknown,
+  updateAccountBody,
+  unknown
+> = async (req, res, next) => {
+  const accountId = req.params.accountId;
+  const newName = req.body.name;
+  const newAmount = req.body.amount;
+  const newCount = req.body.count ?? 1;
+  const authenticatedUserId = req.session.userId;
+  try {
+    assertIsDefined(authenticatedUserId);
+
+    if (!mongoose.isValidObjectId(accountId)) {
+      throw createHttpError(400, "Invalid accountID");
+    }
+    if (!newName || !newAmount) {
+      throw createHttpError(400, "Please enter all input correctly");
+    }
+    const account = await accountModel.findById(accountId).exec();
+
+    if (!account) {
+      throw createHttpError(404, "Account not found");
+    }
+
+    if (!account.userId.equals(authenticatedUserId)) {
+      throw createHttpError(401, "No access");
+    }
+
+    account.name = newName;
+    account.amount = newAmount;
+    account.count = newCount;
+
+    const updatedAccount = await account.save();
+
+    res.status(200).json(updatedAccount);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const deleteAccount: RequestHandler = async (req, res, next) => {
   const accountId = req.params.accountId;
   const authenticatedUserId = req.session.userId;

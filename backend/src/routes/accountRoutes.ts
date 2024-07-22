@@ -6,5 +6,6 @@ const router = express.Router();
 router.get("/", accountController.getAccounts);
 router.get("/:accountId", accountController.getAccount);
 router.post("/", accountController.createAccount);
+router.put("/:accountId", accountController.updateAccount);
 router.delete("/:accountId", accountController.deleteAccount);
 export default router;

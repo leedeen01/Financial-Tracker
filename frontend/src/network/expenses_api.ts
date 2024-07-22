@@ -247,6 +247,12 @@ export async function fetchAccount(): Promise<Account[]> {
   return accounts;
 }
 
+export interface accountInput {
+  name: string;
+  amount: number;
+  count?: number;
+}
+
 export async function createAccount(account: Account): Promise<Account[]> {
   await fetchData(`${website}/api/accounts`, {
     method: "POST",
@@ -264,6 +270,21 @@ export async function createAccount(account: Account): Promise<Account[]> {
   const accounts: Account[] = await response.json();
 
   return accounts;
+}
+
+export async function updateAccount(
+  accountId: string,
+  account: accountInput
+): Promise<Account> {
+  const response = await fetchData(`${website}/api/accounts/` + accountId, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(account),
+    credentials: "include",
+  });
+  return response.json();
 }
 
 export async function deleteAccount(accountId: string) {

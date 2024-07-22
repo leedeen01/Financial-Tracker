@@ -255,6 +255,7 @@ const PendingPayment = ({
                 <AcceptedPayment
                   expenseFromFriends={loggedInUser.topay}
                   loggedInUser={loggedInUser}
+                  userToPay={userToPay.username}
                 />
               </div>
             )}
@@ -264,6 +265,7 @@ const PendingPayment = ({
                 <DeclinedPayment
                   expenseFromFriends={loggedInUser.topay}
                   loggedInUser={loggedInUser}
+                  userToPay={userToPay.username}
                 />
               </div>
             )}
