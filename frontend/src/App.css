@@ -318,6 +318,15 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+.profile-pic-nav {
+  overflow: hidden;
+  height: 25px;
+  width: 25px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 50%;
+}
+
 .profile-title {
   font-size: 20px;
   margin: 25px 0;

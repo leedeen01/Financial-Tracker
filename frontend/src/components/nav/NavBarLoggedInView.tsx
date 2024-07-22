@@ -44,6 +44,9 @@ const NavBarLoggedInView = ({
         <Nav.Link className="mx-auto" as={Link} to="/profile">
           {user.username}'s Profile
         </Nav.Link>
+        <Nav.Link disabled={true} className="mx-auto">
+          <img src={user.picture ? user.picture : import.meta.env.VITE_DEFAULT_PIC} alt="" className="profile-pic-nav" />
+        </Nav.Link>
       </Nav>
       <Button onClick={logout}>Log Out</Button>
     </>
