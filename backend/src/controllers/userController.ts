@@ -101,7 +101,7 @@ export const updateUser: RequestHandler<
   const newUsername = req.body.username;
   const newEmail = req.body.email;
   const newCurrency = req.body.currency;
-  const profileImage = req.body.profileImage;
+  const profileImage = req.body.profileImage ?? "";
 
   try {
     if (!mongoose.isValidObjectId(userId)) {

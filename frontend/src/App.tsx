@@ -42,8 +42,13 @@ function App() {
   }
 
   useEffect(() => {
-    fetchLoggedInUser();
-  }, []);
+    if (loggedInUser) {
+      const interval = setInterval(fetchLoggedInUser, 5000);
+      return () => clearInterval(interval);
+    } else {
+      fetchLoggedInUser();
+    }
+  }, [loggedInUser]);
 
   function handleLogout() {
     setLoggedInUser(null);

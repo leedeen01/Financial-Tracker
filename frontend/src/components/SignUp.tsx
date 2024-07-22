@@ -162,16 +162,6 @@ const SignUp = ({ onDismiss, onSignUpSuccessful }: SignUpModalProps) => {
                   />
                 )}
               </div>
-              
-
-              {/* <ImageInputField
-                name="picture"
-                label="Profile Picture"
-                onChange={convertToBase64}
-                register={register}
-                registerOptions={{}}
-                error={errors.picture}
-              /> */}
 
               <Button
                 type="submit"

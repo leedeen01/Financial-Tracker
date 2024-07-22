@@ -21,7 +21,7 @@ const Profile = () => {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
   const [displayC, setDisplayC] = useState<string>("");
   const [expenses, setExpenses] = useState<Expense[]>([]);
-  const [img, setImg] = useState<string>(import.meta.env.VITE_DEFAULT_PIC);
+  const [img, setImg] = useState<string>(loggedInUser?.picture || import.meta.env.VITE_DEFAULT_PIC);
   const [, setBaseC] = useContext(BaseCurrency);
   const hasSetDisplayC = useRef(false);
   const hasSetImg = useRef(false);
@@ -133,7 +133,7 @@ const Profile = () => {
       alert("User updated successfully!");
       navigate("/profile");
     } catch (error) {
-      alert("Username taken, try again.");
+      alert("Error updating user, try again.");
       console.error("Update user error:", error);
     }
   };
@@ -239,8 +239,15 @@ const Profile = () => {
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
                 handleFileUpload(e)
               }
+              className="mb-3"
             />
-            <img className="profile-pic mb-3 mt-3 mx-auto" src={img} alt="Selected" />
+            {img && (
+              <img
+                className="profile-pic mb-3 mt-3 mx-auto"
+                src={img}
+                alt="Selected"
+              />
+            )}
           </div>
 
           <Button type="submit" disabled={isSubmitting} className="width100">
