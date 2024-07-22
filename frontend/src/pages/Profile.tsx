@@ -227,7 +227,7 @@ const Profile = () => {
                 "🌍"}
             </div>
           </div>
-          <div>
+          <div className="d-flex flex-column gap-2">
             <label htmlFor="file-upload">Profile Picture</label>
             <input
               type="file"
@@ -238,11 +238,10 @@ const Profile = () => {
                 handleFileUpload(e)
               }
             />
+            {img && (
+              <img className="profile-pic mb-3 mt-3 mx-auto" src={img} alt="Selected" />
+            )}
           </div>
-
-          {img && (
-            <img className="profile-pic mb-3 mt-3" src={img} alt="Selected" />
-          )}
 
           <Button type="submit" disabled={isSubmitting} className="width100">
             Save

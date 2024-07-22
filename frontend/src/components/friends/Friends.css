@@ -336,6 +336,15 @@
     background-color: var(--light-green);
 }
 
+.profile-pic-friend {
+    overflow: hidden;
+    height: 50px;
+    width: 50px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 50%;
+}
+
 @media (max-width: 768px) {
     .search-friend-input:focus {
         width: 200px;

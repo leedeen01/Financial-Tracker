@@ -143,7 +143,7 @@ const SignUp = ({ onDismiss, onSignUpSuccessful }: SignUpModalProps) => {
                 </div>
               </div>
 
-              <div>
+              <div className="d-flex flex-column gap-2">
                 <label htmlFor="file-upload">Profile Picture</label>
                 <input
                   type="file"
@@ -154,14 +154,15 @@ const SignUp = ({ onDismiss, onSignUpSuccessful }: SignUpModalProps) => {
                     handleFileUpload(e)
                   }
                 />
+                {img && (
+                  <img
+                    className="profile-pic mb-3 mt-3 mx-auto"
+                    src={img}
+                    alt="Selected"
+                  />
+                )}
               </div>
-              {img && (
-                <img
-                  className="profile-pic mb-3 mt-3"
-                  src={img}
-                  alt="Selected"
-                />
-              )}
+              
 
               {/* <ImageInputField
                 name="picture"

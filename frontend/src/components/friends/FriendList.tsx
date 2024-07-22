@@ -144,14 +144,7 @@ const FriendList = ({ loggedInUser, fetchLoggedInUser }: FriendListProps) => {
                 <div className="card h-md-100">
                   <div className="card-body d-flex flex-row justify-content-between align-items-center">
                     <h6 className="overflow-text mb-0">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        width="24"
-                        height="24"
-                      >
-                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path>
-                      </svg>{" "}
+                      <img src={friend.picture ? friend.picture : import.meta.env.VITE_DEFAULT_PIC} alt="" className="profile-pic-friend" style={{marginRight: "10px"}} />
                       {friend.username}
                     </h6>
 
