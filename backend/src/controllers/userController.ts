@@ -88,6 +88,7 @@ interface updateUserBody {
   username?: string;
   email?: string;
   currency?: string;
+  profileImage?: string;
 }
 
 export const updateUser: RequestHandler<
@@ -100,6 +101,7 @@ export const updateUser: RequestHandler<
   const newUsername = req.body.username;
   const newEmail = req.body.email;
   const newCurrency = req.body.currency;
+  const profileImage = req.body.profileImage;
 
   try {
     if (!mongoose.isValidObjectId(userId)) {
@@ -114,9 +116,26 @@ export const updateUser: RequestHandler<
       throw createHttpError(404, "User not found");
     }
 
+    const CurrencyRes = `https://api.fxratesapi.com/latest?api_key=${JSON.stringify(
+      process.env.CURRENCY_API_KEY
+    )}&base=${user.currency}&currencies=${
+      newCurrency
+    }&resolution=1m&amount=1&places=6&format=json`;
+
+    const CurrencyResponse = await fetch(CurrencyRes);
+
+    const CurrencyData = await CurrencyResponse.json();
+
+    const CurrencyVal = CurrencyData.rates[newCurrency];
+
     user.username = newUsername;
     user.email = newEmail;
-    user.currency = newCurrency;
+    user.topay = user.topay.map(u => ({
+      ...u, 
+      amount: u.amount * CurrencyVal 
+    }));    user.currency = newCurrency;
+
+    user.picture = profileImage;
 
     const updatedUser = await user.save();
     res.status(200).json(updatedUser);
@@ -491,6 +510,7 @@ interface createExpenseBody {
   description?: string;
   date?: Date;
   amount?: number;
+  currency: string;
   category?: string;
 }
 
@@ -506,7 +526,8 @@ export const sendExpenseRequest: RequestHandler<
   const date = req.body.date;
   const amount = req.body.amount;
   const category = req.body.category;
-  /*const time = req.body.category;*/
+  const currency = req.body.currency;
+
   const authenticatedUserId = req.session.userId;
   try {
     assertIsDefined(authenticatedUserId);
@@ -533,12 +554,32 @@ export const sendExpenseRequest: RequestHandler<
       throw createHttpError(404, "User not found");
     }
 
+    const toCurrencyMulti = `https://api.fxratesapi.com/latest?api_key=${JSON.stringify(
+      process.env.CURRENCY_API_KEY
+    )}&base=${currency}&currencies=${
+      friendUser.currency
+    }&resolution=1m&amount=1&places=6&format=json`;
+    const fromCurrencyMulti = `https://api.fxratesapi.com/latest?api_key=${JSON.stringify(
+      process.env.CURRENCY_API_KEY
+    )}&base=${currency}&currencies=${
+      user.currency
+    }&resolution=1m&amount=1&places=6&format=json`;
+
+    const toCurrencyResponse = await fetch(toCurrencyMulti);
+    const fromCurrencyResponse = await fetch(fromCurrencyMulti);
+
+    const toCurrencyData = await toCurrencyResponse.json();
+    const fromCurrencyData = await fromCurrencyResponse.json();
+
+    const toCurrencyVal = toCurrencyData.rates[friendUser.currency];
+    const fromCurrencyVal = fromCurrencyData.rates[user.currency];
+
     if (_id === authenticatedUserId.toString()) {
       const newExpense = await expenseModel.create({
         userId: authenticatedUserId,
         date: date,
         description: description,
-        amount: amount,
+        amount: amount * fromCurrencyVal,
         category: category,
       });
     } else {
@@ -550,7 +591,7 @@ export const sendExpenseRequest: RequestHandler<
         receiveMoneyName: user.username,
         date: date,
         description: description,
-        amount: amount,
+        amount: amount * toCurrencyVal,
         category: category,
       });
 
@@ -562,7 +603,7 @@ export const sendExpenseRequest: RequestHandler<
         receiveMoneyName: user.username,
         date: date,
         description: description,
-        amount: amount,
+        amount: amount * fromCurrencyVal,
         category: category,
       });
     }
@@ -619,11 +660,6 @@ export const acceptExpenseRequest: RequestHandler<
     }
 
     const reqBody = req.body as acceptExpenseRequestBody;
-
-    // Filter user.topay
-
-    console.log(reqBody);
-    console.log(user.topay);
 
     user.topay = user.topay.map((expense) => {
       if (Object.keys(reqBody).some((key) => reqBody[key] !== expense[key])) {

@@ -7,12 +7,14 @@ import { FriendsExpenseRequestBody } from "../../models/expense";
 import { Category } from "../../models/category";
 import * as ExpensesApi from "../../network/expenses_api";
 import DatePicker from "react-datepicker";
+import SelectInputField from "../form/SelectInputField";
 
 interface SplitExpense {
   description: string;
   category: string;
   date: Date;
   amounts: Record<string, number>;
+  currency: string;
 }
 
 interface SplitBillProps {
@@ -37,9 +39,8 @@ const SplitBill = ({
 
   const onSubmit = async (formData: SplitExpense) => {
     try {
-      const { description, category, date, amounts } = formData;
+      const { description, category, date, amounts, currency } = formData;
       onDismiss();
-
 
       alert("Successfully sent a bill split request.");
 
@@ -55,6 +56,7 @@ const SplitBill = ({
               category,
               date,
               amount: amount.toString(),
+              currency: currency,
               sendMoneyName: send.username,
               receiveMoneyName: receive.username,
               sendMoney: loggedInUser._id!,
@@ -88,13 +90,15 @@ const SplitBill = ({
             type="text"
             placeholder="Enter description"
             register={register}
+            registerOptions={{ required: "Required" }}
+
           />
           <div className="mb-3">
             <label htmlFor="category" className="form-label">
               Category
             </label>
             <select
-              {...register("category")}
+              {...register("category", { required: "Required" })}
               id="category"
               className="form-control"
             >
@@ -106,10 +110,14 @@ const SplitBill = ({
               ))}
             </select>
           </div>
+          <label htmlFor="date" className="form-label">
+            Date
+          </label>
           <div className="mb-3">
             <Controller
               control={control}
               name="date"
+              defaultValue={new Date()}
               render={({ field }) => (
                 <DatePicker
                   placeholderText="Select date"
@@ -120,6 +128,14 @@ const SplitBill = ({
               )}
             />
           </div>
+          <SelectInputField
+            name="currency"
+            label="Base Currency"
+            options={["SGD", "USD", "EUR", "GBP", "JPY", "CNY", "KRW"]}
+            register={register}
+            registerOptions={{ required: "Required" }}
+            defaultValue={loggedInUser.currency}
+          />
           {userToSplit.map((user) => (
             <TextInputField
               key={user._id}
@@ -127,8 +143,9 @@ const SplitBill = ({
               label={`${user.username} to pay`}
               type="number"
               step="0.01"
-              placeholder={`Enter amount for ${user.username}`}
+              placeholder={`Enter ${loggedInUser.currency} amount for ${user.username}`}
               register={register}
+              registerOptions={{ required: "Required" }}
             />
           ))}
           <Button type="submit" disabled={isSubmitting} className="width100">

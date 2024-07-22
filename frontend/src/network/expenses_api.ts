@@ -76,6 +76,7 @@ export interface userInput {
   username: string;
   email: string;
   currency: string;
+  profileImage: string;
 }
 
 export async function updateUser(
@@ -356,9 +357,9 @@ export async function fetchStockName(keyword: string) {
   return stockNames;
 }
 
-export async function fetchCurrencies(currency: string) {
+export async function fetchCurrencies(currency: string, prevCurrency: string) {
   let currencyVal = 0;
-  const url = `https://api.fxratesapi.com/latest?api_key=${JSON.stringify(import.meta.env.VITE_CURRENCY_API_KEY)}&base=SGD&currencies=${currency}&resolution=1m&amount=1&places=6&format=json`;
+  const url = `https://api.fxratesapi.com/latest?api_key=${JSON.stringify(import.meta.env.VITE_CURRENCY_API_KEY)}&base=${prevCurrency}&currencies=${currency}&resolution=1m&amount=1&places=6&format=json`;
 
   try {
     const response = await fetch(url);
@@ -445,8 +446,6 @@ export async function sendFriendExpense(
   userId: string,
   expense: FriendsExpenseRequestBody
 ): Promise<User> {
-  console.log(userId);
-
   const response = await fetchData(
     `${website}/api/users/sendExpenseRequest/` + userId,
     {

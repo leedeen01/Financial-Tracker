@@ -111,7 +111,7 @@ function Home() {
           <div className="row">
             <SectionOne expenses={expenses} categories={categories} />
             <SectionTwo
-              expenses={FilteredMonth}
+              expenses={FilteredYear}
               categories={categories}
               selectedExpenses={selectedExpenses2}
               onDelete={(id) => deleteExpense(id)}
