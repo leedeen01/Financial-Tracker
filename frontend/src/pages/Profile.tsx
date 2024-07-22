@@ -11,6 +11,7 @@ import { MdDelete } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { Expense } from "../models/expense";
 
+
 const Profile = () => {
   const {
     register,

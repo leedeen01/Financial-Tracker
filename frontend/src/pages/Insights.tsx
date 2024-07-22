@@ -10,54 +10,58 @@ const Insights = () => {
   const [value, setValue] = useState("");
   const [error, setError] = useState("");
   const [chatHistory, setChatHistory] = useState<history[]>([]);
+  const [loading, setLoading] = useContext(Context);
 
   const surpriseOptions = [
     "How can i improve my finances?",
     "Where do i spend majority of my money on?",
-    "Whats my total expense last month?"
+    "Whats my total expense last month?",
   ];
-
-  const [loading, setLoading] = useContext(Context);
 
   useEffect(() => {
     async function loadExpenses() {
       try {
-        const expenses = await expensesApi.fetchExpense(); // Assuming fetchExpense() returns a Promise<Expense[]>
+        const expenses = await expensesApi.fetchExpense();
         return expenses;
       } catch (error) {
         console.error(error);
-        return []; // Return empty array or handle error case appropriately
+        return [];
       }
     }
-  
+
     async function fetchData() {
       setLoading(true);
-  
+
       try {
         const expenses = await loadExpenses();
-  
+
         if (expenses.length > 0) {
-          let prompt = "Please describe on my spending and how can i save more money";
-          prompt += expenses.map(e => `Description: ${e.description}, Amount: ${e.amount}, Category: ${e.category}, Date: ${e.date}`).join("\n");
-          await initialResponse(prompt);          
+          let prompt =
+            "Please answer my questions using my provided expenses. here is my expenses. ";
+          prompt += expenses
+            .map(
+              (e) =>
+                `Description: ${e.description}, Amount: ${e.amount}, Category: ${e.category}, Date: ${e.date}`
+            )
+            .join("\n");
+          await initialResponse(prompt);
         } else {
-          setValue("No expenses found."); 
+          setValue("No expenses found.");
         }
       } catch (error) {
         console.error("Error loading expenses:", error);
-        setError("Failed to load expenses. Please try again."); 
+        setError("Failed to load expenses. Please try again.");
       } finally {
         setLoading(false);
       }
     }
-  
-    fetchData(); 
-  
-  }, []); 
-  
+
+    fetchData();
+  }, []);
 
   const surprise = () => {
-    const randomValue = surpriseOptions[Math.floor(Math.random() * surpriseOptions.length)];
+    const randomValue =
+      surpriseOptions[Math.floor(Math.random() * surpriseOptions.length)];
     setValue(randomValue);
   };
 
@@ -68,21 +72,22 @@ const Insights = () => {
       return;
     }
     try {
-      const response = await expensesApi.getGeminiResponse( [], value);
+      console.log(value);
+
+      const response = await expensesApi.getGeminiResponse([], value);
 
       setChatHistory([
         {
           role: "user",
-          parts: [{text: "Heres how you can cut down on your spending!"}],
+          parts: [{ text: "Heres how you can cut down on your spending!" }],
         },
         {
           role: "model",
-          parts: [{text: response}],
-        }
+          parts: [{ text: response }],
+        },
       ]);
       setValue("");
       setLoading(false);
-      
     } catch (error) {
       console.error("Error fetching response:", error);
       setError("Something went wrong! Please try again.");
@@ -90,33 +95,27 @@ const Insights = () => {
   };
 
   const getResponse = async () => {
-    console.log("hi");
-
     setLoading(true);
     if (!value) {
       setError("Please ask a question");
       return;
     }
-
     try {
-      const response = await expensesApi.getGeminiResponse( chatHistory, value);
-      console.log(response);
-      console.log("hi2");
+      const response = await expensesApi.getGeminiResponse(chatHistory, value);
 
       setChatHistory([
         ...chatHistory,
         {
           role: "user",
-          parts: [{text: value}],
+          parts: [{ text: value }],
         },
         {
           role: "model",
-          parts: [{text: response}],
-        }
+          parts: [{ text: response }],
+        },
       ]);
       setValue("");
       setLoading(false);
-      
     } catch (error) {
       console.error("Error fetching response:", error);
       setError("Something went wrong! Please try again.");
@@ -129,34 +128,55 @@ const Insights = () => {
     setChatHistory([]);
   };
 
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      event.preventDefault(); // Prevent form submission
+      getResponse();
+    }
+  };
+
   return (
     <div className="container content mb-5">
       <div className="row mt-5">
         <p className="insights-text">
           How can I help you
-          <button className="surprise" onClick={surprise} disabled={!chatHistory}>
+          <button
+            className="surprise"
+            onClick={surprise}
+            disabled={!chatHistory}
+          >
             Surprise ME!
           </button>
         </p>
-        {loading ? <Loader /> : <div className="input-container">
-          <input
-            value={value}
-            type="text"
-            placeholder="Ask me anything about your expenses!"
-            onChange={(e) => setValue(e.target.value)}
-          />
-          {!error && <button onClick={getResponse}>Ask Me!</button>}
-          {error && <button onClick={clear}>Clear</button>}
-        </div>}
+        {loading ? (
+          <Loader />
+        ) : (
+          <div className="input-container">
+            <input
+              value={value}
+              type="text"
+              placeholder="Ask me anything about your expenses!"
+              onChange={(e) => setValue(e.target.value)}
+              onKeyPress={handleKeyPress}
+            />
+            {!error && <button onClick={getResponse}>Ask Me!</button>}
+            {error && <button onClick={clear}>Clear</button>}
+          </div>
+        )}
 
         {error && <p className="insights-text">{error}</p>}
 
         <div className="search-result">
-          {chatHistory.map((chatItem, index) => (
-            <div key={index}>
-              <p className="answer insights-text">{chatItem.role} : {chatItem.parts[0].text}</p>          
-            </div>
-          ))}
+          {chatHistory.map(
+            (chatItem, index) =>
+              index !== 0 && index !== 1 && (
+                <div key={index}>
+                  <pre className="answer insights-text">
+                    {chatItem.role} : {chatItem.parts[0].text}
+                  </pre>
+                </div>
+              )
+          )}
         </div>
       </div>
     </div>
