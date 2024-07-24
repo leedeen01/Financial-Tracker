@@ -1,6 +1,5 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useState } from "react";
 import { User } from "./models/user.ts";
-import * as ExpensesApi from "./network/expenses_api";
 import NavBar from "./components/nav/NavBar.tsx";
 import Login from "./components/Login.tsx";
 import SignUp from "./components/SignUp.tsx";
@@ -31,15 +30,15 @@ function App() {
   const [baseCurrency, setBaseCurrency] = useState<string>("");
 
   const navigate = useNavigate();
-  async function fetchLoggedInUser() {
-    try {
-      const user = await ExpensesApi.getLoggedInUser();
-      setLoggedInUser(user);
-      setBaseCurrency(user.currency);
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  // async function fetchLoggedInUser() {
+  //   try {
+  //     const user = await ExpensesApi.getLoggedInUser();
+  //     setLoggedInUser(user);
+  //     setBaseCurrency(user.currency);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
 
   function handleLogout() {
     setLoggedInUser(null);
