@@ -44,4 +44,8 @@ router.put("/updateUser/:_id", UserController.updateUser);
 
 router.delete("/:_id", UserController.deleteUser);
 
+router.get("/verify/:userId/:uniqueString", UserController.verifyUser);
+
+router.get("/verified", UserController.verifiedUser);
+
 export default router;

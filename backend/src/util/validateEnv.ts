@@ -7,4 +7,5 @@ export default cleanEnv(process.env, {
   PORT: port(),
   SESSION_SECRET: str(),
   API_KEY: str(),
+  MAILGUN: str(),
 });

@@ -41,15 +41,6 @@ function App() {
     }
   }
 
-  useEffect(() => {
-    if (loggedInUser) {
-      const interval = setInterval(fetchLoggedInUser, 5000);
-      return () => clearInterval(interval);
-    } else {
-      fetchLoggedInUser();
-    }
-  }, [loggedInUser]);
-
   function handleLogout() {
     setLoggedInUser(null);
     setBaseCurrency("");
@@ -64,10 +55,11 @@ function App() {
     setShowLogin(false);
   }
 
-  function handleSignUp(user: User) {
-    setLoggedInUser(user);
-    setBaseCurrency(user.currency);
-    navigate("/home");
+  function handleSignUp() {
+    setLoggedInUser(null);
+    setBaseCurrency("");
+    navigate("/");
+    alert("User creation successful. Check your email to verify your account.");
     setLoading(false);
     setShowSignUp(false);
   }

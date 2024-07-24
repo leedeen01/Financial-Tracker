@@ -1,5 +1,4 @@
 import { InferSchemaType, model, Schema } from "mongoose";
-import expense from "./expense";
 
 const userSchema = new Schema({
   username: { type: String, required: true, unique: true },
@@ -10,6 +9,7 @@ const userSchema = new Schema({
   topay: { type: [], required: true },
   picture: { type: String, required: false },
   currency: { type: String, required: true },
+  verified: { type: Boolean, required: true },
 });
 
 type User = InferSchemaType<typeof userSchema>;

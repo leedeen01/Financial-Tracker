@@ -1,11 +1,107 @@
-import { RequestHandler } from "express";
+import { RequestHandler, Response } from "express";
 import createHttpError from "http-errors";
 import UserModel from "../models/user";
+import VerificationModel from "../models/userVerification";
 import expenseModel from "../models/expense";
 import bcrypt from "bcrypt";
 import { assertIsDefined } from "../util/assertIsDefined";
 import mongoose from "mongoose";
-import expense from "../models/expense";
+import nodemailer from "nodemailer";
+import { v4 as uuidv4 } from "uuid";
+import path from "path";
+
+// Create a transporter object
+const transporter = nodemailer.createTransport({
+  service: 'Mailgun',
+  host: 'smtp.mailgun.org',
+  port: 587,
+  auth: {
+    user: process.env.MAILGUN_USER,
+    pass: process.env.MAILGUN_PASS,
+  }
+});
+
+interface UserVerify {
+  _id: string;
+  email: string;
+}
+
+const sendVerificationEmail = async ({ _id, email }: UserVerify, res: Response) => {
+  //const website = "http://localhost:6969";
+  const website = "https://financial-tracker-mtpk.onrender.com";
+  const uniqueString = uuidv4() + _id;
+
+  const mailOptions = {
+    from: process.env.MAILGUN_USER,
+    to: [email],
+    subject: 'Verify your account for Trackspence',
+    html: `<h2>Verify your account</h2>
+      <p>Click on this link to verify your account to complete your signup for Trackspence!</p>
+      <p>This link <b>expires in 6 hours</b>.</p>
+      <p>Press <a href=${website + "/api/users/verify/" + _id + "/" + uniqueString}>here</a> to proceed</p>`
+  };
+
+  try {
+    const hashedUniqueString = await bcrypt.hash(uniqueString, 10);
+    const newVerification = new VerificationModel({
+      userId: _id,
+      uniqueString: hashedUniqueString,
+      createdAt: Date.now(),
+      expiresAt: Date.now() + 21600000,
+    });
+
+    await newVerification.save();
+    await transporter.sendMail(mailOptions);
+    console.log("Email Sent!");
+  } catch (error) {
+    console.error("Failed to send verification email: ", error);
+    res.status(500).json({ message: "Failed to send verification email." });
+  }
+};
+
+export const verifyUser: RequestHandler = async (req, res, next) => {
+  const { userId, uniqueString } = req.params;
+
+  try {
+    const verificationRecord = await VerificationModel.findOne({ userId });
+
+    if (!verificationRecord) {
+      const message = "Account record does not exist or has been verified already. Please sign up or log in.";
+      return res.redirect(`/api/users/verified?error=true&message=${encodeURIComponent(message)}`);
+    }
+
+    const { expiresAt, uniqueString: hashedUniqueString } = verificationRecord;
+
+    if (expiresAt.getTime() < Date.now()) {
+      // Verification has expired
+      await VerificationModel.deleteOne({ userId });
+      await UserModel.deleteOne({ _id: userId });
+
+      const message = "Verification link has expired. Please sign up again.";
+      return res.redirect(`/api/users/verified?error=true&message=${encodeURIComponent(message)}`);
+    }
+
+    const isMatch = await bcrypt.compare(uniqueString, hashedUniqueString);
+    if (isMatch) {
+      await UserModel.updateOne({ _id: userId }, { verified: true });
+      await VerificationModel.deleteOne({ userId });
+
+      res.sendFile(path.join(__dirname, "./../verified.html"));
+    } else {
+      const message = "Invalid verification details. Check your inbox and try again.";
+      return res.redirect(`/api/users/verified?error=true&message=${encodeURIComponent(message)}`);
+    }
+  } catch (error) {
+    console.error("Verification error: ", error);
+    next(error);
+    const message = "An error occurred during verification. Please try again.";
+    return res.redirect(`/api/users/verified?error=true&message=${encodeURIComponent(message)}`);
+  }
+};
+
+export const verifiedUser: RequestHandler = async (req, res, next) => {
+  res.sendFile(path.join(__dirname, "./../verified.html"));
+};
 
 export const getAuthenticatedUser: RequestHandler = async (req, res, next) => {
   try {
@@ -70,9 +166,12 @@ export const signUp: RequestHandler<
       friendlist: [],
       picture: picture,
       currency: currency,
+      verified: false,
     });
 
     req.session.userId = newUser._id;
+
+    await sendVerificationEmail({ _id: newUser._id.toString(), email: newUser.email }, res);
 
     res.status(201).json(newUser);
   } catch (error) {
@@ -191,6 +290,11 @@ export const login: RequestHandler<
 
     if (!user) {
       throw createHttpError(401, "Invalid credentials");
+    }
+
+    // Check if user is verified
+    if (!user.verified) {
+      throw createHttpError(401, "Email has not been verified yet. Check your inbox.");
     }
 
     const passwordMatch = await bcrypt.compare(password, user.password);
