@@ -27,7 +27,7 @@ interface UserVerify {
 }
 
 const sendVerificationEmail = async ({ _id, email }: UserVerify, res: Response) => {
-  //const website = "http://localhost:6969";
+  // const website = "http://localhost:6969";
   const website = "https://financial-tracker-mtpk.onrender.com";
   const uniqueString = uuidv4() + _id;
 
@@ -51,11 +51,10 @@ const sendVerificationEmail = async ({ _id, email }: UserVerify, res: Response) 
     });
 
     await newVerification.save();
-    await transporter.sendMail(mailOptions);
+    transporter.sendMail(mailOptions);
     console.log("Email Sent!");
   } catch (error) {
     console.error("Failed to send verification email: ", error);
-    res.status(500).json({ message: "Failed to send verification email." });
   }
 };
 
