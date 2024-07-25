@@ -11,6 +11,7 @@ import { months } from "../models/expense";
 import Filter from "../components/filter/Filter";
 import Loader from "../components/loader/Loader";
 import { Context } from "../App";
+import Overlay from "../Overlay.tsx";
 
 function Home() {
   const [selectedExpense, setSelectedExpense] = useState("");
@@ -23,6 +24,7 @@ function Home() {
   const [selectedType, setSelectedType] = useState("");
   const [showFilter, setShowFilter] = useState(false);
   const [loading, setLoading] = useContext(Context);
+  const [showOverlay, setShowOverlay] = useState(false);
 
   console.log(selectedYear);
   
@@ -74,6 +76,14 @@ function Home() {
   }, []);
 
   useEffect(() => {
+    if (categories.length === 0) {
+      setShowOverlay(true);
+    } else {
+      setShowOverlay(false);
+    }
+  }, [categories]);
+
+  useEffect(() => {
     async function loadExpenses() {
       try {
         setLoading(true);
@@ -108,6 +118,7 @@ function Home() {
         <Loader />
       ) : (
         <div className="container content mb-5">
+          {showOverlay && <Overlay />}
           <div className="row">
             <SectionOne expenses={expenses} categories={categories} />
             <SectionTwo

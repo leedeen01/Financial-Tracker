@@ -334,6 +334,63 @@
   width: fit-content;
 }
 
+/* Overlay Tutorial */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  opacity: 0;
+  animation: fadeIn 1s forwards;
+  z-index: 1000;
+}
+
+.overlay-box {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 50%;
+  max-width: 400px;
+  max-height: 200px;
+  background-color: var(--dark-white);
+  opacity: 0.9;
+  border-radius: 30px;
+  animation: bounce 2s infinite;
+}
+
+.overlay-text {
+  color: var(--dark-gold);
+  font-size: 18px;
+  text-align: center;
+  max-width: 200px;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translate(-50%, -50%);
+  }
+  40% {
+    transform: translate(-50%, -48%);
+  }
+  60% {
+    transform: translate(-50%, -50%);
+  }
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
 @media (max-width: 481px) {
   .home-title {
     font-size: 50px;
