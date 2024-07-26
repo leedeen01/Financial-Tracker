@@ -206,14 +206,14 @@ const Profile = () => {
             defaultValue={loggedInUser.username}
             error={errors.username}
           />
-          <TextInputField
+          {/* <TextInputField
             name="email"
             label="Email"
             register={register}
             registerOptions={{ required: "Required" }}
             defaultValue={loggedInUser.email}
             error={errors.username}
-          />
+          /> */}
           <div className="d-flex flex-row justify-content-between align-items-center">
             <SelectInputField
               name="currency"
