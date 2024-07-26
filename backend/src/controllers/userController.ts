@@ -51,7 +51,7 @@ const sendVerificationEmail = async ({ _id, email }: UserVerify, res: Response) 
     });
 
     await newVerification.save();
-    transporter.sendMail(mailOptions);
+    await transporter.sendMail(mailOptions);
     console.log("Email Sent!");
   } catch (error) {
     console.error("Failed to send verification email: ", error);

@@ -5,12 +5,14 @@ import { history } from "../models/gemini";
 import { useContext } from "react";
 import { Context } from "../App";
 import Loader from "../components/loader/Loader";
+import { Expense } from "../models/expense";
 
 const Insights = () => {
   const [value, setValue] = useState("");
   const [error, setError] = useState("");
   const [chatHistory, setChatHistory] = useState<history[]>([]);
   const [loading, setLoading] = useContext(Context);
+  const [expense, setExpense] = useState<Expense[]>([]);
 
   const surpriseOptions = [
     "How can i improve my finances?",
@@ -34,14 +36,14 @@ const Insights = () => {
 
       try {
         const expenses = await loadExpenses();
-
+        setExpense(expenses);
         if (expenses.length > 0) {
           let prompt =
-            "Please answer my questions using my provided expenses. here is my expenses. ";
+            "Reply like a financial consultant, Imagine a person has the following expenses...";
           prompt += expenses
             .map(
               (e) =>
-                `Description: ${e.description}, Amount: ${e.amount}, Category: ${e.category}, Date: ${e.date}`
+                `On ${e.date}, I purchased a ${e.description} for $${e.amount}. It falls under the ${e.category} category in my expense list.`
             )
             .join("\n");
           await initialResponse(prompt);
@@ -100,8 +102,14 @@ const Insights = () => {
       setError("Please ask a question");
       return;
     }
+    
     try {
-      const response = await expensesApi.getGeminiResponse(chatHistory, value);
+      const prompt = value + expense
+      .map(
+        (e) =>
+          `On ${e.date}, I purchased a ${e.description} for $${e.amount}. It falls under the ${e.category} category in my expense list.`
+      )
+      const response = await expensesApi.getGeminiResponse(chatHistory, prompt);
 
       setChatHistory([
         ...chatHistory,
