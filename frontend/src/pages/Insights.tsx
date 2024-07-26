@@ -107,9 +107,10 @@ const Insights = () => {
       const prompt = value + expense
       .map(
         (e) =>
-          `On ${e.date}, I purchased a ${e.description} for $${e.amount}. It falls under the ${e.category} category in my expense list.`
+          `On ${e.date}, i Bought ${e.description} (Category: ${e.category}) for $${e.amount}`
       )
       const response = await expensesApi.getGeminiResponse(chatHistory, prompt);
+      const cleanedResponse = response.replace(/\*\*|\n|\r/g, '');
 
       setChatHistory([
         ...chatHistory,
@@ -119,7 +120,7 @@ const Insights = () => {
         },
         {
           role: "model",
-          parts: [{ text: response }],
+          parts: [{ text: cleanedResponse }],
         },
       ]);
       setValue("");
