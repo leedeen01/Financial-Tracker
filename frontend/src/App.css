@@ -27,6 +27,7 @@
   --light-grey: #666666;
 }
 
+
 .width100 {
   width: 100%;
 }
@@ -332,6 +333,17 @@
   margin: 25px 0;
   border-bottom: 5px groove var(--gold);
   width: fit-content;
+}
+
+.readonly-input {
+  background-color: #f0f0f0; /* Light grey background */
+  color: #6c757d; /* Grey text */
+}
+
+.readonly-note {
+  font-size: 0.875rem; /* Smaller font size */
+  color: #6c757d; /* Grey text */
+  margin-top: 0.25rem; /* Small space above the note */
 }
 
 /* Overlay Tutorial */

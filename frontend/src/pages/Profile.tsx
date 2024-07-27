@@ -11,7 +11,6 @@ import { MdDelete } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { Expense } from "../models/expense";
 
-
 const Profile = () => {
   const {
     register,
@@ -22,7 +21,9 @@ const Profile = () => {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
   const [displayC, setDisplayC] = useState<string>("");
   const [expenses, setExpenses] = useState<Expense[]>([]);
-  const [img, setImg] = useState<string>(loggedInUser?.picture || import.meta.env.VITE_DEFAULT_PIC);
+  const [img, setImg] = useState<string>(
+    loggedInUser?.picture || import.meta.env.VITE_DEFAULT_PIC
+  );
   const [, setBaseC] = useContext(BaseCurrency);
   const hasSetDisplayC = useRef(false);
   const hasSetImg = useRef(false);
@@ -65,7 +66,7 @@ const Profile = () => {
         console.error(error);
       }
     }
-    loadExpenses();    
+    loadExpenses();
   }, []);
 
   const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
@@ -206,15 +207,20 @@ const Profile = () => {
             defaultValue={loggedInUser.username}
             error={errors.username}
           />
-          <TextInputField
-            name="email"
-            label="Email"
-            register={register}
-            registerOptions={{ required: "Required" }}
-            defaultValue={loggedInUser.email}
-            error={errors.username}
-            readOnly
-          /> 
+          <div className="input-group">
+            <TextInputField
+              name="email"
+              label="Email"
+              register={register}
+              registerOptions={{ required: "Required" }}
+              defaultValue={loggedInUser.email}
+              error={errors.username}
+              readOnly
+              className="readonly-input"
+            />
+            <p className="readonly-note">This field is read-only</p>
+          </div>
+
           <div className="d-flex flex-row justify-content-between align-items-center">
             <SelectInputField
               name="currency"
