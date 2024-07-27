@@ -335,15 +335,21 @@
   width: fit-content;
 }
 
+.input-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .readonly-input {
-  background-color: #f0f0f0; /* Light grey background */
-  color: #6c757d; /* Grey text */
+  background-color: #f0f0f0; 
+  color: #6c757d;
 }
 
 .readonly-note {
-  font-size: 0.875rem; /* Smaller font size */
-  color: #6c757d; /* Grey text */
-  margin-top: 0.25rem; /* Small space above the note */
+  color: var(--dark-gold);
+  font-size: 0.875rem; 
+  margin-top: 0.25rem; 
 }
 
 /* Overlay Tutorial */

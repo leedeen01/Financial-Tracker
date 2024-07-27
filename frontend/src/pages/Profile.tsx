@@ -218,7 +218,7 @@ const Profile = () => {
               readOnly
               className="readonly-input"
             />
-            <p className="readonly-note">This field is read-only</p>
+            <p className="readonly-note">Email is cannot be changed</p>
           </div>
 
           <div className="d-flex flex-row justify-content-between align-items-center">
