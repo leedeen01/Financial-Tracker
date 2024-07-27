@@ -66,24 +66,36 @@ export const createAccount: RequestHandler<
   try {
     assertIsDefined(authenticatedUserId);
 
-    console.log(name);
-    console.log(amount);
-
-    console.log(type);
-
     if (!name || !amount || !type) {
       throw createHttpError(400, "Please enter all input correctly");
     }
+    
+    const regex = new RegExp(name, "i"); // Case-insensitive search regex
+    const sameAccountArray = await accountModel.find({ name: { $regex: regex } }).exec();
+    if (sameAccountArray.length > 0) {
+      const sameAccount = sameAccountArray[0];
+      if (type === "Stock") {
+        sameAccount.amount =
+          (sameAccount.amount * sameAccount.count! + Number(amount) * Number(count)) /
+          (sameAccount.count! + Number(count));
+          console.log(        sameAccount.amount           );
+        sameAccount.count = sameAccount.count! + Number(count);
+      } else {
+        sameAccount.amount = sameAccount.amount + Number(amount);
+      }
+      const updatedAccount = await sameAccount.save();
+      res.status(200).json(updatedAccount);
+    } else {
+      const newAccount = await accountModel.create({
+        userId: authenticatedUserId,
+        name: name,
+        amount: amount,
+        type: type,
+        count: count,
+      });
 
-    const newAccount = await accountModel.create({
-      userId: authenticatedUserId,
-      name: name,
-      amount: amount,
-      type: type,
-      count: count,
-    });
-
-    res.status(201).json(newAccount);
+      res.status(201).json(newAccount);
+    }
   } catch (error) {
     next(error);
   }

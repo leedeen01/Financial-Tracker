@@ -12,13 +12,10 @@ export const getSuggestion: RequestHandler = async (req, res, next) => {
   const authenticatedUserId = req.session.userId;
   const chatHistory = req.body.chatHistory;
   const message = req.body.message;
-  console.log(chatHistory);
 
   const genAI = new GoogleGenerativeAI(process.env.API_KEY || env.API_KEY)
   
     const model = genAI.getGenerativeModel({model: "gemini-pro"})
-
-
 
     const chat = model.startChat({
       history: chatHistory,
@@ -30,7 +27,6 @@ export const getSuggestion: RequestHandler = async (req, res, next) => {
     const result = await chat.sendMessage(message)
     const response = await result.response
     const text = response.text()
-    console.log(text);
     
     res.json(text);
   

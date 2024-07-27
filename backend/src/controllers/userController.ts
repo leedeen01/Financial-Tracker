@@ -640,17 +640,17 @@ interface createExpenseBody {
 }
 
 interface expenseEmail {
-  toEmail: string,
-  fromUsername: string,
+  toEmail: string;
+  fromUsername: string;
 }
 
-const sendExpenseEmail = async ( {toEmail, fromUsername} : expenseEmail,
+const sendExpenseEmail = async (
+  { toEmail, fromUsername }: expenseEmail,
   expense: createExpenseBody
 ) => {
   // const website = "http://localhost:6969";
   const website = "https://financial-tracker-mtpk.onrender.com";
-  console.log(toEmail);
-  
+
   const mailOptions = {
     from: process.env.MAILGUN_USER,
     to: [toEmail],
@@ -658,20 +658,15 @@ const sendExpenseEmail = async ( {toEmail, fromUsername} : expenseEmail,
     html: `<h2>${fromUsername} just shared a new expense!</h2>
         <p>
     Description: ${expense.description || "N/A"}<br>
-    Date: ${
-      expense.date ? expense.date : "N/A"
-    }<br>
+    Date: ${expense.date ? expense.date : "N/A"}<br>
     Amount: ${
-      expense.amount
-        ? `${expense.amount} ${expense.currency}`
-        : "N/A"
+      expense.amount ? `${expense.amount} ${expense.currency}` : "N/A"
     }<br>
     Category: ${expense.category || "N/A"}
   </p>
       <p>This link <b>expires in 6 hours</b>.</p>
-      <p>Press <a href=${
-        website + "/friends"
-      }>here</a> to view</p>`,  };
+      <p>Press <a href=${website + "/friends"}>here</a> to view</p>`,
+  };
 
   try {
     await transporter.sendMail(mailOptions);
@@ -710,7 +705,7 @@ export const sendExpenseRequest: RequestHandler<
     if (!mongoose.isValidObjectId(authenticatedUserId)) {
       throw createHttpError(400, "Invalid user ID");
     }
-    const friendUser = await UserModel.findById(_id).exec();
+    const friendUser = await UserModel.findById(_id).select("+email").exec();
     const user = await UserModel.findById(authenticatedUserId).exec();
 
     if (!friendUser) {
@@ -773,9 +768,11 @@ export const sendExpenseRequest: RequestHandler<
         amount: amount * fromCurrencyVal,
         category: category,
       });
-      console.log(friendUser);
 
-      sendExpenseEmail({toEmail: friendUser.email, fromUsername: user.username}, req.body);
+      sendExpenseEmail(
+        { toEmail: friendUser.email, fromUsername: user.username },
+        req.body
+      );
     }
 
     const updatedUser = await user.save();
@@ -879,8 +876,6 @@ export const acceptExpenseRequest: RequestHandler<
       amount: amount,
       category: category,
     });
-
-    console.log(newExpense);
 
     await user.save();
     await friendUser.save();
@@ -1009,7 +1004,6 @@ export const settleExpenseRequest: RequestHandler<
     if (!user || !friendUser) {
       throw createHttpError(404, "User not found");
     }
-    console.log(friendUser.username);
 
     // Assuming friendlist is an array of strings in the UserModel schema
     //removes friend request
@@ -1030,8 +1024,6 @@ export const settleExpenseRequest: RequestHandler<
           expense.receiveMoneyName === user.username
         )
     );
-
-    console.log(user.topay);
 
     await friendUser.save();
     const updatedUser = await user.save();

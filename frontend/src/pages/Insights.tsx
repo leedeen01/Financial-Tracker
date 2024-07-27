@@ -74,8 +74,6 @@ const Insights = () => {
       return;
     }
     try {
-      console.log(value);
-
       const response = await expensesApi.getGeminiResponse([], value);
 
       setChatHistory([

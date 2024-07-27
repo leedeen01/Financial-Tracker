@@ -47,10 +47,8 @@ const AccountForm = ({ onDismiss, onAccountSuccess }: AccountProps) => {
   const handleSearch = async () => {
     try {
       if (searchKeyword) {
-        console.log(searchKeyword); // Use the parameter directly
         const result = await ExpensesApi.fetchStockName(searchKeyword);
         const search = result.map((stock) => stock.symbol);
-        console.log(search);
         setSelectedOption(search[0]);
         setSearchResults(search);
       }
