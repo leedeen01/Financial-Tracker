@@ -280,16 +280,6 @@ export const deleteUser: RequestHandler = async (req, res, next) => {
       throw createHttpError(404, "User not found");
     }
 
-    const allUsers = await UserModel.find().exec();
-    await Promise.all(
-      allUsers.map(async (u) => {
-        if (u.friendlist.includes(userId.toString())) {
-          u.friendlist = u.friendlist.filter((friendId) => friendId !== userId.toString());
-          await u.save();
-        }
-      })
-    );
-
     await UserModel.findByIdAndDelete(userId);
 
     res.sendStatus(204);
@@ -667,8 +657,6 @@ const sendExpenseEmail = async (
   { toEmail, fromUsername }: expenseEmail,
   expense: createExpenseBody
 ) => {
-  const website = "https://main--trackspence.netlify.app";
-
   const mailOptions = {
     from: process.env.MAILGUN_USER,
     to: [toEmail],
@@ -683,7 +671,7 @@ const sendExpenseEmail = async (
     Category: ${expense.category || "N/A"}
   </p>
       <p>This link <b>expires in 6 hours</b>.</p>
-      <p>Press <a href=${website}>here</a> to view</p>`,
+      <p>Press <a href=${website + "/friends"}>here</a> to view</p>`,
   };
 
   try {

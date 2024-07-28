@@ -151,6 +151,9 @@ const Profile = () => {
     if (!loggedInUser?._id) {
       alert("User ID is not available.");
       return;
+    } else if (loggedInUser._id === "66a649453dcd63b6591196b9") { // Demo Account
+      alert("Deletion of this demo account has been disabled.");
+      return;
     }
 
     const accounts = await ExpensesApi.fetchAccount();
