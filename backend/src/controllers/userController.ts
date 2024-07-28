@@ -13,6 +13,9 @@ import nodemailer from "nodemailer";
 import { v4 as uuidv4 } from "uuid";
 import path from "path";
 
+//const website = "http://localhost:6969";
+const website = "https://financial-tracker-mtpk.onrender.com";
+
 // Create a transporter object
 const transporter = nodemailer.createTransport({
   service: "Mailgun",
@@ -33,8 +36,6 @@ const sendVerificationEmail = async (
   { _id, email }: UserVerify,
   res: Response
 ) => {
-  // const website = "http://localhost:6969";
-  const website = "https://financial-tracker-mtpk.onrender.com";
   const uniqueString = uuidv4() + _id;
 
   const mailOptions = {
@@ -656,9 +657,6 @@ const sendExpenseEmail = async (
   { toEmail, fromUsername }: expenseEmail,
   expense: createExpenseBody
 ) => {
-  // const website = "http://localhost:6969";
-  const website = "https://financial-tracker-mtpk.onrender.com";
-
   const mailOptions = {
     from: process.env.MAILGUN_USER,
     to: [toEmail],
