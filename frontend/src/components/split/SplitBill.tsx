@@ -137,6 +137,8 @@ const SplitBill = ({
             defaultValue={loggedInUser.currency}
           />
           {userToSplit.map((user) => (
+            <>
+            <img src={user.picture} className="profile-pic-nav" />
             <TextInputField
               key={user._id}
               name={`amounts.${user._id}`}
@@ -147,6 +149,7 @@ const SplitBill = ({
               register={register}
               registerOptions={{ required: "Required" }}
             />
+            </>
           ))}
           <Button type="submit" disabled={isSubmitting} className="width100">
             Split Bill
