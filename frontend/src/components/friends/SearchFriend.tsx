@@ -53,11 +53,6 @@ const SearchFriend = ({ loggedInUser }: SearchFriendProps) => {
     <div className="row g-3 mb-3">
       {searchResult.length > 0 ?
       searchResult
-        .filter(
-          (user) =>
-            user.username !== loggedInUser?.username &&
-            !user.friendlist.includes(loggedInUser!._id!)
-        )
         .map((user) => (
           <div className="col-md-12" key={user._id}>
             <div className="card h-md-100">
@@ -73,15 +68,23 @@ const SearchFriend = ({ loggedInUser }: SearchFriendProps) => {
     
               <div className="card-body d-flex flex-row justify-content-between align-items-center">
                 <p className="overflow-text mb-0">Email: {user.email}</p>
-                <button
-                  onClick={() => handleSendRequest(user._id!)}
-                  disabled={user.friendRequest.includes(loggedInUser!._id!)}
-                  className="add-friend-button"
-                >
-                  {user.friendRequest.includes(loggedInUser!._id!)
-                    ? "Request Sent"
-                    : "Send Friend Request"}
-                </button>
+                {user.username !== loggedInUser?.username ? (
+                  !user.friendlist.includes(loggedInUser!._id!) ? (
+                    <button
+                      onClick={() => handleSendRequest(user._id!)}
+                      disabled={user.friendRequest.includes(loggedInUser!._id!)}
+                      className="add-friend-button"
+                    >
+                      {user.friendRequest.includes(loggedInUser!._id!)
+                        ? "Request Sent"
+                        : "Send Friend Request"}
+                    </button>
+                  ) : (
+                    <p style={{ color: "var(--light-grey)", fontStyle: "italic" }}>Friends</p>
+                  )
+                ) : (
+                  <p style={{ color: "var(--light-grey)", fontStyle: "italic" }}>You</p>
+                )}
               </div>
             </div>
           </div>
