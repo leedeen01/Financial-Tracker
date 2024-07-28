@@ -84,25 +84,26 @@ const AccountForm = ({ onDismiss, onAccountSuccess }: AccountProps) => {
 
               {selectedType === "Stock" ? (
                 <>
-                  <input
-                    className="mb-3"
-                    type="text"
-                    style={{ width: '70%' }}
-
-                    value={searchKeyword}
-                    onChange={(e) => setSearchKeyword(e.target.value)}
-                    placeholder="Search Stock"
-                  />
-                  <button
-                    type="button"
-                    style={{ width: '30%' }}
-                    onClick={() => {
-                      handleSearch();
-                      setShowResults(true);
-                    }}
-                  >
-                    Search Stock
-                  </button>
+                  <div className="d-flex justify-content-between align-items-center">
+                    <input
+                      className="mb-3"
+                      type="text"
+                      style={{ width: '90%', borderRadius: "10px", border: "1px solid var(--lighter-grey)", padding: "7px" }}
+                      value={searchKeyword}
+                      onChange={(e) => setSearchKeyword(e.target.value)}
+                      placeholder="Search Stock"
+                    />
+                    <button
+                      className="expenselist-button expenselist-button-add mb-3"
+                      type="button"
+                      onClick={() => {
+                        handleSearch();
+                        setShowResults(true);
+                      }}
+                    >
+                      <i className="fa fa-search"></i>
+                    </button>
+                  </div>
                   {showResults && (
                     <div>
                       <SelectInputField

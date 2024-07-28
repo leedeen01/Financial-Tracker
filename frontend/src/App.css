@@ -25,6 +25,7 @@
   --black: #121212;
   --grey: #333333;
   --light-grey: #666666;
+  --lighter-grey: #cecece;
 }
 
 
@@ -348,14 +349,14 @@
 }
 
 .readonly-input {
-  background-color: #f0f0f0; 
-  color: #6c757d;
+  background-color: #f0f0f0 !important; 
+  color: #6c757d !important;
+  cursor: not-allowed;
 }
 
 .readonly-note {
-  color: var(--dark-gold);
-  font-size: 0.875rem; 
-  margin-top: 0.25rem; 
+  font-size: 13.5px;
+  font-style: italic;
 }
 
 /* Overlay Tutorial */

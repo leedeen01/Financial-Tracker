@@ -69,6 +69,8 @@ const BudgetEditForm = ({ category, onDismiss, onCategoryEditSuccess }: BudgetEd
                 value={category.name}
                 registerOptions={{ required: "Required" }}
                 error={errors.name}
+                readOnly
+                className="readonly-input"
               />
 
               <ColorInputField

@@ -67,6 +67,8 @@ const AccountEditForm = ({ account, onDismiss, onAccountEditSuccess }: AccountEd
                     value={account.name}
                     registerOptions={{ required: "Required" }}
                     error={errors.name}
+                    readOnly
+                    className="readonly-input"
                   />
                   <TextInputField
                     name="amount"
