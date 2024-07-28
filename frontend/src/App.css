@@ -27,6 +27,7 @@
   --light-grey: #666666;
 }
 
+
 .width100 {
   width: 100%;
 }
@@ -332,6 +333,23 @@
   margin: 25px 0;
   border-bottom: 5px groove var(--gold);
   width: fit-content;
+}
+
+.input-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.readonly-input {
+  background-color: #f0f0f0; 
+  color: #6c757d;
+}
+
+.readonly-note {
+  color: var(--dark-gold);
+  font-size: 0.875rem; 
+  margin-top: 0.25rem; 
 }
 
 /* Overlay Tutorial */

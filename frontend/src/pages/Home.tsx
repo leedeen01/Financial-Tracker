@@ -25,8 +25,6 @@ function Home() {
   const [showFilter, setShowFilter] = useState(false);
   const [loading, setLoading] = useContext(Context);
   const [showOverlay, setShowOverlay] = useState(false);
-
-  console.log(selectedYear);
   
   const FilteredMonth = selectedMonth
     ? expenses.filter((expense) => {

@@ -26,26 +26,8 @@ const SignUp = ({ onDismiss, onSignUpSuccessful }: SignUpModalProps) => {
 
   const [loading, setLoading] = useContext(Context);
   const [img, setImg] = useState<string>(import.meta.env.VITE_DEFAULT_PIC);
-
-  //  const [img, setImg] = useState<string>(import.meta.env.VITE_DEFAULT_PIC);
   const [, setBaseC] = useContext(BaseCurrency);
   const [displayC, setDisplayC] = useState<string>("");
-
-  // function convertToBase64(event: React.ChangeEvent<HTMLInputElement>) {
-  //   if (event.target.files && event.target.files.length > 0) {
-  //     const file = event.target.files[0];
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(file);
-  //     reader.onload = () => {
-  //       if (reader.result) {
-  //         setImg(reader.result as string);
-  //       }
-  //     };
-  //     reader.onerror = (error) => {
-  //       console.log("Error: ", error);
-  //     };
-  //   }
-  // }
 
   async function onSubmit(credentials: SignUpCredentials) {
     try {

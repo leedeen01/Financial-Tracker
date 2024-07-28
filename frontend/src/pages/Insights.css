@@ -12,6 +12,14 @@
     overflow: scroll;
 }
 
+.answer.insights-text {
+    white-space: pre-wrap; /* Maintains whitespace but allows wrapping */
+    word-wrap: break-word; /* Allows long words to be broken */
+    overflow: hidden; /* Hides overflowed content */
+    text-overflow: ellipsis; /* Adds ellipsis when text overflows */
+    max-width: 100%; /* Ensures the element does not exceed its container */
+  }
+
 .surprise {
     background-color: #ececf1;
     color: #000;

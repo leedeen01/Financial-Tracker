@@ -12,13 +12,13 @@ import path from "path";
 
 // Create a transporter object
 const transporter = nodemailer.createTransport({
-  service: 'Mailgun',
-  host: 'smtp.mailgun.org',
+  service: "Mailgun",
+  host: "smtp.mailgun.org",
   port: 587,
   auth: {
     user: process.env.MAILGUN_USER,
     pass: process.env.MAILGUN_PASS,
-  }
+  },
 });
 
 interface UserVerify {
@@ -26,7 +26,10 @@ interface UserVerify {
   email: string;
 }
 
-const sendVerificationEmail = async ({ _id, email }: UserVerify, res: Response) => {
+const sendVerificationEmail = async (
+  { _id, email }: UserVerify,
+  res: Response
+) => {
   // const website = "http://localhost:6969";
   const website = "https://financial-tracker-mtpk.onrender.com";
   const uniqueString = uuidv4() + _id;
@@ -34,11 +37,13 @@ const sendVerificationEmail = async ({ _id, email }: UserVerify, res: Response) 
   const mailOptions = {
     from: process.env.MAILGUN_USER,
     to: [email],
-    subject: 'Verify your account for Trackspence',
+    subject: "Verify your account for Trackspence",
     html: `<h2>Verify your account</h2>
       <p>Click on this link to verify your account to complete your signup for Trackspence!</p>
       <p>This link <b>expires in 6 hours</b>.</p>
-      <p>Press <a href=${website + "/api/users/verify/" + _id + "/" + uniqueString}>here</a> to proceed</p>`
+      <p>Press <a href=${
+        website + "/api/users/verify/" + _id + "/" + uniqueString
+      }>here</a> to proceed</p>`,
   };
 
   try {
@@ -51,7 +56,7 @@ const sendVerificationEmail = async ({ _id, email }: UserVerify, res: Response) 
     });
 
     await newVerification.save();
-    transporter.sendMail(mailOptions);
+    await transporter.sendMail(mailOptions);
     console.log("Email Sent!");
   } catch (error) {
     console.error("Failed to send verification email: ", error);
@@ -65,8 +70,11 @@ export const verifyUser: RequestHandler = async (req, res, next) => {
     const verificationRecord = await VerificationModel.findOne({ userId });
 
     if (!verificationRecord) {
-      const message = "Account record does not exist or has been verified already. Please sign up or log in.";
-      return res.redirect(`/api/users/verified?error=true&message=${encodeURIComponent(message)}`);
+      const message =
+        "Account record does not exist or has been verified already. Please sign up or log in.";
+      return res.redirect(
+        `/api/users/verified?error=true&message=${encodeURIComponent(message)}`
+      );
     }
 
     const { expiresAt, uniqueString: hashedUniqueString } = verificationRecord;
@@ -77,7 +85,9 @@ export const verifyUser: RequestHandler = async (req, res, next) => {
       await UserModel.deleteOne({ _id: userId });
 
       const message = "Verification link has expired. Please sign up again.";
-      return res.redirect(`/api/users/verified?error=true&message=${encodeURIComponent(message)}`);
+      return res.redirect(
+        `/api/users/verified?error=true&message=${encodeURIComponent(message)}`
+      );
     }
 
     const isMatch = await bcrypt.compare(uniqueString, hashedUniqueString);
@@ -87,14 +97,19 @@ export const verifyUser: RequestHandler = async (req, res, next) => {
 
       res.sendFile(path.join(__dirname, "./../verified.html"));
     } else {
-      const message = "Invalid verification details. Check your inbox and try again.";
-      return res.redirect(`/api/users/verified?error=true&message=${encodeURIComponent(message)}`);
+      const message =
+        "Invalid verification details. Check your inbox and try again.";
+      return res.redirect(
+        `/api/users/verified?error=true&message=${encodeURIComponent(message)}`
+      );
     }
   } catch (error) {
     console.error("Verification error: ", error);
     next(error);
     const message = "An error occurred during verification. Please try again.";
-    return res.redirect(`/api/users/verified?error=true&message=${encodeURIComponent(message)}`);
+    return res.redirect(
+      `/api/users/verified?error=true&message=${encodeURIComponent(message)}`
+    );
   }
 };
 
@@ -170,7 +185,10 @@ export const signUp: RequestHandler<
 
     req.session.userId = newUser._id;
 
-    await sendVerificationEmail({ _id: newUser._id.toString(), email: newUser.email }, res);
+    await sendVerificationEmail(
+      { _id: newUser._id.toString(), email: newUser.email },
+      res
+    );
 
     res.status(201).json(newUser);
   } catch (error) {
@@ -216,9 +234,9 @@ export const updateUser: RequestHandler<
 
     const CurrencyRes = `https://api.fxratesapi.com/latest?api_key=${JSON.stringify(
       process.env.CURRENCY_API_KEY
-    )}&base=${user.currency}&currencies=${
-      newCurrency
-    }&resolution=1m&amount=1&places=6&format=json`;
+    )}&base=${
+      user.currency
+    }&currencies=${newCurrency}&resolution=1m&amount=1&places=6&format=json`;
 
     const CurrencyResponse = await fetch(CurrencyRes);
 
@@ -228,10 +246,11 @@ export const updateUser: RequestHandler<
 
     user.username = newUsername;
     user.email = newEmail;
-    user.topay = user.topay.map(u => ({
-      ...u, 
-      amount: u.amount * CurrencyVal 
-    }));    user.currency = newCurrency;
+    user.topay = user.topay.map((u) => ({
+      ...u,
+      amount: u.amount * CurrencyVal,
+    }));
+    user.currency = newCurrency;
 
     user.picture = profileImage;
 
@@ -293,7 +312,10 @@ export const login: RequestHandler<
 
     // Check if user is verified
     if (!user.verified) {
-      throw createHttpError(401, "Email has not been verified yet. Check your inbox.");
+      throw createHttpError(
+        401,
+        "Email has not been verified yet. Check your inbox."
+      );
     }
 
     const passwordMatch = await bcrypt.compare(password, user.password);
@@ -617,6 +639,43 @@ interface createExpenseBody {
   category?: string;
 }
 
+interface expenseEmail {
+  toEmail: string;
+  fromUsername: string;
+}
+
+const sendExpenseEmail = async (
+  { toEmail, fromUsername }: expenseEmail,
+  expense: createExpenseBody
+) => {
+  // const website = "http://localhost:6969";
+  const website = "https://financial-tracker-mtpk.onrender.com";
+
+  const mailOptions = {
+    from: process.env.MAILGUN_USER,
+    to: [toEmail],
+    subject: "Trackspence New Expense",
+    html: `<h2>${fromUsername} just shared a new expense!</h2>
+        <p>
+    Description: ${expense.description || "N/A"}<br>
+    Date: ${expense.date ? expense.date : "N/A"}<br>
+    Amount: ${
+      expense.amount ? `${expense.amount} ${expense.currency}` : "N/A"
+    }<br>
+    Category: ${expense.category || "N/A"}
+  </p>
+      <p>This link <b>expires in 6 hours</b>.</p>
+      <p>Press <a href=${website + "/friends"}>here</a> to view</p>`,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log("Email Sent!");
+  } catch (error) {
+    console.error("Failed to send expense email: ", error);
+  }
+};
+
 //creating expense request for another user
 export const sendExpenseRequest: RequestHandler<
   updatecreateExpenseRequest,
@@ -646,7 +705,7 @@ export const sendExpenseRequest: RequestHandler<
     if (!mongoose.isValidObjectId(authenticatedUserId)) {
       throw createHttpError(400, "Invalid user ID");
     }
-    const friendUser = await UserModel.findById(_id).exec();
+    const friendUser = await UserModel.findById(_id).select("+email").exec();
     const user = await UserModel.findById(authenticatedUserId).exec();
 
     if (!friendUser) {
@@ -709,6 +768,11 @@ export const sendExpenseRequest: RequestHandler<
         amount: amount * fromCurrencyVal,
         category: category,
       });
+
+      sendExpenseEmail(
+        { toEmail: friendUser.email, fromUsername: user.username },
+        req.body
+      );
     }
 
     const updatedUser = await user.save();
@@ -812,8 +876,6 @@ export const acceptExpenseRequest: RequestHandler<
       amount: amount,
       category: category,
     });
-
-    console.log(newExpense);
 
     await user.save();
     await friendUser.save();
@@ -942,7 +1004,6 @@ export const settleExpenseRequest: RequestHandler<
     if (!user || !friendUser) {
       throw createHttpError(404, "User not found");
     }
-    console.log(friendUser.username);
 
     // Assuming friendlist is an array of strings in the UserModel schema
     //removes friend request
@@ -963,8 +1024,6 @@ export const settleExpenseRequest: RequestHandler<
           expense.receiveMoneyName === user.username
         )
     );
-
-    console.log(user.topay);
 
     await friendUser.save();
     const updatedUser = await user.save();

@@ -39,8 +39,6 @@ const AccountForm = ({ onDismiss, onAccountSuccess }: AccountProps) => {
   }
 
   const [selectedType, setSelectedType] = useState<string>("Bank");
-
-  // const { setValue } = useForm();
   const [searchKeyword, setSearchKeyword] = useState<string>("");
   const [searchResults, setSearchResults] = useState<string[]>([]);
   const [showResults, setShowResults] = useState(false);
@@ -49,10 +47,9 @@ const AccountForm = ({ onDismiss, onAccountSuccess }: AccountProps) => {
   const handleSearch = async () => {
     try {
       if (searchKeyword) {
-        console.log(searchKeyword); // Use the parameter directly
         const result = await ExpensesApi.fetchStockName(searchKeyword);
         const search = result.map((stock) => stock.symbol);
-        console.log(search);
+        setSelectedOption(search[0]);
         setSearchResults(search);
       }
     } catch (error) {
@@ -60,17 +57,11 @@ const AccountForm = ({ onDismiss, onAccountSuccess }: AccountProps) => {
     }
   };
 
-  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedValue = event.target.value;
-    setSelectedOption(selectedValue);
-  };
-
   return (
     <>
       {loading ? (
         <Modal show onHide={onDismiss}>
           <Modal.Header closeButton>Add Account</Modal.Header>
-
           <Modal.Body>
             <Loader />
           </Modal.Body>
@@ -94,12 +85,17 @@ const AccountForm = ({ onDismiss, onAccountSuccess }: AccountProps) => {
               {selectedType === "Stock" ? (
                 <>
                   <input
+                    className="mb-3"
                     type="text"
+                    style={{ width: '70%' }}
+
                     value={searchKeyword}
                     onChange={(e) => setSearchKeyword(e.target.value)}
                     placeholder="Search Stock"
                   />
                   <button
+                    type="button"
+                    style={{ width: '30%' }}
                     onClick={() => {
                       handleSearch();
                       setShowResults(true);
@@ -109,38 +105,34 @@ const AccountForm = ({ onDismiss, onAccountSuccess }: AccountProps) => {
                   </button>
                   {showResults && (
                     <div>
-                      <label htmlFor="dropdown">Select an option:</label>
-                      <select
-                        id="dropdown"
-                        value={selectedOption}
-                        onChange={handleSelectChange}
-                      >
-                        <option value="">Select...</option>
-                        {searchResults.map((option, index) => (
-                          <option key={index} value={option}>
-                            {option}
-                          </option>
-                        ))}
-                      </select>
+                      <SelectInputField
+                        name="Stock"
+                        label="Select Stock Ticker Symbol"
+                        options={searchResults}
+                        register={register}
+                        onChange={(value) => setSelectedOption(value)}
+                        registerOptions={{ required: "Required" }}
+                      />
+
+                      <TextInputField
+                        name="amount"
+                        label="Average Price"
+                        type="number"
+                        step="any"
+                        register={register}
+                        registerOptions={{ required: "Required" }}
+                        error={errors.amount}
+                      />
+
+                      <TextInputField
+                        name="count"
+                        label="Shares Held"
+                        type="number"
+                        register={register}
+                        error={errors.count}
+                      />
                     </div>
                   )}
-                  <TextInputField
-                    name="amount"
-                    label="Average Price"
-                    type="number"
-                    step="any"
-                    register={register}
-                    registerOptions={{ required: "Required" }}
-                    error={errors.amount}
-                  />
-
-                  <TextInputField
-                    name="count"
-                    label="Shares Held"
-                    type="number"
-                    register={register}
-                    error={errors.count}
-                  />
                 </>
               ) : (
                 <>
