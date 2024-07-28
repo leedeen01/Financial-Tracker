@@ -78,7 +78,6 @@ export const createAccount: RequestHandler<
         sameAccount.amount =
           (sameAccount.amount * sameAccount.count! + Number(amount) * Number(count)) /
           (sameAccount.count! + Number(count));
-          console.log(        sameAccount.amount           );
         sameAccount.count = sameAccount.count! + Number(count);
       } else {
         sameAccount.amount = sameAccount.amount + Number(amount);
