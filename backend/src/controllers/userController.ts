@@ -33,8 +33,8 @@ const sendVerificationEmail = async (
   { _id, email }: UserVerify,
   res: Response
 ) => {
-   const website = "http://localhost:6969";
-  //const website = "https://financial-tracker-mtpk.onrender.com";
+  // const website = "http://localhost:6969";
+  const website = "https://financial-tracker-mtpk.onrender.com";
   const uniqueString = uuidv4() + _id;
 
   const mailOptions = {
@@ -187,7 +187,7 @@ export const signUp: RequestHandler<
       createdAt: Date.now(),
     });
 
-    req.session.userId = newUser._id;
+    // req.session.userId = newUser._id;
 
     await sendVerificationEmail(
       { _id: newUser._id.toString(), email: newUser.email },
@@ -656,8 +656,8 @@ const sendExpenseEmail = async (
   { toEmail, fromUsername }: expenseEmail,
   expense: createExpenseBody
 ) => {
-   const website = "http://localhost:6969";
-  //const website = "https://financial-tracker-mtpk.onrender.com";
+  // const website = "http://localhost:6969";
+  const website = "https://financial-tracker-mtpk.onrender.com";
 
   const mailOptions = {
     from: process.env.MAILGUN_USER,
