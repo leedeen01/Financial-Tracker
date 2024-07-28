@@ -10,6 +10,7 @@ const userSchema = new Schema({
   picture: { type: String, required: false },
   currency: { type: String, required: true },
   verified: { type: Boolean, required: true },
+  createdAt: { type: Date, required: true },
 });
 
 type User = InferSchemaType<typeof userSchema>;

@@ -61,9 +61,14 @@ const SearchFriend = ({ loggedInUser }: SearchFriendProps) => {
         .map((user) => (
           <div className="col-md-12" key={user._id}>
             <div className="card h-md-100">
-              <div className="card-header pb-0 d-flex">
-                <img src={user.picture ? user.picture : import.meta.env.VITE_DEFAULT_PIC} alt="" className="profile-pic-friend mt-3 mb-3" style={{marginRight: "10px"}} />
-                <h6 className="mb-2 mt-2 d-flex align-items-center">{user.username}</h6>
+              <div className="card-header pb-0 d-flex justify-content-between align-items-center">
+                <div className="d-flex">
+                  <img src={user.picture ? user.picture : import.meta.env.VITE_DEFAULT_PIC} alt="" className={`profile-pic-friend mt-3 mb-3 ${user.verified ? 'verified-border' : ''}`} style={{marginRight: "10px"}} />
+                  <h6 className="mb-2 mt-2 d-flex align-items-center">{user.username}</h6>
+                </div>
+                <div className="ml-auto" style={{ color: user.verified ? 'var(--light-green)' : 'var(--light-red)'}}>
+                  {user.verified ? 'Verified' : 'Unverified'}
+                </div>
               </div>
     
               <div className="card-body d-flex flex-row justify-content-between align-items-center">

@@ -145,7 +145,7 @@ const FriendList = ({ loggedInUser, fetchLoggedInUser }: FriendListProps) => {
                 <div className="card h-md-100">
                   <div className="card-body d-flex flex-row justify-content-between align-items-center">
                     <h6 className="overflow-text mb-0">
-                      <img src={friend.picture ? friend.picture : import.meta.env.VITE_DEFAULT_PIC} alt="" className="profile-pic-friend" style={{marginRight: "10px"}} />
+                      <img src={friend.picture ? friend.picture : import.meta.env.VITE_DEFAULT_PIC} alt="" className={`profile-pic-friend ${friend.verified ? 'verified-border' : ''}`} style={{marginRight: "10px"}} />
                       {friend.username}
                     </h6>
 

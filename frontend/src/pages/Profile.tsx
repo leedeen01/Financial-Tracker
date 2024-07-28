@@ -218,7 +218,9 @@ const Profile = () => {
               readOnly
               className="readonly-input"
             />
-            <p className="readonly-note">Email is cannot be changed</p>
+            <div className="ml-auto readonly-note" style={{ color: loggedInUser.verified ? 'var(--light-green)' : 'var(--light-red)'}}>
+              {loggedInUser.verified ? 'Verified' : 'Unverified'}
+            </div>
           </div>
 
           <div className="d-flex flex-row justify-content-between align-items-center">
@@ -251,7 +253,7 @@ const Profile = () => {
             />
             {img && (
               <img
-                className="profile-pic mb-3 mt-3 mx-auto"
+                className={`profile-pic mb-3 mt-3 mx-auto ${loggedInUser.verified ? 'verified-border' : ''}`}
                 src={img}
                 alt="Selected"
               />

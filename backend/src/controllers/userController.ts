@@ -1,6 +1,9 @@
 import { RequestHandler, Response } from "express";
 import createHttpError from "http-errors";
 import UserModel from "../models/user";
+import ExpenseModel from "../models/expense";
+import AccountModel from "../models/account";
+import CategoryModel from "../models/category";
 import VerificationModel from "../models/userVerification";
 import expenseModel from "../models/expense";
 import bcrypt from "bcrypt";
@@ -30,8 +33,8 @@ const sendVerificationEmail = async (
   { _id, email }: UserVerify,
   res: Response
 ) => {
-  // const website = "http://localhost:6969";
-  const website = "https://financial-tracker-mtpk.onrender.com";
+   const website = "http://localhost:6969";
+  //const website = "https://financial-tracker-mtpk.onrender.com";
   const uniqueString = uuidv4() + _id;
 
   const mailOptions = {
@@ -181,6 +184,7 @@ export const signUp: RequestHandler<
       picture: picture,
       currency: currency,
       verified: false,
+      createdAt: Date.now(),
     });
 
     req.session.userId = newUser._id;
@@ -312,10 +316,14 @@ export const login: RequestHandler<
 
     // Check if user is verified
     if (!user.verified) {
-      throw createHttpError(
-        401,
-        "Email has not been verified yet. Check your inbox."
-      );
+      const expiresAt = user.createdAt.getTime() + 21600000;
+      if (expiresAt < Date.now()) {
+        await CategoryModel.deleteMany({ userId: user._id });
+        await AccountModel.deleteMany({ userId: user._id });
+        await ExpenseModel.deleteMany({ userId: user._id });
+        await UserModel.deleteOne({ _id: user._id });
+        throw createHttpError(401, "Unverified account has expired. Please sign up again.");
+      }
     }
 
     const passwordMatch = await bcrypt.compare(password, user.password);
@@ -648,8 +656,8 @@ const sendExpenseEmail = async (
   { toEmail, fromUsername }: expenseEmail,
   expense: createExpenseBody
 ) => {
-  // const website = "http://localhost:6969";
-  const website = "https://financial-tracker-mtpk.onrender.com";
+   const website = "http://localhost:6969";
+  //const website = "https://financial-tracker-mtpk.onrender.com";
 
   const mailOptions = {
     from: process.env.MAILGUN_USER,

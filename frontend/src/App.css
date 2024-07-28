@@ -335,6 +335,12 @@
   width: fit-content;
 }
 
+.verified-border {
+  border: 4px double var(--gold);
+  box-shadow: 1px 1px 5px var(--gold);
+  border-radius: 50%;
+}
+
 .input-group {
   display: flex;
   justify-content: space-between;

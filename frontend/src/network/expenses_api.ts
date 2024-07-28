@@ -389,6 +389,7 @@ export async function fetchCurrencies(currency: string, prevCurrency: string) {
     if (response.ok) {
       const data = await response.json();
       currencyVal = data.rates[currency];
+      console.log(currencyVal);
     } else {
       console.error(`Failed to fetch currency value for ${currency}`);
     }

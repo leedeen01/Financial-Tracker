@@ -1,4 +1,5 @@
 export interface User {
+  
   _id?: string;
   username: string;
   email: string;
@@ -8,6 +9,8 @@ export interface User {
   __v?: number;
   picture: string;
   currency: string;
+  verified: boolean;
+  createdAt: Date;
 }
 
 export const currencies = {

@@ -27,6 +27,9 @@ const Login = ({ onDismiss, onLoginSuccessful }: LoginModalProps) => {
     try {
       setLoading(true);
       const user = await ExpensesApi.login(credentials);
+      if (!user.verified) {
+        alert("Email has not been verified, account will be deleted in 6 hours. Please verify your account to upgrade to verified status and extend your account's lifespan.");
+      }
       setLoading(false);
       onLoginSuccessful(user);
     } catch (error) {

@@ -138,7 +138,7 @@ const SplitBill = ({
           />
           {userToSplit.map((user) => (
             <>
-            <img src={user.picture} className="profile-pic-nav" />
+            <img src={user.picture} className={`profile-pic-nav ${user.verified ? 'verified-border' : ''}`} />
             <TextInputField
               key={user._id}
               name={`amounts.${user._id}`}

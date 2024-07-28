@@ -107,7 +107,7 @@ const Split = () => {
                     <input className="checkbox-input" type="checkbox" checked={selectedUsers.some((u) => u._id === user._id)}  onChange={() => handleCheckboxChange(user)}/>
                     <span className="checkbox-tile">
                       <span className="checkbox-icon">
-                      <img src={user.picture ? user.picture : import.meta.env.VITE_DEFAULT_PIC} alt="" className="profile-pic-friend" style={{marginBottom: "10px"}} />
+                      <img src={user.picture ? user.picture : import.meta.env.VITE_DEFAULT_PIC} alt="" className={`profile-pic-friend ${user.verified ? 'verified-border' : ''}`} style={{marginBottom: "10px"}} />
                       </span>
                       <span className="checkbox-label overflow-name">{user.username}</span>
                     </span>
