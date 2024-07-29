@@ -307,10 +307,17 @@ export const login: RequestHandler<
       throw createHttpError(400, "Parameters missing");
     }
 
-    const user = await UserModel.findOne({ username: username })
-      .select("+password +email")
+    const query = {
+      $or: [
+        { username: username },
+        { email: username }
+      ]
+    };
+    
+    const user = await UserModel.findOne(query)
+      .select("+password +username +email")
       .exec();
-
+    
     if (!user) {
       throw createHttpError(401, "Invalid credentials");
     }
