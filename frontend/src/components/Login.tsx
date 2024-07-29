@@ -57,9 +57,9 @@ const Login = ({ onDismiss, onLoginSuccessful }: LoginModalProps) => {
             <Form onSubmit={handleSubmit(onSubmit)}>
               <TextInputField
                 name="username"
-                label="Username"
+                label="Username / Email"
                 type="text"
-                placeholder="Username"
+                placeholder="Username / Email"
                 register={register}
                 registerOptions={{ required: "Required" }}
                 error={errors.username}
