@@ -343,6 +343,7 @@
     object-fit: cover;
     object-position: center;
     border-radius: 50%;
+    border: 4px double var(--lighter-grey);
 }
 
 @media (max-width: 768px) {

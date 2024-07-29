@@ -318,6 +318,7 @@
   width: 100px;
   height: 100px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border: 4px double var(--lighter-grey);
 }
 
 .profile-pic-nav {
@@ -327,6 +328,7 @@
   object-fit: cover;
   object-position: center;
   border-radius: 50%;
+  border: 4px double var(--lighter-grey);
 }
 
 .profile-title {
@@ -337,8 +339,8 @@
 }
 
 .verified-border {
-  border: 4px double var(--gold);
-  box-shadow: 1px 1px 5px var(--gold);
+  border: 4px double var(--gold) !important;
+  box-shadow: 1px 1px 5px var(--gold) !important;
   border-radius: 50%;
 }
 
