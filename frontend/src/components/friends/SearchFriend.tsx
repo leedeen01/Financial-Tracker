@@ -1,4 +1,4 @@
-import { User } from "../../models/user";
+import { User, currencies } from "../../models/user";
 import * as ExpensesApi from "../../network/expenses_api";
 import { useState } from "react";
 
@@ -57,7 +57,8 @@ const SearchFriend = ({ loggedInUser }: SearchFriendProps) => {
           <div className="col-md-12" key={user._id}>
             <div className="card h-md-100">
               <div className="card-header pb-0 d-flex justify-content-between align-items-center">
-                <div className="d-flex">
+                <div className="d-flex align-items-center">
+                  <div style={{marginRight: "10px"}}>{currencies.emoji[user.currency as keyof typeof currencies.emoji] || ""}</div>
                   <img src={user.picture ? user.picture : import.meta.env.VITE_DEFAULT_PIC} alt="" className={`profile-pic-friend mt-3 mb-3 ${user.verified ? 'verified-border' : ''}`} style={{marginRight: "10px"}} />
                   <h6 className="mb-2 mt-2 d-flex align-items-center">{user.username}</h6>
                 </div>

@@ -144,6 +144,7 @@ const FriendList = ({ loggedInUser, fetchLoggedInUser }: FriendListProps) => {
               <div className="col-md-12" key={friend._id}>
                 <div className="card h-md-100">
                   <div className="card-body d-flex flex-row justify-content-between align-items-center">
+                    <div style={{marginRight: "10px"}}>{currencies.emoji[friend.currency as keyof typeof currencies.emoji] || ""}</div>
                     <h6 className="overflow-text mb-0">
                       <img src={friend.picture ? friend.picture : import.meta.env.VITE_DEFAULT_PIC} alt="" className={`profile-pic-friend ${friend.verified ? 'verified-border' : ''}`} style={{marginRight: "10px"}} />
                       {friend.username}
@@ -209,7 +210,11 @@ const FriendList = ({ loggedInUser, fetchLoggedInUser }: FriendListProps) => {
               <div className="col-md-12">
                 <div className="card h-md-100">
                   <div className="card-body d-flex flex-row justify-content-between align-items-center">
-                    <h6 className="overflow-text mb-0">{request.username}</h6>
+                    <div style={{marginRight: "10px"}}>{currencies.emoji[request.currency as keyof typeof currencies.emoji] || ""}</div>
+                    <h6 className="overflow-text mb-0">
+                      <img src={request.picture ? request.picture : import.meta.env.VITE_DEFAULT_PIC} alt="" className={`profile-pic-friend ${request.verified ? 'verified-border' : ''}`} style={{marginRight: "10px"}} />
+                      {request.username}
+                    </h6>
                     <button
                       onClick={() => handleAcceptRequest(request._id!)}
                       className="friend-button friend-button-accept"
