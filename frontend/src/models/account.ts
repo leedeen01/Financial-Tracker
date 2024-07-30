@@ -5,4 +5,5 @@ export interface Account {
     amount: number;
     type: string;
     count?: number;
+    currency: string;
 }

@@ -68,7 +68,8 @@ const FriendList = ({ loggedInUser, fetchLoggedInUser }: FriendListProps) => {
         ExpensesApi.searchUsersById(friendId)
       );
       const friendData = await Promise.all(promises);
-      setFriendDetails(friendData);
+      const validFriendData = friendData.filter(friend => friend !== undefined && friend !== null);
+      setFriendDetails(validFriendData);
     } catch (error) {
       console.error("Error fetching friends:", error);
     }

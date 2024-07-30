@@ -12,6 +12,7 @@ interface AccountListProps {
 }
 
 const AccountList = ({ accounts, deleteAccount }: AccountListProps) => {
+    const [netWorth, setNetWorth] = useState(0);
     const [baseC] = useContext(BaseCurrency);
     const [stockPrices, setStockPrices] = useState<any[]>([]);
     const [refresh, setRefresh] = useState<boolean>(true);
@@ -44,6 +45,12 @@ const AccountList = ({ accounts, deleteAccount }: AccountListProps) => {
         if (refresh) {
             stockPrice(accounts);
         }
+        async function fetchNetWorth() {
+            const result = await calculateNetWorth(accounts);
+            setNetWorth(result);
+        }
+
+        fetchNetWorth();
     }, [accounts, refresh]);
 
 
@@ -53,13 +60,23 @@ const AccountList = ({ accounts, deleteAccount }: AccountListProps) => {
 
     const bankAccounts = accounts.filter((account) => account.type === "Bank");
     const stockAccounts = accounts.filter((account) => account.type === "Stock");
-    const netWorth = accounts.reduce((sum, account) => {
-        if (account.type === 'Stock' && account.count) {
-            return sum + (findPrice(account) * account.count);
-        } else {
-            return sum + account.amount;
-        }
-    }, 0);
+
+
+    async function calculateNetWorth(accounts: Account[]) {
+        const netWorth = await accounts.reduce(async (accPromise, account) => {
+            const sum = await accPromise;
+    
+            if (account.type === 'Stock' && account.count) {
+                const mul = await ExpensesApi.fetchCurrencies(baseC, account.currency);
+                return sum + ( mul * findPrice(account) * account.count);
+            } else {
+                const mul = await ExpensesApi.fetchCurrencies(baseC, account.currency);
+                return sum + (mul * account.amount);
+            }
+        }, Promise.resolve(0));
+    
+        return netWorth;
+    }
 
     return (
         <>
@@ -92,7 +109,7 @@ const AccountList = ({ accounts, deleteAccount }: AccountListProps) => {
                                 return (
                                     <tr key={account._id}>
                                         <td>{account.name}</td>
-                                        <td>{currencies.symbol[baseC as keyof typeof currencies.symbol] || "$"}{account.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                                        <td>{currencies.symbol[account.currency as keyof typeof currencies.symbol] || "$"}{account.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                                         <td>
                                             <div className="expenselist-button-container gap-2">
                                                 <MdEdit
@@ -152,11 +169,11 @@ const AccountList = ({ accounts, deleteAccount }: AccountListProps) => {
                                     <tr key={account._id}>
                                         <td>{account.name}</td>
                                         <td>{account.count}</td>
-                                        <td className="hide-cell">{currencies.symbol[baseC as keyof typeof currencies.symbol] || "$"}{(account.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                                        <td className="hide-cell">{currencies.symbol[baseC as keyof typeof currencies.symbol] || "$"}{findPrice(account).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                                        <td className="hide-cell">{account.currency as keyof typeof currencies.symbol || "$"}{(account.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                                        <td className="hide-cell">{account.currency as keyof typeof currencies.symbol || "$"}{findPrice(account).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                                         <td>
                                             <div className="d-flex flex-column justify-content-center align-items-center">
-                                                <div>{currencies.symbol[baseC as keyof typeof currencies.symbol] || "$"}{account.count ? (findPrice(account) * account.count).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 0.00}</div>
+                                                <div>{account.currency as keyof typeof currencies.symbol || "$"}{account.count ? (findPrice(account) * account.count).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 0.00}</div>
                                                 <div style={{color: (findPrice(account) - account.amount) >= 0 ? 'var(--light-green)' : 'var(--light-red)', fontSize: "12px"}}>
                                                 {((findPrice(account) - account.amount) / account.amount) * 100 >= 0
                                                     ? `+${(((findPrice(account) - account.amount) / account.amount) * 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%`

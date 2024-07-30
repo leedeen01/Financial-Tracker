@@ -387,6 +387,14 @@ export const searchUsersById: RequestHandler = async (req, res, next) => {
 
     const users = await UserModel.findById(userId).select("+email").exec();
 
+    if (!users) {
+      const allUsers = await UserModel.find().exec();
+      allUsers.forEach(u => {
+        u.friendlist = u.friendlist.filter(f => f !== userId);
+        u.save();
+      });
+    }
+
     res.status(200).json(users);
   } catch (error) {
     console.error("Error searching users by username:", error);

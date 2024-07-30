@@ -50,6 +50,7 @@ interface createAccountBody {
   amount: number;
   type: string;
   count: number;
+  currency: string;
 }
 
 export const createAccount: RequestHandler<
@@ -62,6 +63,7 @@ export const createAccount: RequestHandler<
   const amount = req.body.amount;
   const type = req.body.type;
   const count = req.body.count;
+  const currency = req.body.currency;
   const authenticatedUserId = req.session.userId;
   try {
     assertIsDefined(authenticatedUserId);
@@ -69,14 +71,17 @@ export const createAccount: RequestHandler<
     if (!name || !amount || !type) {
       throw createHttpError(400, "Please enter all input correctly");
     }
-    
+
     const regex = new RegExp(name, "i"); // Case-insensitive search regex
-    const sameAccountArray = await accountModel.find({ name: { $regex: regex } }).exec();
+    const sameAccountArray = await accountModel
+      .find({ name: { $regex: regex }, userId: authenticatedUserId, currency: currency })
+      .exec();
     if (sameAccountArray.length > 0) {
       const sameAccount = sameAccountArray[0];
       if (type === "Stock") {
         sameAccount.amount =
-          (sameAccount.amount * sameAccount.count! + Number(amount) * Number(count)) /
+          (sameAccount.amount * sameAccount.count! +
+            Number(amount) * Number(count)) /
           (sameAccount.count! + Number(count));
         sameAccount.count = sameAccount.count! + Number(count);
       } else {
@@ -91,6 +96,7 @@ export const createAccount: RequestHandler<
         amount: amount,
         type: type,
         count: count,
+        currency: currency,
       });
 
       res.status(201).json(newAccount);

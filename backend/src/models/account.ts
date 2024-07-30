@@ -5,6 +5,7 @@ const accountSchema = new Schema(
   {
     userId: { type: Schema.Types.ObjectId, required: true },
     name: { type: String, required: true },
+    currency: { type: String, required: true },
     amount: { type: Number, required: true },
     type: { type: String, required: true },
     count: { type: Number, required: false },
