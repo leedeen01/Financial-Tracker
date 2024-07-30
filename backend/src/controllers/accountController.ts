@@ -50,6 +50,7 @@ interface createAccountBody {
   amount: number;
   type: string;
   count: number;
+  currency: string;
 }
 
 export const createAccount: RequestHandler<
@@ -62,6 +63,7 @@ export const createAccount: RequestHandler<
   const amount = req.body.amount;
   const type = req.body.type;
   const count = req.body.count;
+  const currency = req.body.currency;
   const authenticatedUserId = req.session.userId;
   try {
     assertIsDefined(authenticatedUserId);
@@ -72,7 +74,7 @@ export const createAccount: RequestHandler<
 
     const regex = new RegExp(name, "i"); // Case-insensitive search regex
     const sameAccountArray = await accountModel
-      .find({ name: { $regex: regex }, userId: authenticatedUserId })
+      .find({ name: { $regex: regex }, userId: authenticatedUserId, currency: currency })
       .exec();
     if (sameAccountArray.length > 0) {
       const sameAccount = sameAccountArray[0];
@@ -94,6 +96,7 @@ export const createAccount: RequestHandler<
         amount: amount,
         type: type,
         count: count,
+        currency: currency,
       });
 
       res.status(201).json(newAccount);

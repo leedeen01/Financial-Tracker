@@ -274,6 +274,7 @@ export interface accountInput {
   name: string;
   amount: number;
   count?: number;
+  currency?: string;
 }
 
 export async function createAccount(account: Account): Promise<Account[]> {
