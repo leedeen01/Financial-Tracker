@@ -108,10 +108,10 @@ function App() {
                 path="/friends"
                 element={loggedInUser ? <Friends /> : <HomeLoggedOut />}
               ></Route>
-              <Route
+              {/*<Route
                 path="/insights"
                 element={loggedInUser ? <Insights /> : <HomeLoggedOut />}
-              ></Route>
+              ></Route> */}
               <Route
                 path="/budgets"
                 element={loggedInUser ? <Budgets /> : <HomeLoggedOut />}
