@@ -10,7 +10,7 @@ import HomeLoggedOut from "./pages/HomeLoggedOut.tsx";
 import Profile from "./pages/Profile.tsx";
 import Friends from "./pages/Friends.tsx";
 import { Route, Routes, useNavigate, Navigate } from "react-router-dom";
-import Insights from "./pages/Insights.tsx";
+// import Insights from "./pages/Insights.tsx";
 import Budgets from "./pages/Budgets.tsx";
 import Accounts from "./pages/Accounts.tsx";
 import Footer from "./components/footer/footer.tsx";
